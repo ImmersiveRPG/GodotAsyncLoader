@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/Start/Start.gd" type="Script" id=1]
+
+[node name="Start" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="StartButton" type="Button" parent="CenterContainer"]
+margin_left = 462.0
+margin_top = 250.0
+margin_right = 562.0
+margin_bottom = 350.0
+rect_min_size = Vector2( 100, 100 )
+text = "Start"
+
+[connection signal="pressed" from="CenterContainer/StartButton" to="." method="_on_start_pressed"]
