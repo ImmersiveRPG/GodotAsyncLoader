@@ -1,3 +1,7 @@
+# Copyright (c) 2021 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
+# This file is license under the MIT License
+# https://github.com/ImmersiveRPG/AsyncLoaderExample
+
 extends KinematicBody
 
 const HP_MAX := 100.0
