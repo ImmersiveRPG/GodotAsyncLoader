@@ -16,6 +16,7 @@ var to_add_furniture := []
 var to_add_plants := []
 var to_add_items := []
 var to_add_npcs := []
+var to_add_etc := []
 
 func _enter_tree() -> void:
 	_thread = Thread.new()
@@ -64,6 +65,9 @@ func _can_add_items() -> bool:
 func _can_add_npcs() -> bool:
 	return not to_add_npcs.empty() and not _can_add_items()
 
+func _can_add_etc() -> bool:
+	return not to_add_etc.empty() and not _can_add_npcs()
+
 func _run_thread(_arg : int) -> void:
 	_is_running = true
 	var is_reset := false
@@ -89,6 +93,9 @@ func _run_thread(_arg : int) -> void:
 
 		while _is_running and not is_reset and _can_add_npcs():
 			is_reset = _add_entry(to_add_npcs, "NPC")
+
+		while _is_running and not is_reset and _can_add_etc():
+			is_reset = _add_entry(to_add_etc, "ETC")
 
 		OS.delay_msec(2)
 
@@ -139,6 +146,9 @@ func _get_destination_queue_for_instance(instance):
 	elif instance.is_in_group("npc"):
 		#print(">>> %s to %s" % [instance.name, "to_add_npcs"])
 		return to_add_npcs
+	elif instance.is_in_group("etc"):
+		#print(">>> %s to %s" % [instance.name, "to_add_npcs"])
+		return to_add_etc
 
 	return null
 

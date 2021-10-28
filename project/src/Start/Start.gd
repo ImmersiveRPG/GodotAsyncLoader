@@ -7,3 +7,4 @@ extends Control
 
 func _on_start_pressed() -> void:
 	SceneSwitcher.change_scene("res://src/World/World.tscn")
+	#self.get_tree().change_scene("res://src/World/World.tscn")
