@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/Plants/Cactus/material.tres" type="Material" id=1]
+
+[sub_resource type="CapsuleShape" id=1]
+radius = 5.0
+height = 50.0
+
+[sub_resource type="CapsuleMesh" id=2]
+material = ExtResource( 1 )
+radius = 5.0
+mid_height = 50.0
+
+[node name="Cactus" type="StaticBody" groups=[
+"plant",
+]]
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 25, 0 )
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 25, 0 )
+mesh = SubResource( 2 )
+material/0 = null
