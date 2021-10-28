@@ -131,7 +131,10 @@ func _add_parent(entry, message : String) -> void:
 	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, logs)
 
 func _get_destination_queue_for_instance(instance):
-	if instance.is_in_group("building"):
+	if instance.is_in_group("terrain"):
+		#print(">>> %s to %s" % [instance.name, "to_add_terrain"])
+		return to_add_terrain
+	elif instance.is_in_group("building"):
 		#print(">>> %s to %s" % [instance.name, "to_add_buildings"])
 		return to_add_buildings
 	elif instance.is_in_group("furniture"):
