@@ -1,0 +1,2 @@
+extends StaticBody
+class_name BaseBuilding
