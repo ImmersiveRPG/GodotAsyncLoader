@@ -24,6 +24,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -50, 0 )
 [node name="Terrain3" parent="Terrain" instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -300, -50, 0 )
 
+[node name="Terrain4" parent="Terrain" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -300, -50, -300 )
+
+[node name="Terrain5" parent="Terrain" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, -300 )
+
+[node name="Terrain6" parent="Terrain" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -50, -300 )
+
 [node name="Items" type="Spatial" parent="."]
 
 [node name="Orange" parent="Items" instance=ExtResource( 2 )]
@@ -31,6 +40,27 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 82, 0 )
 
 [node name="SodaCan" parent="Items" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 65, 45 )
+
+[node name="SodaCan2" parent="Items" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 105.624, 26, 11 )
+
+[node name="SodaCan3" parent="Items" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.6238, 26, 11 )
+
+[node name="SodaCan4" parent="Items" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 89.6238, 26, 11 )
+
+[node name="SodaCan5" parent="Items" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 101.624, 33, 11 )
+
+[node name="SodaCan6" parent="Items" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 93.6238, 33, 11 )
+
+[node name="SodaCan7" parent="Items" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.6238, 40, 11 )
+
+[node name="SodaCan8" parent="Items" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.6238, 40, 11 )
 
 [node name="Furniture" type="Spatial" parent="."]
 
