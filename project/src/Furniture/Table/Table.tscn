@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/Furniture/Table/material.tres" type="Material" id=1]
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 20, 1, 20 )
+
+[sub_resource type="CubeMesh" id=4]
+material = ExtResource( 1 )
+size = Vector3( 40, 2, 40 )
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 1, 10, 1 )
+
+[sub_resource type="CubeMesh" id=2]
+material = ExtResource( 1 )
+size = Vector3( 2, 20, 2 )
+
+[node name="Table" type="StaticBody" groups=[
+"furniture",
+]]
+
+[node name="Top" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, 0 )
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Top"]
+mesh = SubResource( 4 )
+material/0 = null
+
+[node name="Leg" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 10, -19 )
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Leg"]
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="Leg2" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 10, -19 )
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Leg2"]
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="Leg3" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 10, 19 )
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Leg3"]
+mesh = SubResource( 2 )
+material/0 = null
+
+[node name="Leg4" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 10, 19 )
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Leg4"]
+mesh = SubResource( 2 )
+material/0 = null

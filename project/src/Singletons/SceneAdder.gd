@@ -127,7 +127,7 @@ func _get_destination_queue_for_instance(instance):
 	if instance is BaseBuilding:
 		#print(">>> %s to %s" % [instance.name, "to_add_buildings"])
 		return to_add_buildings
-	elif instance is BaseFurniture:
+	elif instance.is_in_group("furniture"):
 		#print(">>> %s to %s" % [instance.name, "to_add_furniture"])
 		return to_add_furniture
 	elif instance.is_in_group("plant"):
