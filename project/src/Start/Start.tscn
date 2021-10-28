@@ -5,6 +5,8 @@
 [node name="Start" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -13,13 +15,63 @@ __meta__ = {
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="StartButton" type="Button" parent="CenterContainer"]
-margin_left = 462.0
-margin_top = 250.0
-margin_right = 562.0
-margin_bottom = 350.0
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
+margin_left = 105.0
+margin_top = 228.0
+margin_right = 919.0
+margin_bottom = 372.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/HBoxContainer"]
+margin_right = 356.0
+margin_bottom = 144.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/HBoxContainer/VBoxContainer"]
+margin_right = 356.0
+margin_bottom = 144.0
+custom_constants/separation = 30
+
+[node name="StartSyncButton" type="Button" parent="CenterContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
+margin_right = 356.0
+margin_bottom = 100.0
 rect_min_size = Vector2( 100, 100 )
-text = "Start"
+text = "Start Sync"
 
-[connection signal="pressed" from="CenterContainer/StartButton" to="." method="_on_start_pressed"]
+[node name="Label" type="Label" parent="CenterContainer/HBoxContainer/VBoxContainer/VBoxContainer"]
+margin_top = 130.0
+margin_right = 356.0
+margin_bottom = 144.0
+text = "This will block the game while it loads the entire scene."
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer/HBoxContainer"]
+margin_left = 456.0
+margin_right = 814.0
+margin_bottom = 144.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/HBoxContainer/VBoxContainer2"]
+margin_right = 358.0
+margin_bottom = 144.0
+custom_constants/separation = 30
+
+[node name="StartAsyncButton" type="Button" parent="CenterContainer/HBoxContainer/VBoxContainer2/VBoxContainer"]
+margin_right = 358.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 100, 100 )
+text = "Start Async"
+
+[node name="Label" type="Label" parent="CenterContainer/HBoxContainer/VBoxContainer2/VBoxContainer"]
+margin_top = 130.0
+margin_right = 358.0
+margin_bottom = 144.0
+text = "This won't block the game. It loads the scene in chunks."
+
+[connection signal="pressed" from="CenterContainer/HBoxContainer/VBoxContainer/VBoxContainer/StartSyncButton" to="." method="_on_StartSyncButton_pressed"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/VBoxContainer2/VBoxContainer/StartAsyncButton" to="." method="_on_StartAsyncButton_pressed"]
