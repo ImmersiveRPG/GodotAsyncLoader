@@ -8,16 +8,6 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "KinematicBody",
-"class": "NPC",
-"language": "GDScript",
-"path": "res://src/NPC/NPC.gd"
-} ]
-_global_script_class_icons={
-"NPC": ""
-}
-
 [application]
 
 config/name="AsyncLoaderExample"

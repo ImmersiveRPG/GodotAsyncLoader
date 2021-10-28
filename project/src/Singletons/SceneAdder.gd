@@ -136,7 +136,7 @@ func _get_destination_queue_for_instance(instance):
 	elif instance.is_in_group("item"):
 		#print(">>> %s to %s" % [instance.name, "to_add_items"])
 		return to_add_items
-	elif instance is NPC:
+	elif instance.is_in_group("npc"):
 		#print(">>> %s to %s" % [instance.name, "to_add_npcs"])
 		return to_add_npcs
 
