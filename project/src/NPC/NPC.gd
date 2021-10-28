@@ -1,11 +1,10 @@
 extends KinematicBody
 
 const HP_MAX := 100.0
-const VELOCITY_MAX := 50.0
 const JUMP_IMPULSE := 20.0
 const ROTATION_SPEED := 6.0
 const ACCELERATION := 70.0
-const MAX_VELOCITY := 20.0
+const MAX_VELOCITY := 60.0
 
 var _velocity := Vector3.ZERO
 var _snap_vector := Vector3.ZERO
@@ -45,4 +44,9 @@ func _physics_process(delta : float) -> void:
 
 
 func _on_TimerChangeDestination_timeout() -> void:
-	_destination = Global.rand_vector(-300.0, 300.0)
+	var r := 300.0
+	_destination = Vector3(
+		Global._rng.randf_range(-r, r),
+		Global._rng.randf_range(0.0, 0.0),
+		Global._rng.randf_range(-r, r)
+	)
