@@ -9,36 +9,12 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "StaticBody",
-"class": "BaseBuilding",
-"language": "GDScript",
-"path": "res://src/BaseBuilding/BaseBuilding.gd"
-}, {
-"base": "StaticBody",
-"class": "BaseFurniture",
-"language": "GDScript",
-"path": "res://src/BaseFurniture/BaseFurniture.gd"
-}, {
-"base": "RigidBody",
-"class": "BaseItem",
-"language": "GDScript",
-"path": "res://src/BaseItem/BaseItem.gd"
-}, {
-"base": "StaticBody",
-"class": "BasePlant",
-"language": "GDScript",
-"path": "res://src/BasePlant/BasePlant.gd"
-}, {
 "base": "KinematicBody",
 "class": "NPC",
 "language": "GDScript",
 "path": "res://src/NPC/NPC.gd"
 } ]
 _global_script_class_icons={
-"BaseBuilding": "",
-"BaseFurniture": "",
-"BaseItem": "",
-"BasePlant": "",
 "NPC": ""
 }
 
