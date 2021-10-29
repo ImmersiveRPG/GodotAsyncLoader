@@ -48,31 +48,31 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 82, 0 )
 [node name="SodaCan" parent="Items" instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 65, 45 )
 
-[node name="SodaCan2" parent="Items" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 105.624, 26, 11 )
-
-[node name="SodaCan3" parent="Items" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.6238, 26, 11 )
-
-[node name="SodaCan4" parent="Items" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 89.6238, 26, 11 )
-
-[node name="SodaCan5" parent="Items" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 101.624, 33, 11 )
-
-[node name="SodaCan6" parent="Items" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 93.6238, 33, 11 )
-
-[node name="SodaCan7" parent="Items" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.6238, 40, 11 )
-
-[node name="SodaCan8" parent="Items" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97.6238, 40, 11 )
-
 [node name="Furniture" type="Spatial" parent="."]
 
 [node name="Table" parent="Furniture" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 97, 0, 0 )
+
+[node name="SodaCan2" parent="Furniture/Table" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.624, 26, 11 )
+
+[node name="SodaCan3" parent="Furniture/Table" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623802, 26, 11 )
+
+[node name="SodaCan4" parent="Furniture/Table" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3762, 26, 11 )
+
+[node name="SodaCan5" parent="Furniture/Table" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.624, 33, 11 )
+
+[node name="SodaCan6" parent="Furniture/Table" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3762, 33, 11 )
+
+[node name="SodaCan7" parent="Furniture/Table" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623802, 40, 11 )
+
+[node name="SodaCan8" parent="Furniture/Table" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623802, 40, 11 )
 
 [node name="Plants" type="Spatial" parent="."]
 
@@ -90,27 +90,31 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -104, 0, 0 )
 [node name="Barn" parent="Buildings" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -295, 100, 0 )
 
-[node name="Etc" type="Spatial" parent="."]
-
-[node name="MeshInstance" type="MeshInstance" parent="Etc" groups=[
+[node name="MeshInstance2" type="MeshInstance" parent="Buildings/Barn" groups=[
 "etc",
 ]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 314, 12, 0 )
+transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, 55 )
 mesh = SubResource( 2 )
 material/0 = null
 
-[node name="MeshInstance2" type="MeshInstance" parent="Etc"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 291, 12, -54 )
+[node name="MeshInstance3" type="MeshInstance" parent="Buildings/Barn" groups=[
+"etc",
+]]
+transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, -48 )
 mesh = SubResource( 2 )
 material/0 = null
 
-[node name="MeshInstance3" type="MeshInstance" parent="Etc"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 258, 12, -55 )
+[node name="MeshInstance4" type="MeshInstance" parent="Buildings/Barn" groups=[
+"etc",
+]]
+transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 52, 57, 110 )
 mesh = SubResource( 2 )
 material/0 = null
 
-[node name="MeshInstance4" type="MeshInstance" parent="Etc"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 240.992, 12, 0 )
+[node name="MeshInstance5" type="MeshInstance" parent="Buildings/Barn" groups=[
+"etc",
+]]
+transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, -46, 57, 110 )
 mesh = SubResource( 2 )
 material/0 = null
 
