@@ -120,3 +120,6 @@ material/0 = null
 
 [node name="NPC" parent="." instance=ExtResource( 7 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 52, 0 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( -0.238106, -0.652098, 0.719773, -0.254325, 0.757091, 0.601775, -0.93735, -0.0397702, -0.346113, 375, 508, -383 )
