@@ -114,8 +114,13 @@ func _add_child(entry, message : String) -> void:
 	var instance = entry["instance"]
 	var transform = entry["transform"]
 	instance.transform = transform
-	print("+++ Adding %s %s" % [message, instance.name])
-	parent.call_deferred("add_child", instance)
+	self.call_deferred("_on_add_child_cb", parent, instance, message)
+
+func _on_add_child_cb(parent : Node, instance : Node, message : String) -> void:
+	var start := OS.get_ticks_msec()
+	parent.add_child(instance)
+	var time := OS.get_ticks_msec() - start
+	print("+++ Adding %s %s %s ms" % [message, instance.name, time])
 
 func _add_parent(entry, message : String) -> void:
 	var target = entry["target"]
@@ -126,8 +131,6 @@ func _add_parent(entry, message : String) -> void:
 	var cb = entry["cb"]
 	var instance = entry["instance"]
 	var logs = entry["logs"]
-	print("+++ Adding %s %s" % [message, instance.name])
-	#on_done_cb.call_func(target, path, pos, is_pos_global, cb, instance, logs)
 	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, logs)
 
 func _get_destination_queue_for_instance(instance):

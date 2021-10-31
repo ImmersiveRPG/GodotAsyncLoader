@@ -34,6 +34,7 @@ func _on_scene_loaded(path : String, node : Node, _pos : Vector3, _is_pos_global
 	start = OS.get_ticks_msec()
 	tree.root.add_child(new_scene)
 	if Global._is_logging_loads: logs["add"] = OS.get_ticks_msec() - start
+	print("+++ Adding %s %s ms" % [new_scene.name, OS.get_ticks_msec() - start])
 
 	# Change to the new scene
 	start = OS.get_ticks_msec()
