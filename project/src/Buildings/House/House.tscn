@@ -5,7 +5,7 @@
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 50, 50, 50 )
 
-[sub_resource type="CubeMesh" id=3]
+[sub_resource type="CubeMesh" id=2]
 material = ExtResource( 1 )
 size = Vector3( 100, 100, 100 )
 
@@ -19,5 +19,5 @@ shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0 )
-mesh = SubResource( 3 )
+mesh = SubResource( 2 )
 material/0 = null
