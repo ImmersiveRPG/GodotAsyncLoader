@@ -31,11 +31,13 @@ func _exit_tree() -> void:
 		_thread.wait_to_finish()
 		_thread = null
 
-func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, logs : Dictionary) -> void:
+func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, logs : Dictionary, has_priority : bool) -> void:
 	_to_add_mutex.lock()
+
 	if not _to_add.has(target):
 		_to_add[target] = []
-	_to_add[target].append({
+
+	var entry := {
 		"on_done_cb" : on_done_cb,
 		"path" : path,
 		"pos" : pos,
@@ -43,9 +45,15 @@ func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3
 		"cb" : cb,
 		"instance" : instance,
 		"logs" : logs,
-	})
+		"has_priority" : has_priority,
+	}
+
+	if has_priority:
+		_to_add[target].push_front(entry)
+	else:
+		_to_add[target].push_back(entry)
+
 	_to_add_mutex.unlock()
-	#print(_to_add)
 
 func _can_add_terrain() -> bool:
 	return not to_add_terrain.empty()
@@ -131,6 +139,8 @@ func _add_parent(entry, message : String) -> void:
 	var cb = entry["cb"]
 	var instance = entry["instance"]
 	var logs = entry["logs"]
+	print("+++ Adding %s %s" % [message, instance.name])
+	#on_done_cb.call_func(target, path, pos, is_pos_global, cb, instance, logs)
 	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, logs)
 
 func _get_destination_queue_for_instance(instance):
@@ -167,14 +177,21 @@ func _check_for_new_scenes() -> bool:
 	var has_new_scenes := false
 	for target in to_add:
 		for entry in to_add[target]:
+			var has_priority = entry["has_priority"]
 			#OS.delay_msec(1)
 			var instance = entry["instance"]
 
-			# Add the scene
-			var to = _get_destination_queue_for_instance(instance)
-			if to == null:
-				#print(">>> %s to %s" % [instance.name, "to_add_terrain"])
+			# Get the queue for this instance type
+			var to = null
+			if has_priority:
 				to = to_add_terrain
+			else:
+				to = _get_destination_queue_for_instance(instance)
+				if to == null:
+					#print(">>> %s to %s" % [instance.name, "to_add_terrain"])
+					to = to_add_terrain
+
+			# Add the scene
 			var entry_copy = entry.duplicate()
 			entry_copy["target"] = target
 			entry_copy["is_child"] = false

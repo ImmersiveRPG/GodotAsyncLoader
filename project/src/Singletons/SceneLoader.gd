@@ -34,6 +34,7 @@ func load_scene_async_with_cb(target : Node, path : String, pos : Vector3, is_po
 		"pos" : pos,
 		"is_pos_global" : is_pos_global,
 		"logs" : logs,
+		"has_priority" : has_priority,
 	}
 	if has_priority:
 		_to_load[target].push_front(entry)
@@ -85,6 +86,7 @@ func _run_thread(_arg : int) -> void:
 				var pos = entry["pos"]
 				var is_pos_global = entry["is_pos_global"]
 				var logs = entry["logs"]
+				var has_priority = entry["has_priority"]
 				#print("!!!!!!! path: %s" % path)
 
 				var is_existing = ResourceLoader.exists(path)
@@ -101,7 +103,7 @@ func _run_thread(_arg : int) -> void:
 					if Global._is_logging_loads: logs["instance"] = OS.get_ticks_msec() - start
 
 					# Send the instance to the callback in the main thread
-					SceneAdder.add_scene(funcref(self, "_on_done"), target, path, pos, is_pos_global, cb, instance, logs)
+					SceneAdder.add_scene(funcref(self, "_on_done"), target, path, pos, is_pos_global, cb, instance, logs, has_priority)
 					#self.call_deferred("_on_done", target, path, pos, is_pos_global, cb, instance, logs)
 					#print("??????? instance.global_transform.origin: %s" % instance.global_transform.origin)
 
