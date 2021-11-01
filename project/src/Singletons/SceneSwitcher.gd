@@ -12,8 +12,8 @@ func change_scene(path : String) -> void:
 	var start := OS.get_ticks_msec()
 	var err : int = get_tree().change_scene("res://src/Loading/Loading.tscn")
 	assert(err == OK)
-	#if Global._is_logging_loads: print("!!!!!! MAIN: changed to loading scene for %s ms" % [OS.get_ticks_msec() - start])
-	if Global._is_logging_loads: logs["change_scene"] = OS.get_ticks_msec() - start
+	#if SceneLoader._is_logging_loads: print("!!!!!! MAIN: changed to loading scene for %s ms" % [OS.get_ticks_msec() - start])
+	if SceneLoader._is_logging_loads: logs["change_scene"] = OS.get_ticks_msec() - start
 
 	# Load the scene
 	var pos := Vector3.INF
@@ -28,20 +28,20 @@ func _on_scene_loaded(path : String, node : Node, _pos : Vector3, _is_pos_global
 	var old_scene = tree.current_scene
 	tree.root.remove_child(old_scene)
 	old_scene.queue_free()
-	if Global._is_logging_loads: logs["remove_scene"] = OS.get_ticks_msec() - start
+	if SceneLoader._is_logging_loads: logs["remove_scene"] = OS.get_ticks_msec() - start
 
 	# Add the new scene
 	start = OS.get_ticks_msec()
 	tree.root.add_child(new_scene)
-	if Global._is_logging_loads: logs["add"] = OS.get_ticks_msec() - start
+	if SceneLoader._is_logging_loads: logs["add"] = OS.get_ticks_msec() - start
 	print("+++ Adding %s %s ms" % [new_scene.name, OS.get_ticks_msec() - start])
 
 	# Change to the new scene
 	start = OS.get_ticks_msec()
 	tree.set_current_scene(new_scene)
-	if Global._is_logging_loads: logs["set_current"] = OS.get_ticks_msec() - start
+	if SceneLoader._is_logging_loads: logs["set_current"] = OS.get_ticks_msec() - start
 
-	if Global._is_logging_loads:
+	if SceneLoader._is_logging_loads:
 		var message := ""
 		message += "!!!!!! scene switch %s\n" % path
 		message += "    load %s ms in THREAD\n" % logs["load"]

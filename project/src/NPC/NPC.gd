@@ -4,6 +4,7 @@
 
 extends KinematicBody
 
+const FLOOR_SLOPE_MAX_THRESHOLD := deg2rad(60)
 const HP_MAX := 100.0
 const JUMP_IMPULSE := 20.0
 const ROTATION_SPEED := 6.0
@@ -44,7 +45,7 @@ func _physics_process(delta : float) -> void:
 	_snap_vector = -get_floor_normal() if is_on_floor() else Vector3.DOWN
 
 	# Actually move
-	_velocity = move_and_slide_with_snap(_velocity, _snap_vector, Vector3.UP, true, 4, Global.FLOOR_SLOPE_MAX_THRESHOLD, false)
+	_velocity = move_and_slide_with_snap(_velocity, _snap_vector, Vector3.UP, true, 4, FLOOR_SLOPE_MAX_THRESHOLD, false)
 
 
 func _on_TimerChangeDestination_timeout() -> void:

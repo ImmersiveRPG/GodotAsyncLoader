@@ -6,10 +6,9 @@ extends Node
 
 
 
-const FLOOR_SLOPE_MAX_THRESHOLD := deg2rad(60)
+
 const GRAVITY := -40.0
 
-var _is_logging_loads := false
 var _rng : RandomNumberGenerator
 var _fps_timer : Timer
 
@@ -35,16 +34,3 @@ func _on_fps_timeout() -> void:
 	var title = "(Godot: %s) | FPS: %s" % [godot_debug, fps]
 	OS.set_window_title(title)
 
-func recursively_get_all_children_of_type(target : Node, target_type) -> Array:
-	var matches := []
-	var to_search := [target]
-	while not to_search.empty():
-		var entry = to_search.pop_front()
-
-		for child in entry.get_children():
-			to_search.append(child)
-
-		if entry is target_type:
-			matches.append(entry)
-
-	return matches

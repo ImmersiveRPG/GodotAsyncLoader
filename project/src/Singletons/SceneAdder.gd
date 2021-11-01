@@ -199,7 +199,7 @@ func _check_for_new_scenes() -> bool:
 			has_new_scenes = true
 
 			# Remove all the scene's children to add later
-			for child in Global.recursively_get_all_children_of_type(instance, Node):
+			for child in _recursively_get_all_children_of_type(instance, Node):
 				to = _get_destination_queue_for_instance(child)
 				if to != null:
 					var parent = child.get_parent()
@@ -208,3 +208,17 @@ func _check_for_new_scenes() -> bool:
 						parent.remove_child(child)
 
 	return has_new_scenes
+
+func _recursively_get_all_children_of_type(target : Node, target_type) -> Array:
+	var matches := []
+	var to_search := [target]
+	while not to_search.empty():
+		var entry = to_search.pop_front()
+
+		for child in entry.get_children():
+			to_search.append(child)
+
+		if entry is target_type:
+			matches.append(entry)
+
+	return matches
