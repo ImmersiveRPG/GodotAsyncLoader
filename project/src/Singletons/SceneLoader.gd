@@ -53,6 +53,7 @@ func load_scene_sync(target : Node, path : String) -> Node:
 	# Load the scene
 	var start := OS.get_ticks_msec()
 	var scene = _get_cached_scene(path)
+	if scene == null: return null
 	if SceneLoader._is_logging_loads: logs["load"] = OS.get_ticks_msec() - start
 
 	# Instance the scene
@@ -92,7 +93,9 @@ func _run_thread(_arg : int) -> void:
 
 				var is_existing = ResourceLoader.exists(path)
 				#print(path, " ", is_existing)
-				if is_existing:
+				if not is_existing:
+					push_error("Scene files does not exist: %s" % [path])
+				else:
 					# Load the scene
 					var start := OS.get_ticks_msec()
 					var scene = _get_cached_scene(path)
@@ -138,6 +141,11 @@ func _on_done(target : Node, path : String, pos : Vector3, is_pos_global : bool,
 			print(message)
 
 func _get_cached_scene(path : String) -> PackedScene:
+	# Return null if path does not exist
+	if not ResourceLoader.exists(path):
+		push_error("Scene files does not exist: %s" % [path])
+		return null
+
 	# Check if the scene is loaded
 	_scenes_mutex.lock()
 	var has_scene := _scenes.has(path)

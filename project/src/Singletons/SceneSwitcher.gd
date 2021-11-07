@@ -8,6 +8,11 @@ extends Node
 func change_scene(path : String) -> void:
 	var logs := {}
 
+	# Make sure the scene exists before starting to load
+	if not ResourceLoader.exists(path):
+		push_error("Scene files does not exist: %s" % [path])
+		return
+
 	# Show the loading screen
 	var start := OS.get_ticks_msec()
 	var err : int = get_tree().change_scene("res://src/Loading/Loading.tscn")
