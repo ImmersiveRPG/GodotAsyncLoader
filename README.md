@@ -1,5 +1,8 @@
 # AsyncLoaderExample
 
+
+[![Loading scenes asynchronously in Godot](https://img.youtube.com/vi/GR95TXHz5kg/0.jpg)](https://www.youtube.com/watch?v=GR95TXHz5kg, "Loading scenes asynchronously in Godot")
+
 ## How to load a scene async and in chunks
 
 1. Add SceneLoader, SceneAdder, SceneSwitcher as singleton AutoLoad to project
@@ -53,4 +56,3 @@ var scene_file := "res://src/Animals/Puma.tscn"
 var target = get_tree().get_current_scene()
 var instance := SceneLoader.load_scene_sync(target, scene_file)
 ```
-
