@@ -120,7 +120,7 @@ func _on_done(target : Node, path : String, pos : Vector3, is_pos_global : bool,
 		cb.call_func(path, instance, pos, is_pos_global, logs)
 	else:
 		# Set the instance position
-		if pos != Vector3.INF:
+		if pos != Vector3.INF and instance.has_method("transform"):
 			# Convert the position from global to local if needed
 			if is_pos_global:
 				pos = pos - target.global_transform.origin
