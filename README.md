@@ -7,7 +7,7 @@
 
 1. Add SceneLoader, SceneAdder, SceneSwitcher as singleton AutoLoad to project
 
-2. Add child node to a chunk group
+2. Add child scenes to a group
   * terrain
   * building
   * furniture
@@ -16,7 +16,7 @@
   * npc
   * etc
 
-3. Load parent scene with SceneSwitcher
+3. Load and switch to a scene with SceneSwitcher
   ```GDScript
 
   # Switch to a new scene and load any children asynchronously
@@ -51,7 +51,7 @@ func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_glob
 ## How to load child scene sync
 
 ```GDScript
-# Instance scene synchronously and add to current scene
+# Instance scene synchronously and add to target scene
 var scene_file := "res://src/Animals/Puma.tscn"
 var target = get_tree().get_current_scene()
 var instance := SceneLoader.load_scene_sync(target, scene_file)
