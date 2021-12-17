@@ -163,7 +163,7 @@ func _get_destination_queue_for_instance(instance):
 		#print(">>> %s to %s" % [instance.name, "to_add_npcs"])
 		return to_add_npcs
 	elif instance.is_in_group("etc"):
-		#print(">>> %s to %s" % [instance.name, "to_add_npcs"])
+		#print(">>> %s to %s" % [instance.name, "to_add_etc"])
 		return to_add_etc
 
 	return null
