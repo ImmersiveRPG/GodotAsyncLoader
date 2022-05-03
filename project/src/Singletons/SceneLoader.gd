@@ -115,6 +115,19 @@ func _run_thread(_arg : int) -> void:
 
 func _on_done(target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, logs : Dictionary) -> void:
 	var start := OS.get_ticks_msec()
+
+	# Just return if target is invalid
+	if not is_instance_valid(target):
+		return
+
+	# Just return if instance is invalid
+	if not is_instance_valid(instance):
+		return
+
+	# Just return if the cb is invalid
+	if cb != null and not cb.is_valid():
+		return
+
 	if cb != null:
 		#cb.call_deferred("call_func", path, instance, pos, is_pos_global, logs)
 		cb.call_func(path, instance, pos, is_pos_global, logs)
