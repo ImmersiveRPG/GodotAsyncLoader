@@ -207,64 +207,40 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1200.67, 0, -154.928 )
 [node name="Barn" parent="Buildings" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -295, 100, 0 )
 
-[node name="MeshInstance2" type="MeshInstance" parent="Buildings/Barn" groups=[
-"etc",
-]]
+[node name="MeshInstance2" type="MeshInstance" parent="Buildings/Barn" groups=["etc"]]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, 55 )
 mesh = SubResource( 2 )
-material/0 = null
 
-[node name="MeshInstance3" type="MeshInstance" parent="Buildings/Barn" groups=[
-"etc",
-]]
+[node name="MeshInstance3" type="MeshInstance" parent="Buildings/Barn" groups=["etc"]]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, -48 )
 mesh = SubResource( 2 )
-material/0 = null
 
-[node name="MeshInstance4" type="MeshInstance" parent="Buildings/Barn" groups=[
-"etc",
-]]
+[node name="MeshInstance4" type="MeshInstance" parent="Buildings/Barn" groups=["etc"]]
 transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 52, 57, 110 )
 mesh = SubResource( 2 )
-material/0 = null
 
-[node name="MeshInstance5" type="MeshInstance" parent="Buildings/Barn" groups=[
-"etc",
-]]
+[node name="MeshInstance5" type="MeshInstance" parent="Buildings/Barn" groups=["etc"]]
 transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, -46, 57, 110 )
 mesh = SubResource( 2 )
-material/0 = null
 
 [node name="Barn2" parent="Buildings" instance=ExtResource( 6 )]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1111, 100, -313 )
 
-[node name="MeshInstance2" type="MeshInstance" parent="Buildings/Barn2" groups=[
-"etc",
-]]
+[node name="MeshInstance2" type="MeshInstance" parent="Buildings/Barn2" groups=["etc"]]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, 55 )
 mesh = SubResource( 2 )
-material/0 = null
 
-[node name="MeshInstance3" type="MeshInstance" parent="Buildings/Barn2" groups=[
-"etc",
-]]
+[node name="MeshInstance3" type="MeshInstance" parent="Buildings/Barn2" groups=["etc"]]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, -48 )
 mesh = SubResource( 2 )
-material/0 = null
 
-[node name="MeshInstance4" type="MeshInstance" parent="Buildings/Barn2" groups=[
-"etc",
-]]
+[node name="MeshInstance4" type="MeshInstance" parent="Buildings/Barn2" groups=["etc"]]
 transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 52, 57, 110 )
 mesh = SubResource( 2 )
-material/0 = null
 
-[node name="MeshInstance5" type="MeshInstance" parent="Buildings/Barn2" groups=[
-"etc",
-]]
+[node name="MeshInstance5" type="MeshInstance" parent="Buildings/Barn2" groups=["etc"]]
 transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, -46, 57, 110 )
 mesh = SubResource( 2 )
-material/0 = null
 
 [node name="House" parent="Buildings" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -103, 0, -390 )
@@ -279,4 +255,4 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 571, 0, -390 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 431, 52, -96 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( -0.238106, -0.652098, 0.719773, -0.254325, 0.757091, 0.601775, -0.93735, -0.0397702, -0.346113, 375, 508, -383 )
+transform = Transform( -0.238106, -0.652098, 0.719773, -0.254325, 0.757091, 0.601774, -0.93735, -0.0397703, -0.346113, 375, 508, -383 )

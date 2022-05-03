@@ -1,8 +1,6 @@
 [gd_scene format=2]
 
-[node name="Terrain" type="CSGCombiner" groups=[
-"terrain",
-]]
+[node name="Terrain" type="CSGCombiner" groups=["terrain"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, 0 )
 use_collision = true
 

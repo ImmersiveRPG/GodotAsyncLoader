@@ -9,9 +9,7 @@ extents = Vector3( 100, 100, 100 )
 material = ExtResource( 1 )
 size = Vector3( 200, 200, 200 )
 
-[node name="Barn" type="StaticBody" groups=[
-"building",
-]]
+[node name="Barn" type="StaticBody" groups=["building"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
@@ -19,4 +17,3 @@ shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 mesh = SubResource( 2 )
-material/0 = null
