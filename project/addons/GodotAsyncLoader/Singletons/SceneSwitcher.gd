@@ -34,7 +34,7 @@ func _on_scene_loaded(path : String, node : Node, _pos : Vector3, _is_pos_global
 	var tree : SceneTree = self.get_tree()
 	var new_scene = node
 
-	# Remove the old loading scene
+	# Remove the old scene
 	var start := OS.get_ticks_msec()
 	var old_scene = tree.current_scene
 	tree.root.remove_child(old_scene)
