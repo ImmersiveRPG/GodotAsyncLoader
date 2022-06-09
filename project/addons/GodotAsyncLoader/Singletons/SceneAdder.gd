@@ -141,7 +141,10 @@ func _add_parent(entry, message : String) -> void:
 	#on_done_cb.call_func(target, path, pos, is_pos_global, cb, instance, data)
 	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, data)
 
-func _get_destination_queue_for_instance(instance):
+func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
+	if has_priority:
+		return _to_add_terrain
+
 	if instance.is_in_group("terrain"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_terrain"])
 		return _to_add_terrain
@@ -164,7 +167,7 @@ func _get_destination_queue_for_instance(instance):
 		#print(">>> %s to %s" % [instance.name, "_to_add_etc"])
 		return _to_add_etc
 
-	return null
+	return default_queue
 
 func _check_for_new_scenes() -> bool:
 	_to_add_mutex.lock()
@@ -180,14 +183,7 @@ func _check_for_new_scenes() -> bool:
 		var instance = entry["instance"]
 
 		# Get the queue for this instance type
-		var to = null
-		if has_priority:
-			to = _to_add_terrain
-		else:
-			to = _get_destination_queue_for_instance(instance)
-			if to == null:
-				#print(">>> %s to %s" % [instance.name, "_to_add_terrain"])
-				to = _to_add_terrain
+		var to = _get_destination_queue_for_instance(instance, has_priority, _to_add_terrain)
 
 		# Add the scene
 		var entry_copy = entry.duplicate()
@@ -198,7 +194,7 @@ func _check_for_new_scenes() -> bool:
 
 		# Remove all the scene's children to add later
 		for child in _recursively_get_all_children_of_type(instance, Node):
-			to = _get_destination_queue_for_instance(child)
+			to = _get_destination_queue_for_instance(child, false, null)
 			if to != null:
 				var parent = child.get_parent()
 				if parent != null:
