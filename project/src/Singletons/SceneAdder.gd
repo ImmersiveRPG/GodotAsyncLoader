@@ -31,7 +31,7 @@ func _exit_tree() -> void:
 		_thread.wait_to_finish()
 		_thread = null
 
-func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, logs : Dictionary, has_priority : bool) -> void:
+func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
 	_to_add_mutex.lock()
 
 	if not _to_add.has(target):
@@ -44,7 +44,7 @@ func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3
 		"is_pos_global" : is_pos_global,
 		"cb" : cb,
 		"instance" : instance,
-		"logs" : logs,
+		"data" : data,
 		"has_priority" : has_priority,
 	}
 
@@ -138,10 +138,10 @@ func _add_parent(entry, message : String) -> void:
 	var is_pos_global = entry["is_pos_global"]
 	var cb = entry["cb"]
 	var instance = entry["instance"]
-	var logs = entry["logs"]
+	var data = entry["data"]
 	print("+++ Adding %s %s" % [message, instance.name])
-	#on_done_cb.call_func(target, path, pos, is_pos_global, cb, instance, logs)
-	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, logs)
+	#on_done_cb.call_func(target, path, pos, is_pos_global, cb, instance, data)
+	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, data)
 
 func _get_destination_queue_for_instance(instance):
 	if instance.is_in_group("terrain"):

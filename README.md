@@ -42,7 +42,7 @@ var scene_file := "res://src/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
 SceneLoader.load_scene_async_with_cb(target, scene_file, pos, true, funcref(self, "on_animal_loaded"))
 
-func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_global : bool, logs : Dictionary) -> void:
+func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_global : bool, data : Dictionary) -> void:
 	var target = get_tree().get_current_scene()
 	instance.transform.origin = pos
 	target.add_child(instance)
