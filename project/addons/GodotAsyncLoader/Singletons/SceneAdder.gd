@@ -7,7 +7,7 @@ extends Node
 const sleep_time := 100
 var _is_running := false
 var _thread : Thread
-var _to_add := {}
+var _to_add := []
 var _to_add_mutex := Mutex.new()
 
 var _to_add_terrain := []
@@ -33,6 +33,7 @@ func _exit_tree() -> void:
 
 func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
+		"target" : target,
 		"on_done_cb" : on_done_cb,
 		"path" : path,
 		"pos" : pos,
@@ -45,13 +46,10 @@ func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3
 
 	_to_add_mutex.lock()
 
-	if not _to_add.has(target):
-		_to_add[target] = []
-
 	if has_priority:
-		_to_add[target].push_front(entry)
+		_to_add.push_front(entry)
 	else:
-		_to_add[target].push_back(entry)
+		_to_add.push_back(entry)
 
 	_to_add_mutex.unlock()
 
@@ -107,7 +105,7 @@ func _run_thread(_arg : int) -> void:
 
 		OS.delay_msec(2)
 
-func _add_entry(from, message : String) -> bool:
+func _add_entry(from : Array, message : String) -> bool:
 	var entry = from.pop_front()
 	if entry["is_child"]:
 		_add_child(entry, message)
@@ -171,41 +169,41 @@ func _get_destination_queue_for_instance(instance):
 func _check_for_new_scenes() -> bool:
 	_to_add_mutex.lock()
 	var to_add := _to_add.duplicate()
-	_to_add = {}
+	_to_add.clear()
 	_to_add_mutex.unlock()
 
 	var has_new_scenes := false
-	for target in to_add:
-		for entry in to_add[target]:
-			var has_priority = entry["has_priority"]
-			#OS.delay_msec(1)
-			var instance = entry["instance"]
+	for entry in to_add:
+		var target = entry["target"]
+		var has_priority = entry["has_priority"]
+		#OS.delay_msec(1)
+		var instance = entry["instance"]
 
-			# Get the queue for this instance type
-			var to = null
-			if has_priority:
+		# Get the queue for this instance type
+		var to = null
+		if has_priority:
+			to = _to_add_terrain
+		else:
+			to = _get_destination_queue_for_instance(instance)
+			if to == null:
+				#print(">>> %s to %s" % [instance.name, "_to_add_terrain"])
 				to = _to_add_terrain
-			else:
-				to = _get_destination_queue_for_instance(instance)
-				if to == null:
-					#print(">>> %s to %s" % [instance.name, "_to_add_terrain"])
-					to = _to_add_terrain
 
-			# Add the scene
-			var entry_copy = entry.duplicate()
-			entry_copy["target"] = target
-			entry_copy["is_child"] = false
-			to.append(entry_copy)
-			has_new_scenes = true
+		# Add the scene
+		var entry_copy = entry.duplicate()
+		#entry_copy["target"] = target
+		entry_copy["is_child"] = false
+		to.append(entry_copy)
+		has_new_scenes = true
 
-			# Remove all the scene's children to add later
-			for child in _recursively_get_all_children_of_type(instance, Node):
-				to = _get_destination_queue_for_instance(child)
-				if to != null:
-					var parent = child.get_parent()
-					if parent != null:
-						to.append({ "is_child" : true, "instance" : child, "parent" : parent, "transform" : child.transform})
-						parent.remove_child(child)
+		# Remove all the scene's children to add later
+		for child in _recursively_get_all_children_of_type(instance, Node):
+			to = _get_destination_queue_for_instance(child)
+			if to != null:
+				var parent = child.get_parent()
+				if parent != null:
+					to.append({ "is_child" : true, "instance" : child, "parent" : parent, "transform" : child.transform})
+					parent.remove_child(child)
 
 	return has_new_scenes
 
