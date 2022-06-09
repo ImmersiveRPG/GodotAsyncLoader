@@ -5,7 +5,7 @@
 extends Node
 
 
-func change_scene(path : String) -> void:
+func change_scene(path : String, loading_path := "") -> void:
 	var data := {}
 
 	# Make sure the scene exists before starting to load
@@ -13,11 +13,17 @@ func change_scene(path : String) -> void:
 		push_error("Scene files does not exist: %s" % [path])
 		return
 
+	# Make sure the loading scene exists before starting to load
+	if loading_path and not ResourceLoader.exists(loading_path):
+		push_error("Loading scene files does not exist: %s" % [loading_path])
+		return
+
 	# Show the loading screen
 	var start := OS.get_ticks_msec()
-	var err : int = get_tree().change_scene("res://src/Loading/Loading.tscn")
-	assert(err == OK)
-	#if SceneLoader._is_logging_loads: print("!!!!!! MAIN: changed to loading scene for %s ms" % [OS.get_ticks_msec() - start])
+	if loading_path:
+		var err : int = get_tree().change_scene(loading_path)
+		assert(err == OK)
+		#if SceneLoader._is_logging_loads: print("!!!!!! MAIN: changed to loading scene for %s ms" % [OS.get_ticks_msec() - start])
 	if SceneLoader._is_logging_loads: data["change_scene"] = OS.get_ticks_msec() - start
 
 	# Load the scene

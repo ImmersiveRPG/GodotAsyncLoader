@@ -6,7 +6,7 @@ extends Control
 
 
 func _on_StartAsyncButton_pressed() -> void:
-	SceneSwitcher.change_scene("res://src/World/World.tscn")
+	SceneSwitcher.change_scene("res://src/World/World.tscn", "res://src/Loading/Loading.tscn")
 
 func _on_StartSyncButton_pressed() -> void:
 	# Remove the old scene
