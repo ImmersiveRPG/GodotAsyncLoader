@@ -32,11 +32,6 @@ func _exit_tree() -> void:
 		_thread = null
 
 func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
-	_to_add_mutex.lock()
-
-	if not _to_add.has(target):
-		_to_add[target] = []
-
 	var entry := {
 		"on_done_cb" : on_done_cb,
 		"path" : path,
@@ -47,6 +42,11 @@ func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3
 		"data" : data,
 		"has_priority" : has_priority,
 	}
+
+	_to_add_mutex.lock()
+
+	if not _to_add.has(target):
+		_to_add[target] = []
 
 	if has_priority:
 		_to_add[target].push_front(entry)

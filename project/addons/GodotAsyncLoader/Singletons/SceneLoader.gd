@@ -26,9 +26,6 @@ func _exit_tree() -> void:
 		_thread = null
 
 func load_scene_async_with_cb(target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, data : Dictionary, has_priority := false) -> void:
-	_to_load_mutex.lock()
-	if not _to_load.has(target):
-		_to_load[target] = []
 	var entry := {
 		"path" : path,
 		"cb" : cb,
@@ -37,6 +34,11 @@ func load_scene_async_with_cb(target : Node, path : String, pos : Vector3, is_po
 		"data" : data,
 		"has_priority" : has_priority,
 	}
+
+	_to_load_mutex.lock()
+	if not _to_load.has(target):
+		_to_load[target] = []
+
 	if has_priority:
 		_to_load[target].push_front(entry)
 	else:
