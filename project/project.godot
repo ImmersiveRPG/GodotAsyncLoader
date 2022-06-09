@@ -16,10 +16,14 @@ config/icon="res://icon.png"
 
 [autoload]
 
-SceneLoader="*res://src/Singletons/SceneLoader.gd"
 Global="*res://src/Singletons/Global.gd"
-SceneAdder="*res://src/Singletons/SceneAdder.gd"
-SceneSwitcher="*res://src/Singletons/SceneSwitcher.gd"
+SceneAdder="*res://addons/GodotAsyncLoader/Singletons/SceneAdder.gd"
+SceneLoader="*res://addons/GodotAsyncLoader/Singletons/SceneLoader.gd"
+SceneSwitcher="*res://addons/GodotAsyncLoader/Singletons/SceneSwitcher.gd"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/GodotAsyncLoader/plugin.cfg" )
 
 [physics]
 

@@ -5,7 +5,7 @@
 
 ## How to load a scene async and in chunks
 
-1. Add SceneLoader, SceneAdder, SceneSwitcher as singleton AutoLoad to project
+1. Add the plugin GodotAsyncLoader to your project
 
 2. Add child scenes to a group
   * terrain
