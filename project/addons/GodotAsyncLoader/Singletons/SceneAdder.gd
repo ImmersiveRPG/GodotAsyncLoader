@@ -10,13 +10,15 @@ var _thread : Thread
 var _to_add := []
 var _to_add_mutex := Mutex.new()
 
-var _to_add_terrain := []
-var _to_add_buildings := []
-var _to_add_furniture := []
-var _to_add_plants := []
-var _to_add_items := []
-var _to_add_npcs := []
-var _to_add_etc := []
+var _to_adds := {
+	"terrain" : [],
+	"buildings" : [],
+	"furniture" : [],
+	"plants" : [],
+	"items" : [],
+	"npcs" : [],
+	"etc" : [],
+}
 
 func _enter_tree() -> void:
 	_thread = Thread.new()
@@ -53,26 +55,24 @@ func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3
 
 	_to_add_mutex.unlock()
 
-func _can_add_terrain() -> bool:
-	return not _to_add_terrain.empty()
+func _can_add(category : String) -> bool:
+	match category:
+		"terrain":
+			return not _to_adds["terrain"].empty()
+		"buildings":
+			return not _to_adds["buildings"].empty() and not _can_add("terrain")
+		"furniture":
+			return not _to_adds["furniture"].empty() and not _can_add("buildings")
+		"plants":
+			return not _to_adds["plants"].empty() and not _can_add("furniture")
+		"items":
+			return not _to_adds["items"].empty() and not _can_add("plants")
+		"npcs":
+			return not _to_adds["npcs"].empty() and not _can_add("items")
+		"etc":
+			return not _to_adds["etc"].empty() and not _can_add("npcs")
 
-func _can_add_buildings() -> bool:
-	return not _to_add_buildings.empty() and not _can_add_terrain()
-
-func _can_add_furniture() -> bool:
-	return not _to_add_furniture.empty() and not _can_add_buildings()
-
-func _can_add_plants() -> bool:
-	return not _to_add_plants.empty() and not _can_add_furniture()
-
-func _can_add_items() -> bool:
-	return not _to_add_items.empty() and not _can_add_plants()
-
-func _can_add_npcs() -> bool:
-	return not _to_add_npcs.empty() and not _can_add_items()
-
-func _can_add_etc() -> bool:
-	return not _to_add_etc.empty() and not _can_add_npcs()
+	return false
 
 func _run_thread(_arg : int) -> void:
 	_is_running = true
@@ -82,26 +82,26 @@ func _run_thread(_arg : int) -> void:
 		is_reset = false
 		self._check_for_new_scenes()
 
-		while _is_running and not is_reset and _can_add_terrain():
-			is_reset = _add_entry(_to_add_terrain, "Terrain")
+		while _is_running and not is_reset and _can_add("terrain"):
+			is_reset = _add_entry(_to_adds["terrain"], "Terrain")
 
-		while _is_running and not is_reset and _can_add_buildings():
-			is_reset = _add_entry(_to_add_buildings, "Building")
+		while _is_running and not is_reset and _can_add("buildings"):
+			is_reset = _add_entry(_to_adds["buildings"], "Building")
 
-		while _is_running and not is_reset and _can_add_furniture():
-			is_reset = _add_entry(_to_add_furniture, "Furniture")
+		while _is_running and not is_reset and _can_add("furniture"):
+			is_reset = _add_entry(_to_adds["furniture"], "Furniture")
 
-		while _is_running and not is_reset and _can_add_plants():
-			is_reset = _add_entry(_to_add_plants, "Plant")
+		while _is_running and not is_reset and _can_add("plants"):
+			is_reset = _add_entry(_to_adds["plants"], "Plant")
 
-		while _is_running and not is_reset and _can_add_items():
-			is_reset = _add_entry(_to_add_items, "Item")
+		while _is_running and not is_reset and _can_add("items"):
+			is_reset = _add_entry(_to_adds["items"], "Item")
 
-		while _is_running and not is_reset and _can_add_npcs():
-			is_reset = _add_entry(_to_add_npcs, "NPC")
+		while _is_running and not is_reset and _can_add("npcs"):
+			is_reset = _add_entry(_to_adds["npcs"], "NPC")
 
-		while _is_running and not is_reset and _can_add_etc():
-			is_reset = _add_entry(_to_add_etc, "ETC")
+		while _is_running and not is_reset and _can_add("etc"):
+			is_reset = _add_entry(_to_adds["etc"], "ETC")
 
 		OS.delay_msec(2)
 
@@ -143,29 +143,29 @@ func _add_parent(entry, message : String) -> void:
 
 func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
 	if has_priority:
-		return _to_add_terrain
+		return _to_adds["terrain"]
 
 	if instance.is_in_group("terrain"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_terrain"])
-		return _to_add_terrain
+		return _to_adds["terrain"]
 	elif instance.is_in_group("building"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_buildings"])
-		return _to_add_buildings
+		return _to_adds["buildings"]
 	elif instance.is_in_group("furniture"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_furniture"])
-		return _to_add_furniture
+		return _to_adds["furniture"]
 	elif instance.is_in_group("plant"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_plants"])
-		return _to_add_plants
+		return _to_adds["plants"]
 	elif instance.is_in_group("item"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_items"])
-		return _to_add_items
+		return _to_adds["items"]
 	elif instance.is_in_group("npc"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_npcs"])
-		return _to_add_npcs
+		return _to_adds["npcs"]
 	elif instance.is_in_group("etc"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_etc"])
-		return _to_add_etc
+		return _to_adds["etc"]
 
 	return default_queue
 
@@ -183,7 +183,7 @@ func _check_for_new_scenes() -> bool:
 		var instance = entry["instance"]
 
 		# Get the queue for this instance type
-		var to = _get_destination_queue_for_instance(instance, has_priority, _to_add_terrain)
+		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds["terrain"])
 
 		# Add the scene
 		var entry_copy = entry.duplicate()
