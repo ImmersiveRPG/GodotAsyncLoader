@@ -4,7 +4,7 @@
 
 extends Node
 
-const sleep_time := 100
+var _sleep_msec := 10
 var _is_running := false
 var _thread : Thread
 var _to_add := []
@@ -93,7 +93,7 @@ func _add_entry(from : Array, category : String) -> bool:
 	else:
 		_add_parent(entry, category)
 
-	OS.delay_msec(sleep_time)
+	OS.delay_msec(_sleep_msec)
 	return self._check_for_new_scenes()
 
 func _add_child(entry, category : String) -> void:

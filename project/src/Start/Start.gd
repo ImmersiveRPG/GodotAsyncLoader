@@ -15,6 +15,7 @@ const CATEGORIES := [
 ]
 
 func _init() -> void:
+	SceneAdder._sleep_msec = 100
 	SceneAdder.set_categories(CATEGORIES)
 
 func _on_StartAsyncButton_pressed() -> void:
