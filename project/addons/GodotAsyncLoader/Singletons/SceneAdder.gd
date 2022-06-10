@@ -83,25 +83,25 @@ func _run_thread(_arg : int) -> void:
 		self._check_for_new_scenes()
 
 		while _is_running and not is_reset and _can_add("terrain"):
-			is_reset = _add_entry(_to_adds["terrain"], "Terrain")
+			is_reset = _add_entry(_to_adds["terrain"], "terrain")
 
 		while _is_running and not is_reset and _can_add("building"):
-			is_reset = _add_entry(_to_adds["building"], "Building")
+			is_reset = _add_entry(_to_adds["building"], "building")
 
 		while _is_running and not is_reset and _can_add("furniture"):
-			is_reset = _add_entry(_to_adds["furniture"], "Furniture")
+			is_reset = _add_entry(_to_adds["furniture"], "furniture")
 
 		while _is_running and not is_reset and _can_add("plant"):
-			is_reset = _add_entry(_to_adds["plant"], "Plant")
+			is_reset = _add_entry(_to_adds["plant"], "plant")
 
 		while _is_running and not is_reset and _can_add("item"):
-			is_reset = _add_entry(_to_adds["item"], "Item")
+			is_reset = _add_entry(_to_adds["item"], "item")
 
 		while _is_running and not is_reset and _can_add("npc"):
-			is_reset = _add_entry(_to_adds["npc"], "NPC")
+			is_reset = _add_entry(_to_adds["npc"], "npc")
 
 		while _is_running and not is_reset and _can_add("etc"):
-			is_reset = _add_entry(_to_adds["etc"], "ETC")
+			is_reset = _add_entry(_to_adds["etc"], "etc")
 
 		OS.delay_msec(2)
 
