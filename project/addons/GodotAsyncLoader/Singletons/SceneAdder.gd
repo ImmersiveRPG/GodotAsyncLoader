@@ -9,16 +9,21 @@ var _is_running := false
 var _thread : Thread
 var _to_add := []
 var _to_add_mutex := Mutex.new()
+var _to_adds := {}
 
-var _to_adds := {
-	"terrain" : [],
-	"building" : [],
-	"furniture" : [],
-	"plant" : [],
-	"item" : [],
-	"npc" : [],
-	"etc" : [],
-}
+const CATEGORIES := [
+	"terrain",
+	"building",
+	"furniture",
+	"plant",
+	"item",
+	"npc",
+	"etc",
+]
+
+func _init() -> void:
+	for category in CATEGORIES:
+		_to_adds[category] = []
 
 func _enter_tree() -> void:
 	_thread = Thread.new()
@@ -56,21 +61,20 @@ func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3
 	_to_add_mutex.unlock()
 
 func _can_add(category : String) -> bool:
-	match category:
-		"terrain":
-			return not _to_adds["terrain"].empty()
-		"building":
-			return not _to_adds["building"].empty() and not _can_add("terrain")
-		"furniture":
-			return not _to_adds["furniture"].empty() and not _can_add("building")
-		"plant":
-			return not _to_adds["plant"].empty() and not _can_add("furniture")
-		"item":
-			return not _to_adds["item"].empty() and not _can_add("plant")
-		"npc":
-			return not _to_adds["npc"].empty() and not _can_add("item")
-		"etc":
-			return not _to_adds["etc"].empty() and not _can_add("npc")
+	var i := CATEGORIES.find(category)
+
+	match i:
+		# Return false if unknown category
+		-1:
+			return false
+		# Return true if there are any instances of this category to add
+		0:
+			return not _to_adds[category].empty()
+		# Return true if there are any instances of this category to add
+		# and the previous category has no more instances to add
+		_:
+			var prev_category = CATEGORIES[i - 1]
+			return not _to_adds[category].empty() and not _can_add(prev_category)
 
 	return false
 
@@ -82,26 +86,9 @@ func _run_thread(_arg : int) -> void:
 		is_reset = false
 		self._check_for_new_scenes()
 
-		while _is_running and not is_reset and _can_add("terrain"):
-			is_reset = _add_entry(_to_adds["terrain"], "terrain")
-
-		while _is_running and not is_reset and _can_add("building"):
-			is_reset = _add_entry(_to_adds["building"], "building")
-
-		while _is_running and not is_reset and _can_add("furniture"):
-			is_reset = _add_entry(_to_adds["furniture"], "furniture")
-
-		while _is_running and not is_reset and _can_add("plant"):
-			is_reset = _add_entry(_to_adds["plant"], "plant")
-
-		while _is_running and not is_reset and _can_add("item"):
-			is_reset = _add_entry(_to_adds["item"], "item")
-
-		while _is_running and not is_reset and _can_add("npc"):
-			is_reset = _add_entry(_to_adds["npc"], "npc")
-
-		while _is_running and not is_reset and _can_add("etc"):
-			is_reset = _add_entry(_to_adds["etc"], "etc")
+		for category in CATEGORIES:
+			while _is_running and not is_reset and _can_add(category):
+				is_reset = _add_entry(_to_adds[category], category)
 
 		OS.delay_msec(2)
 
@@ -143,24 +130,12 @@ func _add_parent(entry, category : String) -> void:
 
 func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
 	if has_priority:
-		return _to_adds["terrain"]
+		return _to_adds[CATEGORIES[0]]
 
 	for group in instance.get_groups():
-		match group:
-			"terrain":
-				return _to_adds["terrain"]
-			"building":
-				return _to_adds["building"]
-			"furniture":
-				return _to_adds["furniture"]
-			"plant":
-				return _to_adds["plant"]
-			"item":
-				return _to_adds["item"]
-			"npc":
-				return _to_adds["npc"]
-			"etc":
-				return _to_adds["etc"]
+		var i := CATEGORIES.find(group)
+		if i != -1:
+			return _to_adds[CATEGORIES[i]]
 
 	return default_queue
 
@@ -178,7 +153,7 @@ func _check_for_new_scenes() -> bool:
 		var instance = entry["instance"]
 
 		# Get the queue for this instance type
-		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds["terrain"])
+		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds[CATEGORIES[0]])
 
 		# Add the scene
 		var entry_copy = entry.duplicate()
@@ -193,7 +168,7 @@ func _check_for_new_scenes() -> bool:
 			if to != null:
 				var parent = child.get_parent()
 				if parent != null:
-					to.append({ "is_child" : true, "instance" : child, "parent" : parent, "transform" : child.transform})
+					to.append({ "is_child" : true, "instance" : child, "parent" : parent, "transform" : child.transform })
 					parent.remove_child(child)
 
 	return has_new_scenes
