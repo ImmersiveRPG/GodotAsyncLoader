@@ -12,11 +12,11 @@ var _to_add_mutex := Mutex.new()
 
 var _to_adds := {
 	"terrain" : [],
-	"buildings" : [],
+	"building" : [],
 	"furniture" : [],
-	"plants" : [],
-	"items" : [],
-	"npcs" : [],
+	"plant" : [],
+	"item" : [],
+	"npc" : [],
 	"etc" : [],
 }
 
@@ -59,18 +59,18 @@ func _can_add(category : String) -> bool:
 	match category:
 		"terrain":
 			return not _to_adds["terrain"].empty()
-		"buildings":
-			return not _to_adds["buildings"].empty() and not _can_add("terrain")
+		"building":
+			return not _to_adds["building"].empty() and not _can_add("terrain")
 		"furniture":
-			return not _to_adds["furniture"].empty() and not _can_add("buildings")
-		"plants":
-			return not _to_adds["plants"].empty() and not _can_add("furniture")
-		"items":
-			return not _to_adds["items"].empty() and not _can_add("plants")
-		"npcs":
-			return not _to_adds["npcs"].empty() and not _can_add("items")
+			return not _to_adds["furniture"].empty() and not _can_add("building")
+		"plant":
+			return not _to_adds["plant"].empty() and not _can_add("furniture")
+		"item":
+			return not _to_adds["item"].empty() and not _can_add("plant")
+		"npc":
+			return not _to_adds["npc"].empty() and not _can_add("item")
 		"etc":
-			return not _to_adds["etc"].empty() and not _can_add("npcs")
+			return not _to_adds["etc"].empty() and not _can_add("npc")
 
 	return false
 
@@ -85,20 +85,20 @@ func _run_thread(_arg : int) -> void:
 		while _is_running and not is_reset and _can_add("terrain"):
 			is_reset = _add_entry(_to_adds["terrain"], "Terrain")
 
-		while _is_running and not is_reset and _can_add("buildings"):
-			is_reset = _add_entry(_to_adds["buildings"], "Building")
+		while _is_running and not is_reset and _can_add("building"):
+			is_reset = _add_entry(_to_adds["building"], "Building")
 
 		while _is_running and not is_reset and _can_add("furniture"):
 			is_reset = _add_entry(_to_adds["furniture"], "Furniture")
 
-		while _is_running and not is_reset and _can_add("plants"):
-			is_reset = _add_entry(_to_adds["plants"], "Plant")
+		while _is_running and not is_reset and _can_add("plant"):
+			is_reset = _add_entry(_to_adds["plant"], "Plant")
 
-		while _is_running and not is_reset and _can_add("items"):
-			is_reset = _add_entry(_to_adds["items"], "Item")
+		while _is_running and not is_reset and _can_add("item"):
+			is_reset = _add_entry(_to_adds["item"], "Item")
 
-		while _is_running and not is_reset and _can_add("npcs"):
-			is_reset = _add_entry(_to_adds["npcs"], "NPC")
+		while _is_running and not is_reset and _can_add("npc"):
+			is_reset = _add_entry(_to_adds["npc"], "NPC")
 
 		while _is_running and not is_reset and _can_add("etc"):
 			is_reset = _add_entry(_to_adds["etc"], "ETC")
@@ -150,19 +150,19 @@ func _get_destination_queue_for_instance(instance : Node, has_priority : bool, d
 		return _to_adds["terrain"]
 	elif instance.is_in_group("building"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_buildings"])
-		return _to_adds["buildings"]
+		return _to_adds["building"]
 	elif instance.is_in_group("furniture"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_furniture"])
 		return _to_adds["furniture"]
 	elif instance.is_in_group("plant"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_plants"])
-		return _to_adds["plants"]
+		return _to_adds["plant"]
 	elif instance.is_in_group("item"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_items"])
-		return _to_adds["items"]
+		return _to_adds["item"]
 	elif instance.is_in_group("npc"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_npcs"])
-		return _to_adds["npcs"]
+		return _to_adds["npc"]
 	elif instance.is_in_group("etc"):
 		#print(">>> %s to %s" % [instance.name, "_to_add_etc"])
 		return _to_adds["etc"]
