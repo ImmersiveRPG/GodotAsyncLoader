@@ -4,6 +4,18 @@
 
 extends Control
 
+const CATEGORIES := [
+	"terrain",
+	"building",
+	"furniture",
+	"plant",
+	"item",
+	"npc",
+	"etc",
+]
+
+func _init() -> void:
+	SceneAdder.set_categories(CATEGORIES)
 
 func _on_StartAsyncButton_pressed() -> void:
 	SceneSwitcher.change_scene("res://src/World/World.tscn", "res://src/Loading/Loading.tscn")

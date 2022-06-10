@@ -11,17 +11,11 @@ var _to_add := []
 var _to_add_mutex := Mutex.new()
 var _to_adds := {}
 
-const CATEGORIES := [
-	"terrain",
-	"building",
-	"furniture",
-	"plant",
-	"item",
-	"npc",
-	"etc",
-]
+var CATEGORIES := []
 
-func _init() -> void:
+func set_categories(categories : Array) -> void:
+	CATEGORIES = categories
+
 	for category in CATEGORIES:
 		_to_adds[category] = []
 
