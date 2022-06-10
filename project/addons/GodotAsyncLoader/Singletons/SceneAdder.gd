@@ -145,27 +145,22 @@ func _get_destination_queue_for_instance(instance : Node, has_priority : bool, d
 	if has_priority:
 		return _to_adds["terrain"]
 
-	if instance.is_in_group("terrain"):
-		#print(">>> %s to %s" % [instance.name, "_to_add_terrain"])
-		return _to_adds["terrain"]
-	elif instance.is_in_group("building"):
-		#print(">>> %s to %s" % [instance.name, "_to_add_buildings"])
-		return _to_adds["building"]
-	elif instance.is_in_group("furniture"):
-		#print(">>> %s to %s" % [instance.name, "_to_add_furniture"])
-		return _to_adds["furniture"]
-	elif instance.is_in_group("plant"):
-		#print(">>> %s to %s" % [instance.name, "_to_add_plants"])
-		return _to_adds["plant"]
-	elif instance.is_in_group("item"):
-		#print(">>> %s to %s" % [instance.name, "_to_add_items"])
-		return _to_adds["item"]
-	elif instance.is_in_group("npc"):
-		#print(">>> %s to %s" % [instance.name, "_to_add_npcs"])
-		return _to_adds["npc"]
-	elif instance.is_in_group("etc"):
-		#print(">>> %s to %s" % [instance.name, "_to_add_etc"])
-		return _to_adds["etc"]
+	for group in instance.get_groups():
+		match group:
+			"terrain":
+				return _to_adds["terrain"]
+			"building":
+				return _to_adds["building"]
+			"furniture":
+				return _to_adds["furniture"]
+			"plant":
+				return _to_adds["plant"]
+			"item":
+				return _to_adds["item"]
+			"npc":
+				return _to_adds["npc"]
+			"etc":
+				return _to_adds["etc"]
 
 	return default_queue
 
