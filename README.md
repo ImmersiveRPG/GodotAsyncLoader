@@ -7,16 +7,26 @@
 
 1. Add the plugin GodotAsyncLoader to your project
 
-2. Add child scenes to a group
-  * terrain
-  * building
-  * furniture
-  * plant
-  * item
-  * npc
-  * etc
+2. Add group categories to scenes
 
-3. Load and switch to a scene with SceneSwitcher
+3. Add group categories
+```GDScript
+const CATEGORIES := [
+	"terrain",
+	"building",
+	"furniture",
+	"plant",
+	"item",
+	"npc",
+	"etc",
+]
+
+func _init() -> void:
+	SceneAdder._sleep_msec = 100
+	SceneAdder.set_categories(CATEGORIES)
+```
+
+4. Load and switch to a scene with SceneSwitcher
   ```GDScript
 
   # Switch to a new scene and load any children asynchronously
