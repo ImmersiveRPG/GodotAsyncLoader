@@ -96,19 +96,6 @@ func _add_entry(from : Array, category : String) -> bool:
 	OS.delay_msec(_sleep_msec)
 	return self._check_for_new_scenes()
 
-func _add_entry_child(entry, category : String) -> void:
-	var parent = entry["parent"]
-	var instance = entry["instance"]
-	var transform = entry["transform"]
-	instance.transform = transform
-	self.call_deferred("_on_add_entry_child_cb", parent, instance, category)
-
-func _on_add_entry_child_cb(parent : Node, instance : Node, category : String) -> void:
-	var start := OS.get_ticks_msec()
-	parent.add_child(instance)
-	var time := OS.get_ticks_msec() - start
-	print("+++ Adding %s \"%s\" %s ms" % [category, instance.name, time])
-
 func _add_entry_parent(entry, category : String) -> void:
 	var target = entry["target"]
 	var on_done_cb = entry["on_done_cb"]
@@ -121,6 +108,19 @@ func _add_entry_parent(entry, category : String) -> void:
 	print("+++ Adding %s \"%s\"" % [category, instance.name])
 	#on_done_cb.call_func(target, path, pos, is_pos_global, cb, instance, data)
 	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, data)
+
+func _add_entry_child(entry, category : String) -> void:
+	var parent = entry["parent"]
+	var instance = entry["instance"]
+	var transform = entry["transform"]
+	instance.transform = transform
+	self.call_deferred("_on_add_entry_child_cb", parent, instance, category)
+
+func _on_add_entry_child_cb(parent : Node, instance : Node, category : String) -> void:
+	var start := OS.get_ticks_msec()
+	parent.add_child(instance)
+	var time := OS.get_ticks_msec() - start
+	print("+++ Adding %s \"%s\" %s ms" % [category, instance.name, time])
 
 func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
 	if has_priority:
