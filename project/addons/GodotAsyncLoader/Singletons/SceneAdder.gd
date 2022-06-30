@@ -111,14 +111,17 @@ func _add_entry_parent(entry, category : String) -> void:
 
 func _add_entry_child(entry, category : String) -> void:
 	var parent = entry["parent"]
+	var owner = entry.get("owner", null)
 	var instance = entry["instance"]
 	var transform = entry["transform"]
 	instance.transform = transform
-	self.call_deferred("_on_add_entry_child_cb", parent, instance, category)
+	self.call_deferred("_on_add_entry_child_cb", parent, owner, instance, category)
 
-func _on_add_entry_child_cb(parent : Node, instance : Node, category : String) -> void:
+func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, category : String) -> void:
 	var start := OS.get_ticks_msec()
 	parent.add_child(instance)
+	if owner:
+		instance.set_owner(owner)
 	var time := OS.get_ticks_msec() - start
 	print("+++ Adding %s \"%s\" %s ms" % [category, instance.name, time])
 
@@ -161,8 +164,9 @@ func _check_for_new_scenes() -> bool:
 			to = _get_destination_queue_for_instance(child, false, null)
 			if to != null:
 				var parent = child.get_parent()
+				var owner = instance
 				if parent != null:
-					to.append({ "is_child" : true, "instance" : child, "parent" : parent, "transform" : child.transform })
+					to.append({ "is_child" : true, "instance" : child, "parent" : parent, "owner" : owner, "transform" : child.transform })
 					parent.remove_child(child)
 
 	return has_new_scenes
