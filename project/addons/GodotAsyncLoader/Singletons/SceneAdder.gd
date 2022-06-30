@@ -89,27 +89,27 @@ func _run_thread(_arg : int) -> void:
 func _add_entry(from : Array, category : String) -> bool:
 	var entry = from.pop_front()
 	if entry["is_child"]:
-		_add_child(entry, category)
+		_add_entry_child(entry, category)
 	else:
-		_add_parent(entry, category)
+		_add_entry_parent(entry, category)
 
 	OS.delay_msec(_sleep_msec)
 	return self._check_for_new_scenes()
 
-func _add_child(entry, category : String) -> void:
+func _add_entry_child(entry, category : String) -> void:
 	var parent = entry["parent"]
 	var instance = entry["instance"]
 	var transform = entry["transform"]
 	instance.transform = transform
-	self.call_deferred("_on_add_child_cb", parent, instance, category)
+	self.call_deferred("_on_add_entry_child_cb", parent, instance, category)
 
-func _on_add_child_cb(parent : Node, instance : Node, category : String) -> void:
+func _on_add_entry_child_cb(parent : Node, instance : Node, category : String) -> void:
 	var start := OS.get_ticks_msec()
 	parent.add_child(instance)
 	var time := OS.get_ticks_msec() - start
 	print("+++ Adding %s \"%s\" %s ms" % [category, instance.name, time])
 
-func _add_parent(entry, category : String) -> void:
+func _add_entry_parent(entry, category : String) -> void:
 	var target = entry["target"]
 	var on_done_cb = entry["on_done_cb"]
 	var path = entry["path"]
