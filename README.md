@@ -1,27 +1,42 @@
-# AsyncLoaderExample
+# GodotAsyncLoader
 
 
 [![Loading scenes asynchronously in Godot](https://img.youtube.com/vi/GR95TXHz5kg/0.jpg)](https://www.youtube.com/watch?v=GR95TXHz5kg, "Loading scenes asynchronously in Godot")
 
-## How to load a scene async and in chunks
+## How to install and use plugin
 
-1. Add SceneLoader, SceneAdder, SceneSwitcher as singleton AutoLoad to project
+1. Install the GodotAsyncLoader plugin in AssetLib
 
-2. Add child scenes to a group
-  * terrain
-  * building
-  * furniture
-  * plant
-  * item
-  * npc
-  * etc
+2. Enable the plugin (Project -> Project Settings -> Plugins -> Enable)
 
-3. Load and switch to a scene with SceneSwitcher
-  ```GDScript
+![groups](https://github.com/ImmersiveRPG/GodotAsyncLoader/blob/v2/docs/plugins.png)
 
-  # Switch to a new scene and load any children asynchronously
-  SceneSwitcher.change_scene("res://src/World/World.tscn")
-  ```
+3. Add scenes to groups
+
+![groups](https://github.com/ImmersiveRPG/GodotAsyncLoader/blob/v2/docs/groups.png)
+
+4. Setup plugin in main scene
+```GDScript
+const CATEGORIES := [
+	"terrain",
+	"building",
+	"furniture",
+	"plant",
+	"item",
+	"npc",
+	"etc",
+]
+
+func _init() -> void:
+	SceneAdder._sleep_msec = 100
+	SceneAdder.set_categories(CATEGORIES)
+```
+
+5. Use the plugin to change to a new scene and load it asynchronously
+```GDScript
+func _on_start_pressed() -> void:
+	SceneSwitcher.change_scene("res://src/World/World.tscn")
+```
 
 ## How to load child scene async
 
@@ -40,9 +55,9 @@ SceneLoader.load_scene_async(target, scene_file, pos, true)
 var target = get_tree().get_current_scene()
 var scene_file := "res://src/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
-SceneLoader.load_scene_async_with_cb(target, scene_file, pos, true, funcref(self, "on_animal_loaded"))
+SceneLoader.load_scene_async_with_cb(target, scene_file, pos, true, funcref(self, "on_animal_loaded"), {})
 
-func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_global : bool, logs : Dictionary) -> void:
+func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_global : bool, data : Dictionary) -> void:
 	var target = get_tree().get_current_scene()
 	instance.transform.origin = pos
 	target.add_child(instance)

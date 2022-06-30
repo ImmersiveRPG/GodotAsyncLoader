@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Items/SodaCan/material.tres" type="Material" id=1]
+
+[sub_resource type="CylinderShape" id=1]
+height = 6.0
+radius = 3.0
+
+[sub_resource type="CylinderMesh" id=2]
+material = ExtResource( 1 )
+top_radius = 3.0
+bottom_radius = 3.0
+height = 6.0
+
+[node name="SodaCan" type="RigidBody" groups=["item"]]
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 2 )
