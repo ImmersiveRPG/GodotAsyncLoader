@@ -3,13 +3,19 @@
 
 [![Loading scenes asynchronously in Godot](https://img.youtube.com/vi/GR95TXHz5kg/0.jpg)](https://www.youtube.com/watch?v=GR95TXHz5kg, "Loading scenes asynchronously in Godot")
 
-## How to load a scene async and in chunks
+## How to install and use plugin
 
-1. Add the plugin GodotAsyncLoader to your project
+1. Install the GodotAsyncLoader plugin in AssetLib
 
-2. Add group categories to scenes
+2. Enable the plugin (Project -> Project Settings -> Plugins -> Enable)
 
-3. Add group categories
+![groups](https://github.com/ImmersiveRPG/AsyncLoaderExample/blob/v2/docs/plugins.png)
+
+3. Add scenes to groups
+
+![groups](https://github.com/ImmersiveRPG/AsyncLoaderExample/blob/v2/docs/groups.png)
+
+4. Setup plugin in main scene
 ```GDScript
 const CATEGORIES := [
 	"terrain",
@@ -26,12 +32,11 @@ func _init() -> void:
 	SceneAdder.set_categories(CATEGORIES)
 ```
 
-4. Load and switch to a scene with SceneSwitcher
-  ```GDScript
-
-  # Switch to a new scene and load any children asynchronously
-  SceneSwitcher.change_scene("res://src/World/World.tscn")
-  ```
+5. Use the plugin to change to a new scene and load it asynchronously
+```GDScript
+func _on_start_pressed() -> void:
+	SceneSwitcher.change_scene("res://src/World/World.tscn")
+```
 
 ## How to load child scene async
 
