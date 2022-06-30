@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://src/Plants/Cactus/material.tres" type="Material" id=1]
+[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Plants/Cactus/material.tres" type="Material" id=1]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 5.0

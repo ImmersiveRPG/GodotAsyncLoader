@@ -11,12 +11,12 @@ config_version=4
 [application]
 
 config/name="AsyncLoaderExample"
-run/main_scene="res://src/Start/Start.tscn"
+run/main_scene="res://addons/GodotAsyncLoader/Example/src/Start/Start.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://src/Singletons/Global.gd"
+Global="*res://addons/GodotAsyncLoader/Example/src/Singletons/Global.gd"
 SceneAdder="*res://addons/GodotAsyncLoader/Singletons/SceneAdder.gd"
 SceneLoader="*res://addons/GodotAsyncLoader/Singletons/SceneLoader.gd"
 SceneSwitcher="*res://addons/GodotAsyncLoader/Singletons/SceneSwitcher.gd"
