@@ -1,6 +1,6 @@
 # Copyright (c) 2021-2022 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
 # This file is licensed under the MIT License
-# https://github.com/ImmersiveRPG/AsyncLoaderExample
+# https://github.com/ImmersiveRPG/GodotAsyncLoader
 
 extends Control
 
@@ -46,4 +46,3 @@ func _on_StartSyncButton_pressed() -> void:
 	print("Adding scene took %sms" % [OS.get_ticks_msec() - start])
 
 	tree.set_current_scene(instance)
-

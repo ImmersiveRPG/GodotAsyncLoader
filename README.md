@@ -1,4 +1,4 @@
-# AsyncLoaderExample
+# GodotAsyncLoader
 
 
 [![Loading scenes asynchronously in Godot](https://img.youtube.com/vi/GR95TXHz5kg/0.jpg)](https://www.youtube.com/watch?v=GR95TXHz5kg, "Loading scenes asynchronously in Godot")
@@ -9,11 +9,11 @@
 
 2. Enable the plugin (Project -> Project Settings -> Plugins -> Enable)
 
-![groups](https://github.com/ImmersiveRPG/AsyncLoaderExample/blob/v2/docs/plugins.png)
+![groups](https://github.com/ImmersiveRPG/GodotAsyncLoader/blob/v2/docs/plugins.png)
 
 3. Add scenes to groups
 
-![groups](https://github.com/ImmersiveRPG/AsyncLoaderExample/blob/v2/docs/groups.png)
+![groups](https://github.com/ImmersiveRPG/GodotAsyncLoader/blob/v2/docs/groups.png)
 
 4. Setup plugin in main scene
 ```GDScript

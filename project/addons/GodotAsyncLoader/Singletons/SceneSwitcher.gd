@@ -1,6 +1,6 @@
 # Copyright (c) 2021-2022 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
 # This file is licensed under the MIT License
-# https://github.com/ImmersiveRPG/AsyncLoaderExample
+# https://github.com/ImmersiveRPG/GodotAsyncLoader
 
 extends Node
 
@@ -62,4 +62,3 @@ func _on_scene_loaded(path : String, node : Node, _pos : Vector3, _is_pos_global
 		message += "    add %s ms in MAIN!!!!!!!!!!!!\n" % data["add"]
 		message += "    set current %s ms in MAIN!!!!!!!!!!!!\n" % data["set_current"]
 		print(message)
-
