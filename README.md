@@ -5,7 +5,9 @@
 
 ## How to install and use plugin
 
-1. Install the GodotAsyncLoader plugin in AssetLib
+1. Find, download, and install the "Godot Async Loader" plugin in AssetLib
+
+![groups](https://github.com/ImmersiveRPG/GodotAsyncLoader/blob/main/docs/asset_lib.png)
 
 2. Enable the plugin (Project -> Project Settings -> Plugins -> Enable)
 
