@@ -10,3 +10,4 @@
 default_env.tres    export-ignore
 project.godot       export-ignore
 /examples           export-ignore
+/docs               export-ignore
