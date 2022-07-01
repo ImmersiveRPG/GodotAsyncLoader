@@ -4,7 +4,9 @@
 /.gitmodules        export-ignore
 /CHANGELOG.md       export-ignore
 /README.md          export-ignore
-/LICENSE.md         export-ignore
+/LICENSE            export-ignore
 /icon.png           export-ignore
 /icon.png.import    export-ignore
-/project            export-ignore
+default_env.tres    export-ignore
+project.godot       export-ignore
+/examples           export-ignore

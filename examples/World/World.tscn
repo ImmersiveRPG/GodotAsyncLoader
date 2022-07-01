@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Terrain/Terrain.tscn" type="PackedScene" id=1]
-[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Items/Orange/Orange.tscn" type="PackedScene" id=2]
-[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Items/SodaCan/SodaCan.tscn" type="PackedScene" id=3]
-[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Plants/Cactus/Cactus.tscn" type="PackedScene" id=4]
-[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Furniture/Table/Table.tscn" type="PackedScene" id=5]
-[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Buildings/Barn/Barn.tscn" type="PackedScene" id=6]
-[ext_resource path="res://addons/GodotAsyncLoader/Example/src/NPC/NPC.tscn" type="PackedScene" id=7]
-[ext_resource path="res://addons/GodotAsyncLoader/Example/src/Buildings/House/House.tscn" type="PackedScene" id=8]
+[ext_resource path="res://examples/Terrain/Terrain.tscn" type="PackedScene" id=1]
+[ext_resource path="res://examples/Items/Orange/Orange.tscn" type="PackedScene" id=2]
+[ext_resource path="res://examples/Items/SodaCan/SodaCan.tscn" type="PackedScene" id=3]
+[ext_resource path="res://examples/Plants/Cactus/Cactus.tscn" type="PackedScene" id=4]
+[ext_resource path="res://examples/Furniture/Table/Table.tscn" type="PackedScene" id=5]
+[ext_resource path="res://examples/Buildings/Barn/Barn.tscn" type="PackedScene" id=6]
+[ext_resource path="res://examples/NPC/NPC.tscn" type="PackedScene" id=7]
+[ext_resource path="res://examples/Buildings/House/House.tscn" type="PackedScene" id=8]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.803922, 0.894118, 0.117647, 1 )

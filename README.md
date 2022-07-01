@@ -35,7 +35,7 @@ func _init() -> void:
 5. Use the plugin to change to a new scene and load it asynchronously
 ```GDScript
 func _on_start_pressed() -> void:
-	SceneSwitcher.change_scene("res://src/World/World.tscn")
+	SceneSwitcher.change_scene("res://examples/World/World.tscn")
 ```
 
 ## How to load child scene async
@@ -43,7 +43,7 @@ func _on_start_pressed() -> void:
 ```GDScript
 # Instance scene asynchronously and add to current scene
 var target = get_tree().get_current_scene()
-var scene_file := "res://src/Animals/Puma.tscn"
+var scene_file := "res://examples/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
 SceneLoader.load_scene_async(target, scene_file, pos, true)
 ```
@@ -53,7 +53,7 @@ SceneLoader.load_scene_async(target, scene_file, pos, true)
 ```GDScript
 # Instance scene asynchronously and send to callback
 var target = get_tree().get_current_scene()
-var scene_file := "res://src/Animals/Puma.tscn"
+var scene_file := "res://examples/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
 SceneLoader.load_scene_async_with_cb(target, scene_file, pos, true, funcref(self, "on_animal_loaded"), {})
 
@@ -67,7 +67,7 @@ func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_glob
 
 ```GDScript
 # Instance scene synchronously and add to target scene
-var scene_file := "res://src/Animals/Puma.tscn"
+var scene_file := "res://examples/Animals/Puma.tscn"
 var target = get_tree().get_current_scene()
 var instance := SceneLoader.load_scene_sync(target, scene_file)
 ```

@@ -19,7 +19,7 @@ func _init() -> void:
 	SceneAdder.set_categories(CATEGORIES)
 
 func _on_StartAsyncButton_pressed() -> void:
-	SceneSwitcher.change_scene("res://addons/GodotAsyncLoader/Example/src/World/World.tscn", "res://addons/GodotAsyncLoader/Example/src/Loading/Loading.tscn")
+	SceneSwitcher.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")
 
 func _on_StartSyncButton_pressed() -> void:
 	# Remove the old scene
@@ -32,7 +32,7 @@ func _on_StartSyncButton_pressed() -> void:
 
 	# Load the new scene
 	start = OS.get_ticks_msec()
-	var scene := ResourceLoader.load("res://addons/GodotAsyncLoader/Example/src/World/World.tscn")
+	var scene := ResourceLoader.load("res://examples/World/World.tscn")
 	print("Loading scene took %sms" % [OS.get_ticks_msec() - start])
 
 	# Instance the new scene
