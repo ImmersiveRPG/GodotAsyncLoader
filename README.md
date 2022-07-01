@@ -19,7 +19,7 @@
 
 4. Setup plugin in main scene
 ```GDScript
-const CATEGORIES := [
+const GROUPS := [
 	"terrain",
 	"building",
 	"furniture",
@@ -31,7 +31,7 @@ const CATEGORIES := [
 
 func _init() -> void:
 	SceneAdder._sleep_msec = 100
-	SceneAdder.set_categories(CATEGORIES)
+	SceneAdder.set_groups(GROUPS)
 ```
 
 5. Use the plugin to change to a new scene and load it asynchronously

@@ -4,7 +4,7 @@
 
 extends Control
 
-const CATEGORIES := [
+const GROUPS := [
 	"terrain",
 	"building",
 	"furniture",
@@ -16,7 +16,7 @@ const CATEGORIES := [
 
 func _init() -> void:
 	SceneAdder._sleep_msec = 100
-	SceneAdder.set_categories(CATEGORIES)
+	SceneAdder.set_groups(GROUPS)
 
 func _on_StartAsyncButton_pressed() -> void:
 	SceneSwitcher.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")

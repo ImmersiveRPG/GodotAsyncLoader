@@ -17,8 +17,8 @@ config/icon="res://icon.png"
 [autoload]
 
 Global="*res://examples/Singletons/Global.gd"
-SceneAdder="*res://addons/GodotAsyncLoader/Singletons/SceneAdder.gd"
 SceneLoader="*res://addons/GodotAsyncLoader/Singletons/SceneLoader.gd"
+SceneAdder="*res://addons/GodotAsyncLoader/Singletons/SceneAdder.gd"
 SceneSwitcher="*res://addons/GodotAsyncLoader/Singletons/SceneSwitcher.gd"
 
 [editor_plugins]

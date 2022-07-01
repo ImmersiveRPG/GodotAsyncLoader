@@ -11,13 +11,13 @@ var _to_add := []
 var _to_add_mutex := Mutex.new()
 var _to_adds := {}
 
-var CATEGORIES := []
+var GROUPS := []
 
-func set_categories(categories : Array) -> void:
-	CATEGORIES = categories
+func set_groups(groups : Array) -> void:
+	GROUPS = groups
 
-	for category in CATEGORIES:
-		_to_adds[category] = []
+	for group in GROUPS:
+		_to_adds[group] = []
 
 func _enter_tree() -> void:
 	_thread = Thread.new()
@@ -54,21 +54,21 @@ func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3
 
 	_to_add_mutex.unlock()
 
-func _can_add(category : String) -> bool:
-	var i := CATEGORIES.find(category)
+func _can_add(group : String) -> bool:
+	var i := GROUPS.find(group)
 
 	match i:
-		# Return false if unknown category
+		# Return false if unknown group
 		-1:
 			return false
-		# Return true if there are any instances of this category to add
+		# Return true if there are any instances of this group to add
 		0:
-			return not _to_adds[category].empty()
-		# Return true if there are any instances of this category to add
-		# and the previous category has no more instances to add
+			return not _to_adds[group].empty()
+		# Return true if there are any instances of this group to add
+		# and the previous group has no more instances to add
 		_:
-			var prev_category = CATEGORIES[i - 1]
-			return not _to_adds[category].empty() and not _can_add(prev_category)
+			var prev_group = GROUPS[i - 1]
+			return not _to_adds[group].empty() and not _can_add(prev_group)
 
 	return false
 
@@ -80,23 +80,23 @@ func _run_thread(_arg : int) -> void:
 		is_reset = false
 		self._check_for_new_scenes()
 
-		for category in CATEGORIES:
-			while _is_running and not is_reset and _can_add(category):
-				is_reset = _add_entry(_to_adds[category], category)
+		for group in GROUPS:
+			while _is_running and not is_reset and _can_add(group):
+				is_reset = _add_entry(_to_adds[group], group)
 
 		OS.delay_msec(2)
 
-func _add_entry(from : Array, category : String) -> bool:
+func _add_entry(from : Array, group : String) -> bool:
 	var entry = from.pop_front()
 	if entry["is_child"]:
-		_add_entry_child(entry, category)
+		_add_entry_child(entry, group)
 	else:
-		_add_entry_parent(entry, category)
+		_add_entry_parent(entry, group)
 
 	OS.delay_msec(_sleep_msec)
 	return self._check_for_new_scenes()
 
-func _add_entry_parent(entry, category : String) -> void:
+func _add_entry_parent(entry, group : String) -> void:
 	var target = entry["target"]
 	var on_done_cb = entry["on_done_cb"]
 	var path = entry["path"]
@@ -105,34 +105,34 @@ func _add_entry_parent(entry, category : String) -> void:
 	var cb = entry["cb"]
 	var instance = entry["instance"]
 	var data = entry["data"]
-	print("+++ Adding %s \"%s\"" % [category, instance.name])
+	print("+++ Adding %s \"%s\"" % [group, instance.name])
 	#on_done_cb.call_func(target, path, pos, is_pos_global, cb, instance, data)
 	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, data)
 
-func _add_entry_child(entry, category : String) -> void:
+func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
 	var owner = entry.get("owner", null)
 	var instance = entry["instance"]
 	var transform = entry["transform"]
 	instance.transform = transform
-	self.call_deferred("_on_add_entry_child_cb", parent, owner, instance, category)
+	self.call_deferred("_on_add_entry_child_cb", parent, owner, instance, group)
 
-func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, category : String) -> void:
+func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group : String) -> void:
 	var start := OS.get_ticks_msec()
 	parent.add_child(instance)
 	if owner:
 		instance.set_owner(owner)
 	var time := OS.get_ticks_msec() - start
-	print("+++ Adding %s \"%s\" %s ms" % [category, instance.name, time])
+	print("+++ Adding %s \"%s\" %s ms" % [group, instance.name, time])
 
 func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
 	if has_priority:
-		return _to_adds[CATEGORIES[0]]
+		return _to_adds[GROUPS[0]]
 
 	for group in instance.get_groups():
-		var i := CATEGORIES.find(group)
+		var i := GROUPS.find(group)
 		if i != -1:
-			return _to_adds[CATEGORIES[i]]
+			return _to_adds[GROUPS[i]]
 
 	return default_queue
 
@@ -150,7 +150,7 @@ func _check_for_new_scenes() -> bool:
 		var instance = entry["instance"]
 
 		# Get the queue for this instance type
-		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds[CATEGORIES[0]])
+		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds[GROUPS[0]])
 
 		# Add the scene
 		var entry_copy = entry.duplicate()
