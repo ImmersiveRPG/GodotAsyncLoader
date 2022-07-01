@@ -6,25 +6,28 @@ tool
 extends EditorPlugin
 
 # Get the name and paths of all the autoloads
-const autoloads := {
-	"SceneAdder" : "res://addons/GodotAsyncLoader/Singletons/SceneAdder.gd",
-	"SceneLoader" : "res://addons/GodotAsyncLoader/Singletons/SceneLoader.gd",
-	"SceneSwitcher" : "res://addons/GodotAsyncLoader/Singletons/SceneSwitcher.gd",
-}
+const autoloads := [
+	{"name": "SceneLoader", "path": "res://addons/GodotAsyncLoader/Singletons/SceneLoader.gd"},
+	{"name": "SceneAdder", "path": "res://addons/GodotAsyncLoader/Singletons/SceneAdder.gd"},
+	{"name": "SceneSwitcher", "path": "res://addons/GodotAsyncLoader/Singletons/SceneSwitcher.gd"},
+]
 
 func _enter_tree() -> void:
 	# Install all the autoloads
-	for name in autoloads:
-		var path = autoloads[name]
-		if not ProjectSettings.has_setting("autoload/%s" % [name]):
-			self.add_autoload_singleton(name, path)
+	for entry in autoloads:
+		print("Adding Autoload: %s" % [entry.name])
+		if not ProjectSettings.has_setting("autoload/%s" % [entry.name]):
+			self.add_autoload_singleton(entry.name, entry.path)
 
 	print("Installed plugin Godot Async Loader")
 
 func _exit_tree() -> void:
 	# Uninstall all the autoloads
-	for name in autoloads:
-		if ProjectSettings.has_setting("autoload/%s" % [name]):
-			self.remove_autoload_singleton(name)
+	var reverse_autoloads := autoloads.duplicate()
+	reverse_autoloads.invert()
+	for entry in reverse_autoloads:
+		print("Removing Autoload: %s" % [entry.name])
+		if ProjectSettings.has_setting("autoload/%s" % [entry.name]):
+			self.remove_autoload_singleton(entry.name)
 
 	print("Uninstalled plugin Godot Async Loader")
