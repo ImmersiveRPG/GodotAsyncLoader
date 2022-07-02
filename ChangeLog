@@ -1,0 +1,6 @@
+* Release 0.5
+	* Fixed Bug #4: Extract into addon and put on Godot Asset Library
+
+06/30/2022 Release 0.4
+	* Fixed Bug #2: Make SceneAdder groups customizable
+	* Fixed Bug #5: Trying to load non existent scene silently fails
