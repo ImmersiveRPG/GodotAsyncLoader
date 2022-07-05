@@ -3,7 +3,7 @@
 
 ## Video on how plugin works
 
-[![Loading scenes asynchronously in Godot](https://img.youtube.com/vi/GR95TXHz5kg/0.jpg)](https://www.youtube.com/watch?v=GR95TXHz5kg, "Loading scenes asynchronously in Godot")
+[![Loading scenes asynchronously in Godot](https://img.youtube.com/vi/PFCWlwdfK_k/0.jpg)](https://youtu.be/PFCWlwdfK_k, "Loading scenes asynchronously in Godot")
 
 ## How to install and use plugin
 
