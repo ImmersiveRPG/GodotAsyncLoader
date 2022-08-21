@@ -1,4 +1,4 @@
-# GodotAsyncLoader
+# Godot Async Loader
 
 
 ## Video on how plugin works
