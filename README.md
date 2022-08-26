@@ -32,7 +32,7 @@ const GROUPS := [
 ]
 const SLEEP_MSEC := 100
 
-func _init() -> void:
+func _ready() -> void:
 	AsyncLoader.start(GROUPS, SLEEP_MSEC)
 ```
 
