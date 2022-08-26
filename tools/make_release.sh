@@ -2,7 +2,7 @@
 # Stop and exit on error
 set -e
 
-VERSION="0.5.0"
+VERSION="0.6.0"
 
 # Change dir to this scripts directory
 script_dir=$(dirname $0)
