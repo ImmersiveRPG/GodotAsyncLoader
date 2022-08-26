@@ -6,7 +6,9 @@ extends Node
 
 
 func change_scene(path : String, loading_path := "") -> void:
-	var data := {}
+	var data := {
+		"path" : path,
+	}
 
 	# Make sure the scene exists before starting to load
 	if not ResourceLoader.exists(path):
@@ -27,12 +29,13 @@ func change_scene(path : String, loading_path := "") -> void:
 	if AsyncLoader._is_logging_loads: data["change_scene"] = OS.get_ticks_msec() - start
 
 	# Load the scene
-	var pos := Vector3.INF
-	AsyncLoader.load_scene_async_with_cb(self, path, pos, true, funcref(self, "_on_scene_loaded"), data)
+	var cb := funcref(self, "_on_scene_loaded")
+	AsyncLoader.load_scene_async_with_cb(path, cb, data)
 
-func _on_scene_loaded(path : String, node : Node, _pos : Vector3, _is_pos_global : bool, data : Dictionary) -> void:
+func _on_scene_loaded(instance : Node, data : Dictionary) -> void:
 	var tree : SceneTree = self.get_tree()
-	var new_scene = node
+	var new_scene = instance
+	var path = data["path"]
 
 	# Remove the old scene
 	var start := OS.get_ticks_msec()

@@ -8,33 +8,49 @@ var _is_running := false
 var _thread : Thread
 var _scenes := {}
 var _scenes_mutex := Mutex.new()
-var _to_load := {}
+var _to_load := []
 var _to_load_mutex := Mutex.new()
 
-
-func load_scene_async_with_cb(target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, data : Dictionary, has_priority := false) -> void:
+func load_scene_async_with_cb(path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {
 		"path" : path,
 		"cb" : cb,
-		"pos" : pos,
-		"is_pos_global" : is_pos_global,
 		"data" : data,
 		"has_priority" : has_priority,
 	}
 
 	_to_load_mutex.lock()
-	if not _to_load.has(target):
-		_to_load[target] = []
-
 	if has_priority:
-		_to_load[target].push_front(entry)
+		_to_load.push_front(entry)
 	else:
-		_to_load[target].push_back(entry)
+		_to_load.push_back(entry)
 	_to_load_mutex.unlock()
 	#print(_to_load)
 
-func load_scene_async(target : Node, path : String, pos : Vector3, is_pos_global : bool) -> void:
-	self.load_scene_async_with_cb(target, path, pos, is_pos_global, null, {})
+func load_scene_async(target : Node, path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
+	var data := {
+		"target" : target,
+		"pos" : pos,
+		"is_pos_global" : is_pos_global,
+	}
+	var cb := funcref(self, "_default_load_scene_async_cb")
+	self.load_scene_async_with_cb(path, cb, data, has_priority)
+
+func _default_load_scene_async_cb(instance : Node, data : Dictionary) -> void:
+	var target = data["target"]
+	var pos = data["pos"]
+	var is_pos_global = data["is_pos_global"]
+
+	target.add_child(instance)
+
+	# Set the instance position
+	if pos != Vector3.INF and "transform" in instance:
+		# Convert the position from global to local if needed
+		if is_pos_global:
+			pos = pos - target.global_transform.origin
+
+		instance.transform.origin = pos
+
 
 func load_scene_sync(target : Node, path : String) -> Node:
 	var data := {}
@@ -67,47 +83,45 @@ func _run_loader_thread(_arg : int) -> void:
 	while _is_running:
 		_to_load_mutex.lock()
 		var to_load := _to_load.duplicate()
-		_to_load = {}
+		_to_load.clear()
 		_to_load_mutex.unlock()
 
-		for target in to_load:
-			for entry in to_load[target]:
-				var path = entry["path"]
-				var cb = entry["cb"]
-				var pos = entry["pos"]
-				var is_pos_global = entry["is_pos_global"]
-				var data = entry["data"]
-				var has_priority = entry["has_priority"]
-				#print("!!!!!!! path: %s" % path)
+		#print(to_load)
+		for entry in to_load:
+			var path = entry["path"]
+			var cb = entry["cb"]
+			var data = entry["data"]
+			var has_priority = entry["has_priority"]
+			#print("!!!!!!! path: %s" % path)
 
-				var is_existing = ResourceLoader.exists(path)
-				#print(path, " ", is_existing)
-				if not is_existing:
-					push_error("Scene files does not exist: %s" % [path])
-				else:
-					# Load the scene
-					var start := OS.get_ticks_msec()
-					var scene = _get_cached_scene(path)
-					if AsyncLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
+			var is_existing = ResourceLoader.exists(path)
+			#print(path, " ", is_existing)
+			if not is_existing:
+				push_error("Scene files does not exist: %s" % [path])
+			else:
+				# Load the scene
+				var start := OS.get_ticks_msec()
+				var scene = _get_cached_scene(path)
+				if AsyncLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
 
-					# Instance the scene
-					start = OS.get_ticks_msec()
-					var instance = scene.instance()
-					if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
+				# Instance the scene
+				start = OS.get_ticks_msec()
+				var instance = scene.instance()
+				if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
 
-					# Send the instance to the callback in the main thread
-					AsyncLoader._add_scene(funcref(self, "_on_done"), target, path, pos, is_pos_global, cb, instance, data, has_priority)
-					#self.call_deferred("_on_done", target, path, pos, is_pos_global, cb, instance, data)
-					#print("??????? instance.global_transform.origin: %s" % instance.global_transform.origin)
+				# Send the instance to the callback in the main thread
+				AsyncLoader._add_scene(funcref(self, "_on_done"), path, cb, instance, data, has_priority)
+				#self.call_deferred("_on_done", target, path, cb, instance, data)
+				#print("??????? instance.global_transform.origin: %s" % instance.global_transform.origin)
 
 		OS.delay_msec(2)
 
-func _on_done(target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary) -> void:
-	var start := OS.get_ticks_msec()
+func _on_done(path : String, cb : FuncRef, instance : Node, data : Dictionary) -> void:
+#	var start := OS.get_ticks_msec()
 
-	# Just return if target is invalid
-	if not is_instance_valid(target):
-		return
+#	# Just return if target is invalid
+#	if not is_instance_valid(target):
+#		return
 
 	# Just return if instance is invalid
 	if not is_instance_valid(instance):
@@ -118,29 +132,30 @@ func _on_done(target : Node, path : String, pos : Vector3, is_pos_global : bool,
 		return
 
 	if cb != null:
-		#cb.call_deferred("call_func", path, instance, pos, is_pos_global, data)
-		cb.call_func(path, instance, pos, is_pos_global, data)
+		#cb.call_deferred("call_func", instance, data)
+		cb.call_func(instance, data)
 	else:
-		# Set the instance position
-		if pos != Vector3.INF and "transform" in instance:
-			# Convert the position from global to local if needed
-			if is_pos_global:
-				pos = pos - target.global_transform.origin
+		push_error("!!! Warning: cb was null!!!!")
+#		# Set the instance position
+#		if pos != Vector3.INF and "transform" in instance:
+#			# Convert the position from global to local if needed
+#			if is_pos_global:
+#				pos = pos - target.global_transform.origin
+#
+#			instance.transform.origin = pos
+#
+#		# Add the instance to the target
+#		target.add_child(instance)
 
-			instance.transform.origin = pos
-
-		# Add the instance to the target
-		target.add_child(instance)
-
-		if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
-
-		if AsyncLoader._is_logging_loads:
-			var message := ""
-			message += "!!!!!! ASYNC scene %s\n" % path
-			message += "    load %s ms in THREAD\n" % data["load"]
-			message += "    instance %s ms in THREAD\n" % data["instance"]
-			message += "    add %s ms in MAIN!!!!!!!!!!!!" % data["add"]
-			print(message)
+#		if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
+#
+#		if AsyncLoader._is_logging_loads:
+#			var message := ""
+#			message += "!!!!!! ASYNC scene %s\n" % path
+#			message += "    load %s ms in THREAD\n" % data["load"]
+#			message += "    instance %s ms in THREAD\n" % data["instance"]
+#			message += "    add %s ms in MAIN!!!!!!!!!!!!" % data["add"]
+#			print(message)
 
 func _get_cached_scene(path : String) -> PackedScene:
 	# Return null if path does not exist

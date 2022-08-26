@@ -264,6 +264,14 @@ margin_left = 37.0
 margin_top = 27.0
 margin_right = 219.0
 margin_bottom = 79.0
-text = "Add Orange"
+text = "Add orange"
+
+[node name="ButtonAddOrangeWithCB" type="Button" parent="."]
+margin_left = 268.0
+margin_top = 26.0
+margin_right = 450.0
+margin_bottom = 78.0
+text = "Add orange with CB"
 
 [connection signal="pressed" from="ButtonAddOrange" to="." method="_on_add_orange_pressed"]
+[connection signal="pressed" from="ButtonAddOrangeWithCB" to="." method="_on_add_orange_with_cb_pressed"]
