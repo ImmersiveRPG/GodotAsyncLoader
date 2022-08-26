@@ -13,8 +13,8 @@ func _on_add_orange_async_pressed() -> void:
 	)
 
 	var target = self.get_tree().get_current_scene()
-	var path := "res://examples/Items/Orange/Orange.tscn"
-	AsyncLoader.load_scene_async(target, path, pos, false)
+	var scene_path := "res://examples/Items/Orange/Orange.tscn"
+	AsyncLoader.load_scene_async(target, scene_path, pos, false)
 
 
 func _on_add_orange_async_with_cb_pressed() -> void:
@@ -29,9 +29,9 @@ func _on_add_orange_async_with_cb_pressed() -> void:
 		"target" : self.get_tree().get_current_scene(),
 		"pos" : pos,
 	}
-	var scene_file := "res://examples/Items/Orange/Orange.tscn"
+	var scene_path := "res://examples/Items/Orange/Orange.tscn"
 	var cb := funcref(self, "_on_orange_loaded_cb")
-	AsyncLoader.load_scene_async_with_cb(scene_file, cb, data)
+	AsyncLoader.load_scene_async_with_cb(scene_path, cb, data)
 
 func _on_orange_loaded_cb(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
@@ -48,7 +48,7 @@ func _on_add_orange_sync_pressed() -> void:
 	)
 
 	var target = self.get_tree().get_current_scene()
-	var path := "res://examples/Items/Orange/Orange.tscn"
-	var orange = AsyncLoader.load_scene_sync(target, path)
+	var scene_path := "res://examples/Items/Orange/Orange.tscn"
+	var orange = AsyncLoader.load_scene_sync(target, scene_path)
 	orange.transform.origin = pos
 

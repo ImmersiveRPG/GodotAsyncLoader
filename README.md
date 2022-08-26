@@ -47,9 +47,9 @@ func _on_start_pressed() -> void:
 ```GDScript
 # Instance scene asynchronously and add to current scene
 var target = get_tree().get_current_scene()
-var scene_file := "res://examples/Animals/Puma.tscn"
+var scene_path := "res://examples/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
-AsyncLoader.load_scene_async(target, scene_file, pos, true)
+AsyncLoader.load_scene_async(target, scene_path, pos, true)
 ```
 
 ## How to load child scene async with callback
@@ -57,11 +57,11 @@ AsyncLoader.load_scene_async(target, scene_file, pos, true)
 ```GDScript
 # Instance scene asynchronously and send to callback
 var target = get_tree().get_current_scene()
-var scene_file := "res://examples/Animals/Puma.tscn"
+var scene_path := "res://examples/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
-AsyncLoader.load_scene_async_with_cb(target, scene_file, pos, true, funcref(self, "on_animal_loaded"), {})
+AsyncLoader.load_scene_async_with_cb(target, scene_path, pos, true, funcref(self, "on_animal_loaded"), {})
 
-func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_global : bool, data : Dictionary) -> void:
+func on_animal_loaded(scene_path : String, instance : Node, pos : Vector3, is_pos_global : bool, data : Dictionary) -> void:
 	var target = get_tree().get_current_scene()
 	instance.transform.origin = pos
 	target.add_child(instance)
@@ -71,7 +71,7 @@ func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_glob
 
 ```GDScript
 # Instance scene synchronously and add to target scene
-var scene_file := "res://examples/Animals/Puma.tscn"
+var scene_path := "res://examples/Animals/Puma.tscn"
 var target = get_tree().get_current_scene()
-var instance := AsyncLoader.load_scene_sync(target, scene_file)
+var instance := AsyncLoader.load_scene_sync(target, scene_path)
 ```

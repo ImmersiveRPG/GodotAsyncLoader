@@ -18,10 +18,10 @@ func set_groups(groups : Array) -> void:
 	for group in GROUPS:
 		_to_adds[group] = []
 
-func _add_scene(on_done_cb : FuncRef, path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
+func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
 		"on_done_cb" : on_done_cb,
-		"path" : path,
+		"scene_path" : scene_path,
 		"cb" : cb,
 		"instance" : instance,
 		"data" : data,
@@ -81,13 +81,13 @@ func _add_entry(from : Array, group : String) -> bool:
 
 func _add_entry_parent(entry, group : String) -> void:
 	var on_done_cb = entry["on_done_cb"]
-	var path = entry["path"]
+	var scene_path = entry["scene_path"]
 	var cb = entry["cb"]
 	var instance = entry["instance"]
 	var data = entry["data"]
 	print("+++ Adding %s \"%s\"" % [group, instance.name])
-	#on_done_cb.call_func(path, cb, instance, data)
-	on_done_cb.call_deferred("call_func", path, cb, instance, data)
+	#on_done_cb.call_func(scene_path, cb, instance, data)
+	on_done_cb.call_deferred("call_func", scene_path, cb, instance, data)
 
 func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
