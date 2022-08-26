@@ -5,9 +5,9 @@
 [ext_resource path="res://examples/Items/SodaCan/SodaCan.tscn" type="PackedScene" id=3]
 [ext_resource path="res://examples/Plants/Cactus/Cactus.tscn" type="PackedScene" id=4]
 [ext_resource path="res://examples/Furniture/Table/Table.tscn" type="PackedScene" id=5]
-[ext_resource path="res://examples/Buildings/Barn/Barn.tscn" type="PackedScene" id=6]
+[ext_resource path="res://examples/Structures/Barn/Barn.tscn" type="PackedScene" id=6]
 [ext_resource path="res://examples/NPC/NPC.tscn" type="PackedScene" id=7]
-[ext_resource path="res://examples/Buildings/House/House.tscn" type="PackedScene" id=8]
+[ext_resource path="res://examples/Structures/House/House.tscn" type="PackedScene" id=8]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.803922, 0.894118, 0.117647, 1 )
@@ -202,53 +202,53 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 907, 0, -179 )
 [node name="Cactus9" parent="Plants" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1200.67, 0, -154.928 )
 
-[node name="Buildings" type="Spatial" parent="."]
+[node name="Structures" type="Spatial" parent="."]
 
-[node name="Barn" parent="Buildings" instance=ExtResource( 6 )]
+[node name="Barn" parent="Structures" instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -295, 100, 0 )
 
-[node name="MeshInstance2" type="MeshInstance" parent="Buildings/Barn" groups=["etc"]]
+[node name="MeshInstance2" type="MeshInstance" parent="Structures/Barn" groups=["etc"]]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, 55 )
 mesh = SubResource( 2 )
 
-[node name="MeshInstance3" type="MeshInstance" parent="Buildings/Barn" groups=["etc"]]
+[node name="MeshInstance3" type="MeshInstance" parent="Structures/Barn" groups=["etc"]]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, -48 )
 mesh = SubResource( 2 )
 
-[node name="MeshInstance4" type="MeshInstance" parent="Buildings/Barn" groups=["etc"]]
+[node name="MeshInstance4" type="MeshInstance" parent="Structures/Barn" groups=["etc"]]
 transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 52, 57, 110 )
 mesh = SubResource( 2 )
 
-[node name="MeshInstance5" type="MeshInstance" parent="Buildings/Barn" groups=["etc"]]
+[node name="MeshInstance5" type="MeshInstance" parent="Structures/Barn" groups=["etc"]]
 transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, -46, 57, 110 )
 mesh = SubResource( 2 )
 
-[node name="Barn2" parent="Buildings" instance=ExtResource( 6 )]
+[node name="Barn2" parent="Structures" instance=ExtResource( 6 )]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 1111, 100, -313 )
 
-[node name="MeshInstance2" type="MeshInstance" parent="Buildings/Barn2" groups=["etc"]]
+[node name="MeshInstance2" type="MeshInstance" parent="Structures/Barn2" groups=["etc"]]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, 55 )
 mesh = SubResource( 2 )
 
-[node name="MeshInstance3" type="MeshInstance" parent="Buildings/Barn2" groups=["etc"]]
+[node name="MeshInstance3" type="MeshInstance" parent="Structures/Barn2" groups=["etc"]]
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 111, 57, -48 )
 mesh = SubResource( 2 )
 
-[node name="MeshInstance4" type="MeshInstance" parent="Buildings/Barn2" groups=["etc"]]
+[node name="MeshInstance4" type="MeshInstance" parent="Structures/Barn2" groups=["etc"]]
 transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 52, 57, 110 )
 mesh = SubResource( 2 )
 
-[node name="MeshInstance5" type="MeshInstance" parent="Buildings/Barn2" groups=["etc"]]
+[node name="MeshInstance5" type="MeshInstance" parent="Structures/Barn2" groups=["etc"]]
 transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, -46, 57, 110 )
 mesh = SubResource( 2 )
 
-[node name="House" parent="Buildings" instance=ExtResource( 8 )]
+[node name="House" parent="Structures" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -103, 0, -390 )
 
-[node name="House2" parent="Buildings" instance=ExtResource( 8 )]
+[node name="House2" parent="Structures" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 265, 0, -390 )
 
-[node name="House3" parent="Buildings" instance=ExtResource( 8 )]
+[node name="House3" parent="Structures" instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 571, 0, -390 )
 
 [node name="NPC" parent="." instance=ExtResource( 7 )]

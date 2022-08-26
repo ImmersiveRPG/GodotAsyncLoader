@@ -23,7 +23,7 @@
 ```GDScript
 const GROUPS := [
 	"terrain",
-	"building",
+	"structure",
 	"furniture",
 	"plant",
 	"item",
