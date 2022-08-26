@@ -108,7 +108,7 @@ func _run_thread(_arg : int) -> void:
 					if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
 
 					# Send the instance to the callback in the main thread
-					AsyncLoader.add_scene(funcref(self, "_on_done"), target, path, pos, is_pos_global, cb, instance, data, has_priority)
+					AsyncLoader._add_scene(funcref(self, "_on_done"), target, path, pos, is_pos_global, cb, instance, data, has_priority)
 					#self.call_deferred("_on_done", target, path, pos, is_pos_global, cb, instance, data)
 					#print("??????? instance.global_transform.origin: %s" % instance.global_transform.origin)
 

@@ -31,7 +31,7 @@ func _exit_tree() -> void:
 		_thread.wait_to_finish()
 		_thread = null
 
-func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
+func _add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
 		"target" : target,
 		"on_done_cb" : on_done_cb,

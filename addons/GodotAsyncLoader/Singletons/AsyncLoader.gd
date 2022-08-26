@@ -24,9 +24,6 @@ func _ready() -> void:
 func set_groups(groups : Array) -> void:
 	_scene_adder.set_groups(groups)
 
-func add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
-	_scene_adder.add_scene(on_done_cb, target, path, pos, is_pos_global, cb, instance, data, has_priority)
-
 func load_scene_async_with_cb(target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, data : Dictionary, has_priority := false) -> void:
 	_scene_loader.load_scene_async_with_cb(target, path, pos, is_pos_global, cb, data, has_priority)
 
@@ -38,3 +35,6 @@ func load_scene_sync(target : Node, path : String) -> Node:
 
 func change_scene(path : String, loading_path := "") -> void:
 	_scene_switcher.change_scene(path, loading_path)
+
+func _add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
+	_scene_adder._add_scene(on_done_cb, target, path, pos, is_pos_global, cb, instance, data, has_priority)
