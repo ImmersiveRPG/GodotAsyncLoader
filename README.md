@@ -42,6 +42,28 @@ func _on_start_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn")
 ```
 
+## API
+
+```GDScript
+# The default time the thread will wait after running a callback
+const DEFAULT_SLEEP_MSEC := 10
+
+# Initializes the plugin threads and groups. Must be called before plugin can be used.
+AsyncLoader.start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void
+
+# Instance the scene asynchronously and add it to the target
+AsyncLoader.load_scene_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool) -> void
+
+# Instance the scene asynchronously and fire the callback with it
+AsyncLoader.load_scene_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void
+
+# Instance the scene synchronously and add it to the target
+AsyncLoader.load_scene_sync(target : Node, scene_path : String) -> Node
+
+# Just like self.get_tree().change_scene, but it loads the scene asynchronously instead of synchronously
+AsyncLoader.change_scene(scene_path : String) -> void
+```
+
 ## How to load child scene async
 
 ```GDScript
