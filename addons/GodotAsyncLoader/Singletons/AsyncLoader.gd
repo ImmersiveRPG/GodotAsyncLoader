@@ -33,8 +33,8 @@ func instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_p
 func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool) -> void:
 	_scene_loader.instance_async(target, scene_path, pos, is_pos_global)
 
-func instance_sync(target : Node, scene_path : String) -> Node:
-	return _scene_loader.instance_sync(target, scene_path)
+func instance_sync(scene_path : String) -> Node:
+	return _scene_loader.instance_sync(scene_path)
 
 func change_scene(scene_path : String, loading_path := "") -> void:
 	_scene_switcher.change_scene(scene_path, loading_path)

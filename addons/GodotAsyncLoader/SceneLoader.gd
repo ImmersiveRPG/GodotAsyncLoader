@@ -11,7 +11,7 @@ var _scenes_mutex := Mutex.new()
 var _to_load := []
 var _to_load_mutex := Mutex.new()
 
-func instance_sync(target : Node, scene_path : String) -> Node:
+func instance_sync(scene_path : String) -> Node:
 	var data := {}
 
 	# Load the scene
@@ -27,8 +27,6 @@ func instance_sync(target : Node, scene_path : String) -> Node:
 
 	# Add the scene to the target
 	start = OS.get_ticks_msec()
-	if target:
-		target.add_child(instance)
 	if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
 
 	if AsyncLoader._is_logging_loads:

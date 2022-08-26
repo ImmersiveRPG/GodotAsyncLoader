@@ -49,6 +49,7 @@ func _on_add_orange_sync_pressed() -> void:
 
 	var target = self.get_tree().get_current_scene()
 	var scene_path := "res://examples/Items/Orange/Orange.tscn"
-	var orange = AsyncLoader.instance_sync(target, scene_path)
+	var orange = AsyncLoader.instance_sync(scene_path)
+	target.add_child(orange)
 	orange.transform.origin = pos
 
