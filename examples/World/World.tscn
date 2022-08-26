@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://examples/Terrain/Terrain.tscn" type="PackedScene" id=1]
 [ext_resource path="res://examples/Items/Orange/Orange.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://examples/Structures/Barn/Barn.tscn" type="PackedScene" id=6]
 [ext_resource path="res://examples/NPC/NPC.tscn" type="PackedScene" id=7]
 [ext_resource path="res://examples/Structures/House/House.tscn" type="PackedScene" id=8]
+[ext_resource path="res://examples/World/World.gd" type="Script" id=9]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.803922, 0.894118, 0.117647, 1 )
@@ -17,6 +18,7 @@ material = SubResource( 1 )
 size = Vector3( 20, 20, 20 )
 
 [node name="World" type="Spatial"]
+script = ExtResource( 9 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 414, 622, 343 )
@@ -256,3 +258,28 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 431, 52, -96 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( -0.238106, -0.652098, 0.719773, -0.254325, 0.757091, 0.601774, -0.93735, -0.0397703, -0.346113, 375, 508, -383 )
+
+[node name="ButtonAddOrangeAsync" type="Button" parent="."]
+margin_left = 37.0
+margin_top = 27.0
+margin_right = 219.0
+margin_bottom = 79.0
+text = "Add orange async"
+
+[node name="ButtonAddOrangeAsyncWithCB" type="Button" parent="."]
+margin_left = 268.0
+margin_top = 26.0
+margin_right = 450.0
+margin_bottom = 78.0
+text = "Add orange async with CB"
+
+[node name="ButtonAddOrangeSync" type="Button" parent="."]
+margin_left = 540.0
+margin_top = 28.0
+margin_right = 713.0
+margin_bottom = 84.0
+text = "Add orange sync"
+
+[connection signal="pressed" from="ButtonAddOrangeAsync" to="." method="_on_add_orange_async_with_cb_pressed"]
+[connection signal="pressed" from="ButtonAddOrangeAsyncWithCB" to="." method="_on_add_orange_async_pressed"]
+[connection signal="pressed" from="ButtonAddOrangeSync" to="." method="_on_add_orange_sync_pressed"]

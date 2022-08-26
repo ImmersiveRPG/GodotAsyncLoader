@@ -12,19 +12,16 @@ var _to_adds := {}
 
 var GROUPS := []
 
-func set_groups(groups : Array) -> void:
+func _set_groups(groups : Array) -> void:
 	GROUPS = groups
 
 	for group in GROUPS:
 		_to_adds[group] = []
 
-func _add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
+func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
-		"target" : target,
 		"on_done_cb" : on_done_cb,
-		"path" : path,
-		"pos" : pos,
-		"is_pos_global" : is_pos_global,
+		"scene_path" : scene_path,
 		"cb" : cb,
 		"instance" : instance,
 		"data" : data,
@@ -83,17 +80,14 @@ func _add_entry(from : Array, group : String) -> bool:
 	return self._check_for_new_scenes()
 
 func _add_entry_parent(entry, group : String) -> void:
-	var target = entry["target"]
 	var on_done_cb = entry["on_done_cb"]
-	var path = entry["path"]
-	var pos = entry["pos"]
-	var is_pos_global = entry["is_pos_global"]
+	var scene_path = entry["scene_path"]
 	var cb = entry["cb"]
 	var instance = entry["instance"]
 	var data = entry["data"]
 	print("+++ Adding %s \"%s\"" % [group, instance.name])
-	#on_done_cb.call_func(target, path, pos, is_pos_global, cb, instance, data)
-	on_done_cb.call_deferred("call_func", target, path, pos, is_pos_global, cb, instance, data)
+	#on_done_cb.call_func(scene_path, cb, instance, data)
+	on_done_cb.call_deferred("call_func", scene_path, cb, instance, data)
 
 func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
@@ -130,7 +124,6 @@ func _check_for_new_scenes() -> bool:
 
 	var has_new_scenes := false
 	for entry in to_add:
-		var target = entry["target"]
 		var has_priority = entry["has_priority"]
 		#OS.delay_msec(1)
 		var instance = entry["instance"]
@@ -140,7 +133,6 @@ func _check_for_new_scenes() -> bool:
 
 		# Add the scene
 		var entry_copy = entry.duplicate()
-		#entry_copy["target"] = target
 		entry_copy["is_child"] = false
 		to.append(entry_copy)
 		has_new_scenes = true

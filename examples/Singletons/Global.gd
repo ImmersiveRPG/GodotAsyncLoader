@@ -5,18 +5,11 @@
 extends Node
 
 
-
-
 const GRAVITY := -40.0
 
-var _rng : RandomNumberGenerator
 var _fps_timer : Timer
 
 func _ready() -> void:
-	# Setup random number generator
-	_rng = RandomNumberGenerator.new()
-	_rng.randomize()
-
 	# Every 1 second show FPS in the title
 	_fps_timer = Timer.new()
 	self.add_child(_fps_timer)

@@ -32,7 +32,7 @@ const GROUPS := [
 ]
 const SLEEP_MSEC := 100
 
-func _init() -> void:
+func _ready() -> void:
 	AsyncLoader.start(GROUPS, SLEEP_MSEC)
 ```
 
@@ -42,36 +42,63 @@ func _on_start_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn")
 ```
 
+## API
+
+```GDScript
+# The default time the thread will wait after running a callback
+const DEFAULT_SLEEP_MSEC := 10
+
+# Initializes the plugin threads and groups. Must be called before plugin can be used.
+AsyncLoader.start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void
+
+# Instance the scene asynchronously and add it to the target
+AsyncLoader.instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool) -> void
+
+# Instance the scene asynchronously and fire the callback with it
+AsyncLoader.instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void
+
+# Instance the scene synchronously and add it to the target
+AsyncLoader.instance_sync(target : Node, scene_path : String) -> Node
+
+# Just like self.get_tree().change_scene, but it loads the scene asynchronously instead of synchronously
+AsyncLoader.change_scene(scene_path : String) -> void
+```
+
 ## How to load child scene async
 
 ```GDScript
 # Instance scene asynchronously and add to current scene
 var target = get_tree().get_current_scene()
-var scene_file := "res://examples/Animals/Puma.tscn"
+var scene_path := "res://examples/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
-AsyncLoader.load_scene_async(target, scene_file, pos, true)
+AsyncLoader.instance_async(target, scene_path, pos)
 ```
 
 ## How to load child scene async with callback
 
 ```GDScript
 # Instance scene asynchronously and send to callback
-var target = get_tree().get_current_scene()
-var scene_file := "res://examples/Animals/Puma.tscn"
-var pos := Vector3(0, 1, 0)
-AsyncLoader.load_scene_async_with_cb(target, scene_file, pos, true, funcref(self, "on_animal_loaded"), {})
+var data := {
+	"target" : self.get_tree().get_current_scene(),
+	"pos" : Vector3(0, 1, 0),
+}
+var scene_path := "res://examples/Animals/Puma.tscn"
+var cb := funcref(self, "on_animal_loaded")
+AsyncLoader.instance_async_with_cb(scene_path, cb, data)
 
-func on_animal_loaded(path : String, instance : Node, pos : Vector3, is_pos_global : bool, data : Dictionary) -> void:
-	var target = get_tree().get_current_scene()
-	instance.transform.origin = pos
+func on_animal_loaded(instance : Node, data : Dictionary) -> void:
+	var target = data["target"]
 	target.add_child(instance)
+	instance.transform.origin = data["pos"]
+
+
 ```
 
 ## How to load child scene sync
 
 ```GDScript
 # Instance scene synchronously and add to target scene
-var scene_file := "res://examples/Animals/Puma.tscn"
+var scene_path := "res://examples/Animals/Puma.tscn"
 var target = get_tree().get_current_scene()
-var instance := AsyncLoader.load_scene_sync(target, scene_file)
+var instance := AsyncLoader.instance_sync(target, scene_path)
 ```

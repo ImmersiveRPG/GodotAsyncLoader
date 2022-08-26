@@ -5,12 +5,14 @@
 extends Node
 
 
-func change_scene(path : String, loading_path := "") -> void:
-	var data := {}
+func change_scene(scene_path : String, loading_path := "") -> void:
+	var data := {
+		"scene_path" : scene_path,
+	}
 
 	# Make sure the scene exists before starting to load
-	if not ResourceLoader.exists(path):
-		push_error("Scene files does not exist: %s" % [path])
+	if not ResourceLoader.exists(scene_path):
+		push_error("Scene files does not exist: %s" % [scene_path])
 		return
 
 	# Make sure the loading scene exists before starting to load
@@ -27,12 +29,13 @@ func change_scene(path : String, loading_path := "") -> void:
 	if AsyncLoader._is_logging_loads: data["change_scene"] = OS.get_ticks_msec() - start
 
 	# Load the scene
-	var pos := Vector3.INF
-	AsyncLoader.load_scene_async_with_cb(self, path, pos, true, funcref(self, "_on_scene_loaded"), data)
+	var cb := funcref(self, "_on_scene_loaded")
+	AsyncLoader.instance_async_with_cb(scene_path, cb, data)
 
-func _on_scene_loaded(path : String, node : Node, _pos : Vector3, _is_pos_global : bool, data : Dictionary) -> void:
+func _on_scene_loaded(instance : Node, data : Dictionary) -> void:
 	var tree : SceneTree = self.get_tree()
-	var new_scene = node
+	var new_scene = instance
+	var scene_path = data["scene_path"]
 
 	# Remove the old scene
 	var start := OS.get_ticks_msec()
@@ -55,7 +58,7 @@ func _on_scene_loaded(path : String, node : Node, _pos : Vector3, _is_pos_global
 
 	if AsyncLoader._is_logging_loads:
 		var message := ""
-		message += "!!!!!! scene switch %s\n" % path
+		message += "!!!!!! scene switch %s\n" % scene_path
 		message += "    load %s ms in THREAD\n" % data["load"]
 		message += "    instance %s ms in THREAD\n" % data["instance"]
 		message += "    remove previous %s ms in MAIN!!!!!!!!!!!!\n" % data["remove_scene"]

@@ -24,7 +24,7 @@ func _ready() -> void:
 
 func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	_sleep_msec = sleep_msec
-	_scene_adder.set_groups(groups)
+	_scene_adder._set_groups(groups)
 
 	# Start the adder thread
 	_scene_adder._thread = Thread.new()
@@ -53,17 +53,17 @@ func _exit_tree() -> void:
 		_scene_loader._thread.wait_to_finish()
 		_scene_loader._thread = null
 
-func load_scene_async_with_cb(target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, data : Dictionary, has_priority := false) -> void:
-	_scene_loader.load_scene_async_with_cb(target, path, pos, is_pos_global, cb, data, has_priority)
+func instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+	_scene_loader.instance_async_with_cb(scene_path, cb, data, has_priority)
 
-func load_scene_async(target : Node, path : String, pos : Vector3, is_pos_global : bool) -> void:
-	_scene_loader.load_scene_async(target, path, pos, is_pos_global)
+func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool) -> void:
+	_scene_loader.instance_async(target, scene_path, pos, is_pos_global)
 
-func load_scene_sync(target : Node, path : String) -> Node:
-	return _scene_loader.load_scene_sync(target, path)
+func instance_sync(target : Node, scene_path : String) -> Node:
+	return _scene_loader.instance_sync(target, scene_path)
 
-func change_scene(path : String, loading_path := "") -> void:
-	_scene_switcher.change_scene(path, loading_path)
+func change_scene(scene_path : String, loading_path := "") -> void:
+	_scene_switcher.change_scene(scene_path, loading_path)
 
-func _add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
-	_scene_adder._add_scene(on_done_cb, target, path, pos, is_pos_global, cb, instance, data, has_priority)
+func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
+	_scene_adder._add_scene(on_done_cb, scene_path, cb, instance, data, has_priority)

@@ -51,7 +51,7 @@ func _physics_process(delta : float) -> void:
 func _on_TimerChangeDestination_timeout() -> void:
 	var r := 300.0
 	_destination = Vector3(
-		Global._rng.randf_range(-r, r),
-		Global._rng.randf_range(0.0, 0.0),
-		Global._rng.randf_range(-r, r)
+		rand_range(-r, r),
+		rand_range(0.0, 0.0),
+		rand_range(-r, r)
 	)
