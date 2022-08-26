@@ -11,6 +11,31 @@ var _scenes_mutex := Mutex.new()
 var _to_load := []
 var _to_load_mutex := Mutex.new()
 
+func instance_sync(target : Node, scene_path : String) -> Node:
+	var data := {}
+
+	# Load the scene
+	var start := OS.get_ticks_msec()
+	var scene = _get_cached_scene(scene_path)
+	if scene == null: return null
+	if AsyncLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
+
+	# Instance the scene
+	start = OS.get_ticks_msec()
+	var instance = scene.instance()
+	if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
+
+	# Add the scene to the target
+	start = OS.get_ticks_msec()
+	if target:
+		target.add_child(instance)
+	if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
+
+	if AsyncLoader._is_logging_loads:
+		print("!!!!!! SYNC scene %s\n    load %s ms in MAIN!!!!!!!!!!!!\n    instance %s ms in MAIN!!!!!!!!!!!!\n    add %s ms in MAIN!!!!!!!!!!!!" % [scene_path, data["load"], data["instance"], data["add"]])
+
+	return instance
+
 func instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {
 		"scene_path" : scene_path,
@@ -50,32 +75,6 @@ func _default_load_scene_async_cb(instance : Node, data : Dictionary) -> void:
 			pos = pos - target.global_transform.origin
 
 		instance.transform.origin = pos
-
-
-func instance_sync(target : Node, scene_path : String) -> Node:
-	var data := {}
-
-	# Load the scene
-	var start := OS.get_ticks_msec()
-	var scene = _get_cached_scene(scene_path)
-	if scene == null: return null
-	if AsyncLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
-
-	# Instance the scene
-	start = OS.get_ticks_msec()
-	var instance = scene.instance()
-	if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
-
-	# Add the scene to the target
-	start = OS.get_ticks_msec()
-	if target:
-		target.add_child(instance)
-	if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
-
-	if AsyncLoader._is_logging_loads:
-		print("!!!!!! SYNC scene %s\n    load %s ms in MAIN!!!!!!!!!!!!\n    instance %s ms in MAIN!!!!!!!!!!!!\n    add %s ms in MAIN!!!!!!!!!!!!" % [scene_path, data["load"], data["instance"], data["add"]])
-
-	return instance
 
 func _run_loader_thread(_arg : int) -> void:
 	_is_running = true
