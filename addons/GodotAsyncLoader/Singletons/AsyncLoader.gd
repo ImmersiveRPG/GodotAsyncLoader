@@ -53,14 +53,14 @@ func _exit_tree() -> void:
 		_scene_loader._thread.wait_to_finish()
 		_scene_loader._thread = null
 
-func load_scene_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
-	_scene_loader.load_scene_async_with_cb(scene_path, cb, data, has_priority)
+func instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+	_scene_loader.instance_async_with_cb(scene_path, cb, data, has_priority)
 
-func load_scene_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool) -> void:
-	_scene_loader.load_scene_async(target, scene_path, pos, is_pos_global)
+func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool) -> void:
+	_scene_loader.instance_async(target, scene_path, pos, is_pos_global)
 
-func load_scene_sync(target : Node, scene_path : String) -> Node:
-	return _scene_loader.load_scene_sync(target, scene_path)
+func instance_sync(target : Node, scene_path : String) -> Node:
+	return _scene_loader.instance_sync(target, scene_path)
 
 func change_scene(scene_path : String, loading_path := "") -> void:
 	_scene_switcher.change_scene(scene_path, loading_path)

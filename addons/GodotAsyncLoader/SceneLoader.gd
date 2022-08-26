@@ -11,7 +11,7 @@ var _scenes_mutex := Mutex.new()
 var _to_load := []
 var _to_load_mutex := Mutex.new()
 
-func load_scene_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+func instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {
 		"scene_path" : scene_path,
 		"cb" : cb,
@@ -27,14 +27,14 @@ func load_scene_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has
 	_to_load_mutex.unlock()
 	#print(_to_load)
 
-func load_scene_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
+func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
 	var data := {
 		"target" : target,
 		"pos" : pos,
 		"is_pos_global" : is_pos_global,
 	}
 	var cb := funcref(self, "_default_load_scene_async_cb")
-	self.load_scene_async_with_cb(scene_path, cb, data, has_priority)
+	self.instance_async_with_cb(scene_path, cb, data, has_priority)
 
 func _default_load_scene_async_cb(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
@@ -52,7 +52,7 @@ func _default_load_scene_async_cb(instance : Node, data : Dictionary) -> void:
 		instance.transform.origin = pos
 
 
-func load_scene_sync(target : Node, scene_path : String) -> Node:
+func instance_sync(target : Node, scene_path : String) -> Node:
 	var data := {}
 
 	# Load the scene
