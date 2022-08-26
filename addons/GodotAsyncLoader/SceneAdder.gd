@@ -4,7 +4,6 @@
 
 extends Node
 
-var _sleep_msec := 10
 var _is_running := false
 var _thread : Thread
 var _to_add := []
@@ -93,7 +92,7 @@ func _add_entry(from : Array, group : String) -> bool:
 	else:
 		_add_entry_parent(entry, group)
 
-	OS.delay_msec(_sleep_msec)
+	OS.delay_msec(AsyncLoader._sleep_msec)
 	return self._check_for_new_scenes()
 
 func _add_entry_parent(entry, group : String) -> void:

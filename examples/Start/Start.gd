@@ -14,12 +14,12 @@ const GROUPS := [
 	"etc",
 ]
 
-func _init() -> void:
-	SceneAdder._sleep_msec = 100
-	SceneAdder.set_groups(GROUPS)
+func _ready() -> void:
+	AsyncLoader._sleep_msec = 100
+	AsyncLoader.set_groups(GROUPS)
 
 func _on_StartAsyncButton_pressed() -> void:
-	SceneSwitcher.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")
+	AsyncLoader.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")
 
 func _on_StartSyncButton_pressed() -> void:
 	# Remove the old scene

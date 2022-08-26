@@ -1,3 +1,6 @@
+* Release 0.6.0
+	* Fixed Bug #10: Replace 3 singletons with 1
+
 08/25/2022 Release 0.5.0
 	* Fixed Bug #4: Extract into addon and put on Godot Asset Library
 

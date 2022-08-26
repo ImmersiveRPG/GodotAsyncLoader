@@ -4,7 +4,6 @@
 
 extends Node
 
-var _is_logging_loads := false
 var _is_running := false
 var _thread : Thread
 var _scenes := {}
@@ -56,20 +55,20 @@ func load_scene_sync(target : Node, path : String) -> Node:
 	var start := OS.get_ticks_msec()
 	var scene = _get_cached_scene(path)
 	if scene == null: return null
-	if SceneLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
+	if AsyncLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
 
 	# Instance the scene
 	start = OS.get_ticks_msec()
 	var instance = scene.instance()
-	if SceneLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
+	if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
 
 	# Add the scene to the target
 	start = OS.get_ticks_msec()
 	if target:
 		target.add_child(instance)
-	if SceneLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
+	if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
 
-	if SceneLoader._is_logging_loads:
+	if AsyncLoader._is_logging_loads:
 		print("!!!!!! SYNC scene %s\n    load %s ms in MAIN!!!!!!!!!!!!\n    instance %s ms in MAIN!!!!!!!!!!!!\n    add %s ms in MAIN!!!!!!!!!!!!" % [path, data["load"], data["instance"], data["add"]])
 
 	return instance
@@ -101,15 +100,15 @@ func _run_thread(_arg : int) -> void:
 					# Load the scene
 					var start := OS.get_ticks_msec()
 					var scene = _get_cached_scene(path)
-					if SceneLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
+					if AsyncLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
 
 					# Instance the scene
 					start = OS.get_ticks_msec()
 					var instance = scene.instance()
-					if SceneLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
+					if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
 
 					# Send the instance to the callback in the main thread
-					SceneAdder.add_scene(funcref(self, "_on_done"), target, path, pos, is_pos_global, cb, instance, data, has_priority)
+					AsyncLoader.add_scene(funcref(self, "_on_done"), target, path, pos, is_pos_global, cb, instance, data, has_priority)
 					#self.call_deferred("_on_done", target, path, pos, is_pos_global, cb, instance, data)
 					#print("??????? instance.global_transform.origin: %s" % instance.global_transform.origin)
 
@@ -145,9 +144,9 @@ func _on_done(target : Node, path : String, pos : Vector3, is_pos_global : bool,
 		# Add the instance to the target
 		target.add_child(instance)
 
-		if SceneLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
+		if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
 
-		if SceneLoader._is_logging_loads:
+		if AsyncLoader._is_logging_loads:
 			var message := ""
 			message += "!!!!!! ASYNC scene %s\n" % path
 			message += "    load %s ms in THREAD\n" % data["load"]

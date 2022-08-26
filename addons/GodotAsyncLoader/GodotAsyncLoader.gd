@@ -7,9 +7,7 @@ extends EditorPlugin
 
 # Get the name and paths of all the autoloads
 const autoloads := [
-	{"name": "SceneLoader", "path": "res://addons/GodotAsyncLoader/Singletons/SceneLoader.gd"},
-	{"name": "SceneAdder", "path": "res://addons/GodotAsyncLoader/Singletons/SceneAdder.gd"},
-	{"name": "SceneSwitcher", "path": "res://addons/GodotAsyncLoader/Singletons/SceneSwitcher.gd"},
+	{"name": "AsyncLoader", "path": "res://addons/GodotAsyncLoader/Singletons/AsyncLoader.gd"},
 ]
 
 func _enter_tree() -> void:
