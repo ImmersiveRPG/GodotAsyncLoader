@@ -4,7 +4,7 @@
 
 extends Spatial
 
-func _on_add_orange_pressed() -> void:
+func _on_add_orange_async_pressed() -> void:
 	var r := 100.0
 	var pos := Vector3(
 		rand_range(-r, r),
@@ -17,7 +17,7 @@ func _on_add_orange_pressed() -> void:
 	AsyncLoader.load_scene_async(target, path, pos, false)
 
 
-func _on_add_orange_with_cb_pressed() -> void:
+func _on_add_orange_async_with_cb_pressed() -> void:
 	var r := 100.0
 	var pos := Vector3(
 		rand_range(-r, r),
@@ -37,3 +37,18 @@ func _on_orange_loaded_cb(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
 	target.add_child(instance)
 	instance.transform.origin = data["pos"]
+
+
+func _on_add_orange_sync_pressed() -> void:
+	var r := 100.0
+	var pos := Vector3(
+		rand_range(-r, r),
+		20.0,
+		rand_range(-r, r)
+	)
+
+	var target = self.get_tree().get_current_scene()
+	var path := "res://examples/Items/Orange/Orange.tscn"
+	var orange = AsyncLoader.load_scene_sync(target, path)
+	orange.transform.origin = pos
+
