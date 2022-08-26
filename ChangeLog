@@ -1,4 +1,5 @@
 * Release 3.0.0
+	* Fixed Bug #9: Simplify using SceneLoader.load_scene_async_with_cb
 	* Fixed Bug #12: Move thread setup out of AutoLoad _enter_tree
 	* Fixed Bug #10: Replace 3 singletons with 1
 
