@@ -13,10 +13,10 @@ const GROUPS := [
 	"npc",
 	"etc",
 ]
+const SLEEP_MSEC := 100
 
 func _ready() -> void:
-	AsyncLoader._sleep_msec = 100
-	AsyncLoader.set_groups(GROUPS)
+	AsyncLoader.start(GROUPS, SLEEP_MSEC)
 
 func _on_StartAsyncButton_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")

@@ -30,10 +30,10 @@ const GROUPS := [
 	"npc",
 	"etc",
 ]
+const SLEEP_MSEC := 100
 
 func _init() -> void:
-	AsyncLoader._sleep_msec = 100
-	AsyncLoader.set_groups(GROUPS)
+	AsyncLoader.start(GROUPS, SLEEP_MSEC)
 ```
 
 5. Use the plugin to change to a new scene and load it asynchronously

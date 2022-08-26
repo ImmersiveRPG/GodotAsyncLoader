@@ -11,18 +11,6 @@ var _scenes_mutex := Mutex.new()
 var _to_load := {}
 var _to_load_mutex := Mutex.new()
 
-func _enter_tree() -> void:
-	_thread = Thread.new()
-	var err = _thread.start(self, "_run_thread", 0, Thread.PRIORITY_LOW)
-	assert(err == OK)
-
-func _exit_tree() -> void:
-	if _is_running:
-		_is_running = false
-
-	if _thread:
-		_thread.wait_to_finish()
-		_thread = null
 
 func load_scene_async_with_cb(target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, data : Dictionary, has_priority := false) -> void:
 	var entry := {
@@ -73,7 +61,7 @@ func load_scene_sync(target : Node, path : String) -> Node:
 
 	return instance
 
-func _run_thread(_arg : int) -> void:
+func _run_loader_thread(_arg : int) -> void:
 	_is_running = true
 
 	while _is_running:

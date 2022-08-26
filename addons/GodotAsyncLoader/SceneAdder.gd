@@ -18,19 +18,6 @@ func set_groups(groups : Array) -> void:
 	for group in GROUPS:
 		_to_adds[group] = []
 
-func _enter_tree() -> void:
-	_thread = Thread.new()
-	var err = _thread.start(self, "_run_thread", 0, Thread.PRIORITY_LOW)
-	assert(err == OK)
-
-func _exit_tree() -> void:
-	if _is_running:
-		_is_running = false
-
-	if _thread:
-		_thread.wait_to_finish()
-		_thread = null
-
 func _add_scene(on_done_cb : FuncRef, target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
 		"target" : target,
@@ -71,7 +58,7 @@ func _can_add(group : String) -> bool:
 
 	return false
 
-func _run_thread(_arg : int) -> void:
+func _run_adder_thread(_arg : int) -> void:
 	_is_running = true
 	var is_reset := false
 

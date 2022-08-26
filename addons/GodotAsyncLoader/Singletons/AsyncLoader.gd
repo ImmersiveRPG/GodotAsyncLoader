@@ -4,12 +4,13 @@
 
 extends Node
 
+const DEFAULT_SLEEP_MSEC := 10
 
 var _scene_loader = null
 var _scene_adder = null
 var _scene_switcher = null
 
-var _sleep_msec := 100
+var _sleep_msec := 0
 var _is_logging_loads := false
 
 func _ready() -> void:
@@ -20,9 +21,37 @@ func _ready() -> void:
 	self.add_child(_scene_loader)
 	self.add_child(_scene_adder)
 	self.add_child(_scene_switcher)
-	
-func set_groups(groups : Array) -> void:
+
+func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
+	_sleep_msec = sleep_msec
 	_scene_adder.set_groups(groups)
+
+	# Start the adder thread
+	_scene_adder._thread = Thread.new()
+	var err = _scene_adder._thread.start(_scene_adder, "_run_adder_thread", 0, Thread.PRIORITY_LOW)
+	assert(err == OK)
+
+	# Start the loader thread
+	_scene_loader._thread = Thread.new()
+	err = _scene_loader._thread.start(_scene_loader, "_run_loader_thread", 0, Thread.PRIORITY_LOW)
+	assert(err == OK)
+
+func _exit_tree() -> void:
+	# Tell the threads to stop
+	if _scene_adder._is_running:
+		_scene_adder._is_running = false
+
+	if _scene_loader._is_running:
+		_scene_loader._is_running = false
+
+	# Wait for the threads to stop
+	if _scene_adder._thread:
+		_scene_adder._thread.wait_to_finish()
+		_scene_adder._thread = null
+
+	if _scene_loader._thread:
+		_scene_loader._thread.wait_to_finish()
+		_scene_loader._thread = null
 
 func load_scene_async_with_cb(target : Node, path : String, pos : Vector3, is_pos_global : bool, cb : FuncRef, data : Dictionary, has_priority := false) -> void:
 	_scene_loader.load_scene_async_with_cb(target, path, pos, is_pos_global, cb, data, has_priority)
