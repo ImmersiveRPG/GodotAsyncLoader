@@ -24,7 +24,7 @@ func _ready() -> void:
 
 func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	_sleep_msec = sleep_msec
-	_scene_adder.set_groups(groups)
+	_scene_adder._set_groups(groups)
 
 	# Start the adder thread
 	_scene_adder._thread = Thread.new()

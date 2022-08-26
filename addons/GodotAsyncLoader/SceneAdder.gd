@@ -12,7 +12,7 @@ var _to_adds := {}
 
 var GROUPS := []
 
-func set_groups(groups : Array) -> void:
+func _set_groups(groups : Array) -> void:
 	GROUPS = groups
 
 	for group in GROUPS:
