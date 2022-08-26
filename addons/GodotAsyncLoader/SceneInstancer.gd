@@ -56,10 +56,10 @@ func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_gl
 		"pos" : pos,
 		"is_pos_global" : is_pos_global,
 	}
-	var cb := funcref(self, "_default_load_scene_async_cb")
+	var cb := funcref(self, "_default_instance_async_cb")
 	self.instance_async_with_cb(scene_path, cb, data, has_priority)
 
-func _default_load_scene_async_cb(instance : Node, data : Dictionary) -> void:
+func _default_instance_async_cb(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
 	var pos = data["pos"]
 	var is_pos_global = data["is_pos_global"]
@@ -74,7 +74,7 @@ func _default_load_scene_async_cb(instance : Node, data : Dictionary) -> void:
 
 		instance.transform.origin = pos
 
-func _run_loader_thread(_arg : int) -> void:
+func _run_instancer_thread(_arg : int) -> void:
 	_is_running = true
 
 	while _is_running:
