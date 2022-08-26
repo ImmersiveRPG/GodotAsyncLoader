@@ -11,7 +11,6 @@ var _scene_adder = null
 var _scene_switcher = null
 
 var _sleep_msec := 0
-var _is_logging_loads := false
 
 func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	_sleep_msec = sleep_msec

@@ -15,22 +15,11 @@ func instance_sync(scene_path : String) -> Node:
 	var data := {}
 
 	# Load the scene
-	var start := OS.get_ticks_msec()
 	var scene = _get_cached_scene(scene_path)
 	if scene == null: return null
-	if AsyncLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
 
 	# Instance the scene
-	start = OS.get_ticks_msec()
 	var instance = scene.instance()
-	if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
-
-	# Add the scene to the target
-	start = OS.get_ticks_msec()
-	if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
-
-	if AsyncLoader._is_logging_loads:
-		print("!!!!!! SYNC scene %s\n    load %s ms in MAIN!!!!!!!!!!!!\n    instance %s ms in MAIN!!!!!!!!!!!!\n    add %s ms in MAIN!!!!!!!!!!!!" % [scene_path, data["load"], data["instance"], data["add"]])
 
 	return instance
 
@@ -97,14 +86,10 @@ func _run_instancer_thread(_arg : int) -> void:
 				push_error("Scene files does not exist: %s" % [scene_path])
 			else:
 				# Load the scene
-				var start := OS.get_ticks_msec()
 				var scene = _get_cached_scene(scene_path)
-				if AsyncLoader._is_logging_loads: data["load"] = OS.get_ticks_msec() - start
 
 				# Instance the scene
-				start = OS.get_ticks_msec()
 				var instance = scene.instance()
-				if AsyncLoader._is_logging_loads: data["instance"] = OS.get_ticks_msec() - start
 
 				# Send the instance to the callback in the main thread
 				AsyncLoader._add_scene(funcref(self, "_on_done"), scene_path, cb, instance, data, has_priority)
@@ -114,8 +99,6 @@ func _run_instancer_thread(_arg : int) -> void:
 		OS.delay_msec(2)
 
 func _on_done(scene_path : String, cb : FuncRef, instance : Node, data : Dictionary) -> void:
-#	var start := OS.get_ticks_msec()
-
 #	# Just return if target is invalid
 #	if not is_instance_valid(target):
 #		return
@@ -133,26 +116,6 @@ func _on_done(scene_path : String, cb : FuncRef, instance : Node, data : Diction
 		cb.call_func(instance, data)
 	else:
 		push_error("!!! Warning: cb was null!!!!")
-#		# Set the instance position
-#		if pos != Vector3.INF and "transform" in instance:
-#			# Convert the position from global to local if needed
-#			if is_pos_global:
-#				pos = pos - target.global_transform.origin
-#
-#			instance.transform.origin = pos
-#
-#		# Add the instance to the target
-#		target.add_child(instance)
-
-#		if AsyncLoader._is_logging_loads: data["add"] = OS.get_ticks_msec() - start
-#
-#		if AsyncLoader._is_logging_loads:
-#			var message := ""
-#			message += "!!!!!! ASYNC scene %s\n" % scene_path
-#			message += "    load %s ms in THREAD\n" % data["load"]
-#			message += "    instance %s ms in THREAD\n" % data["instance"]
-#			message += "    add %s ms in MAIN!!!!!!!!!!!!" % data["add"]
-#			print(message)
 
 func _get_cached_scene(scene_path : String) -> PackedScene:
 	# Return null if path does not exist

@@ -85,7 +85,6 @@ func _add_entry_parent(entry, group : String) -> void:
 	var cb = entry["cb"]
 	var instance = entry["instance"]
 	var data = entry["data"]
-	print("+++ Adding %s \"%s\"" % [group, instance.name])
 	#on_done_cb.call_func(scene_path, cb, instance, data)
 	on_done_cb.call_deferred("call_func", scene_path, cb, instance, data)
 
@@ -98,12 +97,9 @@ func _add_entry_child(entry, group : String) -> void:
 	self.call_deferred("_on_add_entry_child_cb", parent, owner, instance, group)
 
 func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group : String) -> void:
-	var start := OS.get_ticks_msec()
 	parent.add_child(instance)
 	if owner:
 		instance.set_owner(owner)
-	var time := OS.get_ticks_msec() - start
-	print("+++ Adding %s \"%s\" %s ms" % [group, instance.name, time])
 
 func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
 	if has_priority:

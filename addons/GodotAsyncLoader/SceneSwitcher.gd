@@ -21,12 +21,9 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 		return
 
 	# Show the loading screen
-	var start := OS.get_ticks_msec()
 	if loading_path:
 		var err : int = get_tree().change_scene(loading_path)
 		assert(err == OK)
-		#if AsyncLoader._is_logging_loads: print("!!!!!! MAIN: changed to loading scene for %s ms" % [OS.get_ticks_msec() - start])
-	if AsyncLoader._is_logging_loads: data["change_scene"] = OS.get_ticks_msec() - start
 
 	# Load the scene
 	var cb := funcref(self, "_on_scene_loaded")
@@ -38,30 +35,12 @@ func _on_scene_loaded(instance : Node, data : Dictionary) -> void:
 	var scene_path = data["scene_path"]
 
 	# Remove the old scene
-	var start := OS.get_ticks_msec()
 	var old_scene = tree.current_scene
 	tree.root.remove_child(old_scene)
 	old_scene.queue_free()
-	if AsyncLoader._is_logging_loads: data["remove_scene"] = OS.get_ticks_msec() - start
 
 	# Add the new scene
-	start = OS.get_ticks_msec()
 	tree.root.add_child(new_scene)
-	var time := OS.get_ticks_msec() - start
-	if AsyncLoader._is_logging_loads: data["add"] = time
-	print("+++ Adding %s \"%s\" %s ms" % ["scene", new_scene.name, time])
 
 	# Change to the new scene
-	start = OS.get_ticks_msec()
 	tree.set_current_scene(new_scene)
-	if AsyncLoader._is_logging_loads: data["set_current"] = OS.get_ticks_msec() - start
-
-	if AsyncLoader._is_logging_loads:
-		var message := ""
-		message += "!!!!!! scene switch %s\n" % scene_path
-		message += "    load %s ms in THREAD\n" % data["load"]
-		message += "    instance %s ms in THREAD\n" % data["instance"]
-		message += "    remove previous %s ms in MAIN!!!!!!!!!!!!\n" % data["remove_scene"]
-		message += "    add %s ms in MAIN!!!!!!!!!!!!\n" % data["add"]
-		message += "    set current %s ms in MAIN!!!!!!!!!!!!\n" % data["set_current"]
-		print(message)
