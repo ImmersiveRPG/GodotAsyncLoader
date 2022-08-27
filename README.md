@@ -52,7 +52,7 @@ const DEFAULT_SLEEP_MSEC := 10
 AsyncLoader.start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void
 
 # Instance the scene asynchronously and add it to the target
-AsyncLoader.instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool) -> void
+AsyncLoader.instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void
 
 # Instance the scene asynchronously and fire the callback with it
 AsyncLoader.instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void
@@ -71,7 +71,7 @@ AsyncLoader.change_scene(scene_path : String) -> void
 var target = get_tree().get_current_scene()
 var scene_path := "res://examples/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
-AsyncLoader.instance_async(target, scene_path, pos)
+AsyncLoader.instance_async(target, scene_path, pos, true)
 ```
 
 ## How to load child scene async with callback
@@ -84,7 +84,7 @@ var data := {
 }
 var scene_path := "res://examples/Animals/Puma.tscn"
 var cb := funcref(self, "on_animal_loaded")
-AsyncLoader.instance_async_with_cb(scene_path, cb, data)
+AsyncLoader.instance_async_with_cb(scene_path, cb, data, true)
 
 func on_animal_loaded(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]

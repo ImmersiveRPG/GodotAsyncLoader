@@ -35,14 +35,14 @@ func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 func instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	_scene_loader.load_and_instance_async_with_cb(scene_path, cb, data, has_priority)
 
-func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool) -> void:
+func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
 	var data := {
 		"target" : target,
 		"pos" : pos,
 		"is_pos_global" : is_pos_global,
 	}
 	var cb := funcref(self, "_default_instance_async_cb")
-	_scene_loader.load_and_instance_async_with_cb(scene_path, cb, data, false)
+	_scene_loader.load_and_instance_async_with_cb(scene_path, cb, data, has_priority)
 
 func _default_instance_async_cb(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
