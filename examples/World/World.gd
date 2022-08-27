@@ -40,17 +40,16 @@ func _on_orange_loaded_cb(instance : Node, data : Dictionary) -> void:
 
 
 func _on_add_orange_sync_pressed() -> void:
-	pass
-#	var r := 100.0
-#	var pos := Vector3(
-#		rand_range(-r, r),
-#		20.0,
-#		rand_range(-r, r)
-#	)
-#
-#	var target = self.get_tree().get_current_scene()
-#	var scene_path := "res://examples/Items/Orange/Orange.tscn"
-#	var orange = AsyncLoader.instance_sync(scene_path)
-#	target.add_child(orange)
-#	orange.transform.origin = pos
+	var r := 100.0
+	var pos := Vector3(
+		rand_range(-r, r),
+		20.0,
+		rand_range(-r, r)
+	)
+
+	var target = self.get_tree().get_current_scene()
+	var scene_path := "res://examples/Items/Orange/Orange.tscn"
+	var orange = AsyncLoader.instance_sync(scene_path)
+	target.add_child(orange)
+	orange.transform.origin = pos
 

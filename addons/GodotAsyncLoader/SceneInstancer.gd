@@ -9,17 +9,6 @@ var _thread : Thread
 var _to_instance := []
 var _to_instance_mutex := Mutex.new()
 
-#func instance_sync(scene_path : String) -> Node:
-#	var data := {}
-#
-#	# Load the scene
-#	var scene = _get_cached_scene(scene_path)
-#	if scene == null: return null
-#
-#	# Instance the scene
-#	var instance = scene.instance()
-#
-#	return instance
 
 func instance_async_with_cb(packed_scene : PackedScene, scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {

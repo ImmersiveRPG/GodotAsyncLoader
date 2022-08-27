@@ -59,8 +59,10 @@ func _default_instance_async_cb(instance : Node, data : Dictionary) -> void:
 
 		instance.transform.origin = pos
 
-#func instance_sync(scene_path : String) -> Node:
-#	return _scene_instancer.instance_sync(scene_path)
+func instance_sync(scene_path : String) -> Node:
+	var scene = _scene_loader._get_cached_scene(scene_path)
+	var instance = scene.instance()
+	return instance
 
 func change_scene(scene_path : String, loading_path := "") -> void:
 	_scene_switcher.change_scene(scene_path, loading_path)
