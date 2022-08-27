@@ -70,7 +70,7 @@ func _default_instance_async_cb(instance : Node, data : Dictionary) -> void:
 func instance_sync(scene_path : String) -> Node:
 	if not self._assert_is_setup(): return null
 
-	var scene = _scene_cache._get_cached_scene(scene_path)
+	var scene = _scene_cache._get_cached(scene_path)
 	var instance = scene.instance()
 	return instance
 
@@ -81,7 +81,7 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 
 func get_cached_scene(scene_path : String) -> PackedScene:
 	if not self._assert_is_setup(): return null
-	return _scene_cache._get_cached_scene(scene_path)
+	return _scene_cache._get_cached(scene_path)
 
 func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
 	_scene_adder._add_scene(on_done_cb, scene_path, cb, instance, data, has_priority)
