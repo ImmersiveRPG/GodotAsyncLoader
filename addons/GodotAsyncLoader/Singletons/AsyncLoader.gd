@@ -12,6 +12,7 @@ var _scene_adder = null
 var _scene_switcher = null
 
 var _sleep_msec := 0
+var _is_setup := false
 
 func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	_sleep_msec = sleep_msec
@@ -32,10 +33,16 @@ func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	err = _scene_loader._thread.start(_scene_loader, "_run_loader_thread", 0, Thread.PRIORITY_LOW)
 	assert(err == OK)
 
+	_is_setup = true
+
 func instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+	if not self._assert_is_setup(): return
+
 	_scene_loader.load_and_instance_async_with_cb(scene_path, cb, data, has_priority)
 
 func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
+	if not self._assert_is_setup(): return
+
 	var data := {
 		"target" : target,
 		"pos" : pos,
@@ -60,11 +67,15 @@ func _default_instance_async_cb(instance : Node, data : Dictionary) -> void:
 		instance.transform.origin = pos
 
 func instance_sync(scene_path : String) -> Node:
+	if not self._assert_is_setup(): return null
+
 	var scene = _scene_loader._get_cached_scene(scene_path)
 	var instance = scene.instance()
 	return instance
 
 func change_scene(scene_path : String, loading_path := "") -> void:
+	if not self._assert_is_setup(): return
+
 	_scene_switcher.change_scene(scene_path, loading_path)
 
 func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
@@ -72,6 +83,11 @@ func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instanc
 
 func _instance_scene(packed_scene : PackedScene, scene_path : String, cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
 	_scene_instancer.instance_async_with_cb(packed_scene, scene_path, cb, data, has_priority)
+
+func _assert_is_setup() -> bool:
+	if not _is_setup:
+		push_error("Call AsyncLoader.start to initialize the library first")
+	return _is_setup
 
 func _ready() -> void:
 	_scene_loader = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneLoader.gd").new()
