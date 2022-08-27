@@ -6,8 +6,7 @@ extends Node
 
 var _is_running := false
 var _thread : Thread
-var _scenes := {}
-var _scenes_mutex := Mutex.new()
+
 var _to_load := []
 var _to_load_mutex := Mutex.new()
 
@@ -43,32 +42,7 @@ func _run_loader_thread(_arg : int) -> void:
 			var cb = entry["cb"]
 			var data = entry["data"]
 			var has_priority = entry["has_priority"]
-			var packed_scene = _get_cached_scene(scene_path)
+			var packed_scene = AsyncLoader.get_cached_scene(scene_path)
 			AsyncLoader._instance_scene(packed_scene, scene_path, cb, data, has_priority)
 
 		OS.delay_msec(2)
-
-func _get_cached_scene(scene_path : String) -> PackedScene:
-	# Return null if path does not exist
-	if not ResourceLoader.exists(scene_path):
-		push_error("Scene files does not exist: %s" % [scene_path])
-		return null
-
-	# Check if the scene is loaded
-	_scenes_mutex.lock()
-	var has_scene := _scenes.has(scene_path)
-	_scenes_mutex.unlock()
-
-	# Load the scene if it isn't loaded
-	if not has_scene:
-		var packed_scene = ResourceLoader.load(scene_path)
-		_scenes_mutex.lock()
-		_scenes[scene_path] = packed_scene
-		_scenes_mutex.unlock()
-
-	# Get the scene
-	_scenes_mutex.lock()
-	var scene = _scenes[scene_path]
-	_scenes_mutex.unlock()
-
-	return scene

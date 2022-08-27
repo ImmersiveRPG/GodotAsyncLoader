@@ -6,6 +6,7 @@ extends Node
 
 const DEFAULT_SLEEP_MSEC := 10
 
+var _scene_cache = null
 var _scene_loader = null
 var _scene_instancer = null
 var _scene_adder = null
@@ -69,7 +70,7 @@ func _default_instance_async_cb(instance : Node, data : Dictionary) -> void:
 func instance_sync(scene_path : String) -> Node:
 	if not self._assert_is_setup(): return null
 
-	var scene = _scene_loader._get_cached_scene(scene_path)
+	var scene = _scene_cache._get_cached_scene(scene_path)
 	var instance = scene.instance()
 	return instance
 
@@ -77,6 +78,10 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 	if not self._assert_is_setup(): return
 
 	_scene_switcher.change_scene(scene_path, loading_path)
+
+func get_cached_scene(scene_path : String) -> PackedScene:
+	if not self._assert_is_setup(): return null
+	return _scene_cache._get_cached_scene(scene_path)
 
 func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
 	_scene_adder._add_scene(on_done_cb, scene_path, cb, instance, data, has_priority)
@@ -90,11 +95,13 @@ func _assert_is_setup() -> bool:
 	return _is_setup
 
 func _ready() -> void:
+	_scene_cache = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneCache.gd").new()
 	_scene_loader = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneLoader.gd").new()
 	_scene_instancer = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneInstancer.gd").new()
 	_scene_adder = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneAdder.gd").new()
 	_scene_switcher = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneSwitcher.gd").new()
 
+	self.add_child(_scene_cache)
 	self.add_child(_scene_loader)
 	self.add_child(_scene_instancer)
 	self.add_child(_scene_adder)
