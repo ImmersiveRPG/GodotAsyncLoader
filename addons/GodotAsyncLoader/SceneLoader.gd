@@ -42,7 +42,21 @@ func _run_loader_thread(_arg : int) -> void:
 			var cb = entry["cb"]
 			var data = entry["data"]
 			var has_priority = entry["has_priority"]
-			var packed_scene = AsyncLoader.get_cached_scene(scene_path)
+			var packed_scene = _load_packed_scene(scene_path)
 			AsyncLoader._instance_scene(packed_scene, scene_path, cb, data, has_priority)
 
 		OS.delay_msec(2)
+
+func _load_packed_scene(scene_path : String) -> PackedScene:
+	var packed_scene = null
+
+	# Print warning if scene does not exist
+	if not ResourceLoader.exists(scene_path):
+		push_error("Scene files does not exist: %s" % [scene_path])
+	# Get loaded scene
+	else:
+		packed_scene = ResourceLoader.load(scene_path)
+		AsyncLoader._set_cached(scene_path, packed_scene)
+
+	return packed_scene
+
