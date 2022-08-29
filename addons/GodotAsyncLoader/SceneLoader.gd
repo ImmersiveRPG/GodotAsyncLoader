@@ -42,7 +42,7 @@ func _run_loader_thread(_arg : int) -> void:
 			var cb = entry["cb"]
 			var data = entry["data"]
 			var has_priority = entry["has_priority"]
-			var packed_scene = AsyncLoader.get_cached_scene(scene_path)
+			var packed_scene = AsyncLoader._get_cached_scene(scene_path)
 			AsyncLoader._instance_scene(packed_scene, scene_path, cb, data, has_priority)
 
 		OS.delay_msec(2)

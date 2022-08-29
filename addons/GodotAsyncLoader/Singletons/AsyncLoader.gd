@@ -79,7 +79,19 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 
 	_scene_switcher.change_scene(scene_path, loading_path)
 
-func get_cached_scene(scene_path : String) -> PackedScene:
+func is_scene_cached(scene_path : String) -> bool:
+	if not self._assert_is_setup(): return false
+	return _scene_cache._is_cached(scene_path)
+
+func uncache_scene(scene_path : String) -> void:
+	if not self._assert_is_setup(): return
+	_scene_cache._uncache(scene_path)
+
+func get_all_cached_scene_paths() -> Array:
+	if not self._assert_is_setup(): return []
+	return _scene_cache._get_all_cached()
+
+func _get_cached_scene(scene_path : String) -> PackedScene:
 	if not self._assert_is_setup(): return null
 	return _scene_cache._get_cached(scene_path)
 

@@ -280,6 +280,30 @@ margin_right = 713.0
 margin_bottom = 84.0
 text = "Add orange sync"
 
+[node name="ButtonListCachedScenes" type="Button" parent="."]
+margin_left = 44.0
+margin_top = 542.0
+margin_right = 193.0
+margin_bottom = 588.0
+text = "List cached scenes"
+
+[node name="ButtonIsOrangeCached" type="Button" parent="."]
+margin_left = 229.0
+margin_top = 546.0
+margin_right = 363.0
+margin_bottom = 588.0
+text = "Is orange cached"
+
+[node name="ButtonUnCacheOrange" type="Button" parent="."]
+margin_left = 400.0
+margin_top = 542.0
+margin_right = 566.0
+margin_bottom = 591.0
+text = "Un cache orange"
+
 [connection signal="pressed" from="ButtonAddOrangeAsyncWithCB" to="." method="_on_add_orange_async_with_cb_pressed"]
 [connection signal="pressed" from="ButtonAddOrangeAsync" to="." method="_on_add_orange_async_pressed"]
 [connection signal="pressed" from="ButtonAddOrangeSync" to="." method="_on_add_orange_sync_pressed"]
+[connection signal="pressed" from="ButtonListCachedScenes" to="." method="_on_list_cached_scenes_pressed"]
+[connection signal="pressed" from="ButtonIsOrangeCached" to="." method="_on_is_orange_cached_pressed"]
+[connection signal="pressed" from="ButtonUnCacheOrange" to="." method="_on_un_cache_orange_pressed"]

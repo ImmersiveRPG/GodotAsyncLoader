@@ -53,3 +53,18 @@ func _on_add_orange_sync_pressed() -> void:
 	target.add_child(orange)
 	orange.transform.origin = pos
 
+func _on_list_cached_scenes_pressed() -> void:
+	print("Cached scenes:")
+	for scene_path in AsyncLoader.get_all_cached_scene_paths():
+		print(scene_path)
+
+func _on_is_orange_cached_pressed() -> void:
+	var scene_path := "res://examples/Items/Orange/Orange.tscn"
+	var is_cached = AsyncLoader.is_scene_cached(scene_path)
+	print("Orange is cached: %s" % [is_cached])
+
+func _on_un_cache_orange_pressed() -> void:
+	var scene_path := "res://examples/Items/Orange/Orange.tscn"
+	AsyncLoader.uncache_scene(scene_path)
+	print("Orange scene uncached")
+

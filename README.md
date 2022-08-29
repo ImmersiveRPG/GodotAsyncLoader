@@ -57,11 +57,20 @@ AsyncLoader.instance_async(target : Node, scene_path : String, pos : Vector3, is
 # Instance the scene asynchronously and fire the callback with it
 AsyncLoader.instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void
 
-# Instance the scene synchronously and return it
+# Instance the scene synchronously and returns it
 AsyncLoader.instance_sync(scene_path : String) -> Node
 
-# Just like self.get_tree().change_scene, but it loads the scene asynchronously instead of synchronously
+# Instances the scene asynchronously and changes to it
 AsyncLoader.change_scene(scene_path : String) -> void
+
+# Returns true if the scene is cached
+AsyncLoader.is_scene_cached(scene_path : String) -> bool
+
+# Uncaches the scene. This will allow it to to unload
+AsyncLoader.uncache_scene(scene_path : String) -> void
+
+# Returns all the cached scene paths
+AsyncLoader.get_all_cached_scene_paths() -> Array
 ```
 
 ## How to load child scene async
