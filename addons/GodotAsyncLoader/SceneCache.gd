@@ -13,21 +13,13 @@ func _get_cached(scene_path : String) -> PackedScene:
 		push_error("Scene files does not exist: %s" % [scene_path])
 		return null
 
-	# Check if the scene is loaded
-	_cached_mutex.lock()
-	var has_scene := _cached.has(scene_path)
-	_cached_mutex.unlock()
+	# Get loaded scene
+	var packed_scene = ResourceLoader.load(scene_path)
 
-	# Load the scene if it isn't loaded
-	if not has_scene:
-		var packed_scene = ResourceLoader.load(scene_path)
-		_cached_mutex.lock()
+	# Cache the scene if not already cached
+	_cached_mutex.lock()
+	if not _cached.has(scene_path):
 		_cached[scene_path] = packed_scene
-		_cached_mutex.unlock()
-
-	# Get the scene
-	_cached_mutex.lock()
-	var scene = _cached[scene_path]
 	_cached_mutex.unlock()
 
-	return scene
+	return packed_scene
