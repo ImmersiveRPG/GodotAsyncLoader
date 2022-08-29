@@ -36,12 +36,12 @@ func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 
 	_is_setup = true
 
-func instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+func instance_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	if not self._assert_is_setup(): return
 
-	_scene_loader.load_and_instance_async_with_cb(scene_path, cb, data, has_priority)
+	_scene_loader.load_and_instance_with_cb(scene_path, cb, data, has_priority)
 
-func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
+func instance(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
 	if not self._assert_is_setup(): return
 
 	var data := {
@@ -49,10 +49,10 @@ func instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_gl
 		"pos" : pos,
 		"is_pos_global" : is_pos_global,
 	}
-	var cb := funcref(self, "_default_instance_async_cb")
-	_scene_loader.load_and_instance_async_with_cb(scene_path, cb, data, has_priority)
+	var cb := funcref(self, "_default_instance_cb")
+	_scene_loader.load_and_instance_with_cb(scene_path, cb, data, has_priority)
 
-func _default_instance_async_cb(instance : Node, data : Dictionary) -> void:
+func _default_instance_cb(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
 	var pos = data["pos"]
 	var is_pos_global = data["is_pos_global"]
@@ -87,7 +87,7 @@ func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instanc
 	_scene_adder._add_scene(on_done_cb, scene_path, cb, instance, data, has_priority)
 
 func _instance_scene(packed_scene : PackedScene, scene_path : String, cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
-	_scene_instancer.instance_async_with_cb(packed_scene, scene_path, cb, data, has_priority)
+	_scene_instancer.instance_with_cb(packed_scene, scene_path, cb, data, has_priority)
 
 func _assert_is_setup() -> bool:
 	if not _is_setup:

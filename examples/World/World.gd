@@ -14,7 +14,7 @@ func _on_add_orange_async_pressed() -> void:
 
 	var target = self.get_tree().get_current_scene()
 	var scene_path := "res://examples/Items/Orange/Orange.tscn"
-	AsyncLoader.instance_async(target, scene_path, pos, false, true)
+	AsyncLoader.instance(target, scene_path, pos, false, true)
 
 
 func _on_add_orange_async_with_cb_pressed() -> void:
@@ -31,7 +31,7 @@ func _on_add_orange_async_with_cb_pressed() -> void:
 	}
 	var scene_path := "res://examples/Items/Orange/Orange.tscn"
 	var cb := funcref(self, "_on_orange_loaded_cb")
-	AsyncLoader.instance_async_with_cb(scene_path, cb, data, true)
+	AsyncLoader.instance_with_cb(scene_path, cb, data, true)
 
 func _on_orange_loaded_cb(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]

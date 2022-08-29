@@ -10,7 +10,7 @@ var _to_instance := []
 var _to_instance_mutex := Mutex.new()
 
 
-func instance_async_with_cb(packed_scene : PackedScene, scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+func instance_with_cb(packed_scene : PackedScene, scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {
 		"packed_scene" : packed_scene,
 		"scene_path" : scene_path,

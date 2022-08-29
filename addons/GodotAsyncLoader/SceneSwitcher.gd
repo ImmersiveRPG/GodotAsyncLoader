@@ -27,7 +27,7 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 
 	# Load the scene
 	var cb := funcref(self, "_on_scene_loaded")
-	AsyncLoader.instance_async_with_cb(scene_path, cb, data)
+	AsyncLoader.instance_with_cb(scene_path, cb, data)
 
 func _on_scene_loaded(instance : Node, data : Dictionary) -> void:
 	var tree : SceneTree = self.get_tree()

@@ -11,7 +11,7 @@ var _to_load := []
 var _to_load_mutex := Mutex.new()
 
 
-func load_and_instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+func load_and_instance_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {
 		"scene_path" : scene_path,
 		"cb" : cb,

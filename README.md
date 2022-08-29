@@ -52,10 +52,10 @@ const DEFAULT_SLEEP_MSEC := 10
 AsyncLoader.start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void
 
 # Instance the scene asynchronously and add it to the target
-AsyncLoader.instance_async(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void
+AsyncLoader.instance(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void
 
 # Instance the scene asynchronously and fire the callback with it
-AsyncLoader.instance_async_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void
+AsyncLoader.instance_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void
 
 # Instance the scene synchronously and return it
 AsyncLoader.instance_sync(scene_path : String) -> Node
