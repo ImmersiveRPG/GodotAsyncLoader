@@ -64,17 +64,17 @@ AsyncLoader.instance_sync(scene_path : String) -> Node
 AsyncLoader.change_scene(scene_path : String) -> void
 ```
 
-## How to load child scene async
+## AsyncLoader.instance
 
 ```GDScript
 # Instance scene asynchronously and add to current scene
 var target = get_tree().get_current_scene()
 var scene_path := "res://examples/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
-AsyncLoader.instance_async(target, scene_path, pos, true)
+AsyncLoader.instance(target, scene_path, pos, true)
 ```
 
-## How to load child scene async with callback
+## AsyncLoader.instance_with_cb
 
 ```GDScript
 # Instance scene asynchronously and send to callback
@@ -84,7 +84,7 @@ var data := {
 }
 var scene_path := "res://examples/Animals/Puma.tscn"
 var cb := funcref(self, "on_animal_loaded")
-AsyncLoader.instance_async_with_cb(scene_path, cb, data, true)
+AsyncLoader.instance_with_cb(scene_path, cb, data, true)
 
 func on_animal_loaded(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
@@ -94,7 +94,7 @@ func on_animal_loaded(instance : Node, data : Dictionary) -> void:
 
 ```
 
-## How to load child scene sync
+## AsyncLoader.instance_sync
 
 ```GDScript
 # Instance scene synchronously and add to target scene
