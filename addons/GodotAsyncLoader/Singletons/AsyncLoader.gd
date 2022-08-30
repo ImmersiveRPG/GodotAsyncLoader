@@ -36,10 +36,60 @@ func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 
 	_is_setup = true
 
+
+
+
+
 func instance_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
 	if not self._assert_is_setup(): return
 
-	_scene_loader.load_and_instance_with_cb(scene_path, cb, data, has_priority)
+	var cb_data := {
+		"scene_path" : scene_path,
+		"cb" : cb,
+		"data" : data,
+		"has_priority" : has_priority
+	}
+
+	var _loaded_cb := funcref(self, "_loaded_cb")
+	_scene_loader.load_with_cb(scene_path, _loaded_cb, cb_data, has_priority)
+
+func _loaded_cb(packed_scene : PackedScene, data : Dictionary) -> void:
+	print(["!!! _loaded_cb", data])
+	var _instanced_cb := funcref(self, "_instanced_cb")
+	var has_priority = data["has_priority"]
+	_scene_instancer.instance_with_cb(packed_scene, _instanced_cb, data, has_priority)
+
+func _instanced_cb(instance : Node, data : Dictionary) -> void:
+	print(["!!! _instanced_cb", data])
+	var _added_cb := funcref(self, "_added_cb")
+	var has_priority = data["has_priority"]
+	#var cb_data = data["data"]
+	_scene_adder._add_scene(instance, _added_cb, data, has_priority)
+
+func _added_cb(instance : Node, data : Dictionary) -> void:
+	print(["!!! _added_cb", instance, data])
+	var cb = data["cb"]
+	var cb_data = data["data"]
+
+#	# Just return if target is invalid
+#	if not is_instance_valid(target):
+#		return
+
+	# Just return if instance is invalid
+	if not is_instance_valid(instance):
+		return
+
+	# Just return if the cb is invalid
+	if cb != null and not cb.is_valid():
+		return
+
+	if cb != null:
+		#cb.call_deferred("call_func", instance, data)
+		#print([cb, instance, data])
+		cb.call_func(instance, cb_data)
+	else:
+		push_error("!!! Warning: cb was null!!!!")
+
 
 func instance(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
 	if not self._assert_is_setup(): return
@@ -50,7 +100,7 @@ func instance(target : Node, scene_path : String, pos : Vector3, is_pos_global :
 		"is_pos_global" : is_pos_global,
 	}
 	var cb := funcref(self, "_default_instance_cb")
-	_scene_loader.load_and_instance_with_cb(scene_path, cb, data, has_priority)
+	AsyncLoader.instance_with_cb(scene_path, cb, data, has_priority)
 
 func _default_instance_cb(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
@@ -79,11 +129,11 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 
 	_scene_switcher.change_scene(scene_path, loading_path)
 
-func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
-	_scene_adder._add_scene(on_done_cb, scene_path, cb, instance, data, has_priority)
-
-func _instance_scene(packed_scene : PackedScene, scene_path : String, cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
-	_scene_instancer.instance_with_cb(packed_scene, scene_path, cb, data, has_priority)
+#func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
+#	_scene_adder._add_scene(on_done_cb, scene_path, cb, instance, data, has_priority)
+#
+#func _instance_scene(packed_scene : PackedScene, scene_path : String, cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
+#	_scene_instancer.instance_with_cb(packed_scene, scene_path, cb, data, has_priority)
 
 func _set_cached(scene_path : String, packed_scene : PackedScene) -> void:
 	_scene_cache._set_cached(scene_path, packed_scene)
