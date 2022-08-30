@@ -18,23 +18,19 @@ func _set_groups(groups : Array) -> void:
 	for group in GROUPS:
 		_to_adds[group] = []
 
-func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
+func _add_scene(instance : Node, added_cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
-		"on_done_cb" : on_done_cb,
-		"scene_path" : scene_path,
-		"cb" : cb,
+		"added_cb" : added_cb,
 		"instance" : instance,
 		"data" : data,
 		"has_priority" : has_priority,
 	}
 
 	_to_add_mutex.lock()
-
 	if has_priority:
 		_to_add.push_front(entry)
 	else:
 		_to_add.push_back(entry)
-
 	_to_add_mutex.unlock()
 
 func _can_add(group : String) -> bool:
@@ -80,13 +76,11 @@ func _add_entry(from : Array, group : String) -> bool:
 	return self._check_for_new_scenes()
 
 func _add_entry_parent(entry, group : String) -> void:
-	var on_done_cb = entry["on_done_cb"]
-	var scene_path = entry["scene_path"]
-	var cb = entry["cb"]
+	var added_cb = entry["added_cb"]
 	var instance = entry["instance"]
 	var data = entry["data"]
-	#on_done_cb.call_func(scene_path, cb, instance, data)
-	on_done_cb.call_deferred("call_func", scene_path, cb, instance, data)
+	#print(["!!! _add_entry_parent", instance, data])
+	added_cb.call_deferred("call_func", instance, data)
 
 func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
@@ -121,7 +115,6 @@ func _check_for_new_scenes() -> bool:
 	var has_new_scenes := false
 	for entry in to_add:
 		var has_priority = entry["has_priority"]
-		#OS.delay_msec(1)
 		var instance = entry["instance"]
 
 		# Get the queue for this instance type

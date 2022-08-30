@@ -30,17 +30,13 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 	AsyncLoader.instance_with_cb(scene_path, cb, data)
 
 func _on_scene_loaded(instance : Node, data : Dictionary) -> void:
+	# Get old current scene
 	var tree : SceneTree = self.get_tree()
-	var new_scene = instance
-	var scene_path = data["scene_path"]
-
-	# Remove the old scene
 	var old_scene = tree.current_scene
-	tree.root.remove_child(old_scene)
+
+	# Add new scene and make it current
+	tree.root.add_child(instance)
+	tree.set_current_scene(instance)
+
+	# Free old scene
 	old_scene.queue_free()
-
-	# Add the new scene
-	tree.root.add_child(new_scene)
-
-	# Change to the new scene
-	tree.set_current_scene(new_scene)

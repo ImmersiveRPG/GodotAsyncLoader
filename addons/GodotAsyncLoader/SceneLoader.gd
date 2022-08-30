@@ -11,12 +11,11 @@ var _to_load := []
 var _to_load_mutex := Mutex.new()
 
 
-func load_and_instance_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+func load_with_cb(scene_path : String, loaded_cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {
 		"scene_path" : scene_path,
-		"cb" : cb,
+		"loaded_cb" : loaded_cb,
 		"data" : data,
-		"has_priority" : has_priority,
 	}
 
 	_to_load_mutex.lock()
@@ -25,7 +24,6 @@ func load_and_instance_with_cb(scene_path : String, cb : FuncRef, data := {}, ha
 	else:
 		_to_load.push_back(entry)
 	_to_load_mutex.unlock()
-	#print(_to_load)
 
 func _run_loader_thread(_arg : int) -> void:
 	_is_running = true
@@ -36,14 +34,12 @@ func _run_loader_thread(_arg : int) -> void:
 		_to_load.clear()
 		_to_load_mutex.unlock()
 
-		#print(to_load)
 		for entry in to_load:
 			var scene_path = entry["scene_path"]
-			var cb = entry["cb"]
+			var loaded_cb = entry["loaded_cb"]
 			var data = entry["data"]
-			var has_priority = entry["has_priority"]
 			var packed_scene = _load_packed_scene(scene_path)
-			AsyncLoader._instance_scene(packed_scene, scene_path, cb, data, has_priority)
+			loaded_cb.call_deferred("call_func", packed_scene, data)
 
 		OS.delay_msec(2)
 
