@@ -129,11 +129,6 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 
 	_scene_switcher.change_scene(scene_path, loading_path)
 
-#func _add_scene(on_done_cb : FuncRef, scene_path : String, cb : FuncRef, instance : Node, data : Dictionary, has_priority : bool) -> void:
-#	_scene_adder._add_scene(on_done_cb, scene_path, cb, instance, data, has_priority)
-#
-#func _instance_scene(packed_scene : PackedScene, scene_path : String, cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
-#	_scene_instancer.instance_with_cb(packed_scene, scene_path, cb, data, has_priority)
 
 func _set_cached(scene_path : String, packed_scene : PackedScene) -> void:
 	_scene_cache._set_cached(scene_path, packed_scene)

@@ -56,22 +56,4 @@ func _run_instancer_thread(_arg : int) -> void:
 
 		OS.delay_msec(2)
 
-#func _on_done(scene_path : String, cb : FuncRef, instance : Node, data : Dictionary) -> void:
-##	# Just return if target is invalid
-##	if not is_instance_valid(target):
-##		return
-#
-#	# Just return if instance is invalid
-#	if not is_instance_valid(instance):
-#		return
-#
-#	# Just return if the cb is invalid
-#	if cb != null and not cb.is_valid():
-#		return
-#
-#	if cb != null:
-#		#cb.call_deferred("call_func", instance, data)
-#		cb.call_func(instance, data)
-#	else:
-#		push_error("!!! Warning: cb was null!!!!")
 
