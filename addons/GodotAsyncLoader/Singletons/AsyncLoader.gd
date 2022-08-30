@@ -54,20 +54,20 @@ func instance_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priorit
 	_scene_loader.load_with_cb(scene_path, _loaded_cb, cb_data, has_priority)
 
 func _loaded_cb(packed_scene : PackedScene, data : Dictionary) -> void:
-	print(["!!! _loaded_cb", data])
+	#print(["!!! _loaded_cb", data])
 	var _instanced_cb := funcref(self, "_instanced_cb")
 	var has_priority = data["has_priority"]
 	_scene_instancer.instance_with_cb(packed_scene, _instanced_cb, data, has_priority)
 
 func _instanced_cb(instance : Node, data : Dictionary) -> void:
-	print(["!!! _instanced_cb", data])
+	#print(["!!! _instanced_cb", data])
 	var _added_cb := funcref(self, "_added_cb")
 	var has_priority = data["has_priority"]
 	#var cb_data = data["data"]
 	_scene_adder._add_scene(instance, _added_cb, data, has_priority)
 
 func _added_cb(instance : Node, data : Dictionary) -> void:
-	print(["!!! _added_cb", instance, data])
+	#print(["!!! _added_cb", instance, data])
 	var cb = data["cb"]
 	var cb_data = data["data"]
 

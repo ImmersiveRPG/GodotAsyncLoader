@@ -34,7 +34,7 @@ func _on_add_orange_async_with_cb_pressed() -> void:
 	AsyncLoader.instance_with_cb(scene_path, cb, data, true)
 
 func _on_orange_loaded_cb(instance : Node, data : Dictionary) -> void:
-	print(["_on_orange_loaded_cb", instance, data])
+	#print(["_on_orange_loaded_cb", instance, data])
 	var target = data["target"]
 	var pos = data["pos"]
 	#print(["_on_orange_loaded_cb", instance, target, pos])
