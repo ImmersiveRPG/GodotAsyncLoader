@@ -63,7 +63,6 @@ func _instanced_cb(instance : Node, data : Dictionary) -> void:
 	#print(["!!! _instanced_cb", data])
 	var _added_cb := funcref(self, "_added_cb")
 	var has_priority = data["has_priority"]
-	#var cb_data = data["data"]
 	_scene_adder._add_scene(instance, _added_cb, data, has_priority)
 
 func _added_cb(instance : Node, data : Dictionary) -> void:
