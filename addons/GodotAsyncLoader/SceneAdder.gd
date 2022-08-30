@@ -80,8 +80,7 @@ func _add_entry_parent(entry, group : String) -> void:
 	var instance = entry["instance"]
 	var data = entry["data"]
 	#print(["!!! _add_entry_parent", instance, data])
-	added_cb.call_func(instance, data)
-	#added_cb.call_deferred("call_func", instance, data)
+	added_cb.call_deferred("call_func", instance, data)
 
 func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
