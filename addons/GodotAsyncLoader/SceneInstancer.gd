@@ -26,6 +26,7 @@ func instance_with_cb(packed_scene : PackedScene, instanced_cb : FuncRef, data :
 
 func _run_instancer_thread(_arg : int) -> void:
 	_is_running = true
+	var config = get_node("/root/AsyncLoaderConfig")
 
 	while _is_running:
 		_to_instance_mutex.lock()
@@ -44,6 +45,6 @@ func _run_instancer_thread(_arg : int) -> void:
 			# Send the instance to the callback in the main thread
 			instanced_cb.call_deferred("call_func", instance, data)
 
-		OS.delay_msec(2)
+		OS.delay_msec(config._thread_sleep_msec)
 
 

@@ -52,6 +52,7 @@ func _can_add(group : String) -> bool:
 	return false
 
 func _run_adder_thread(_arg : int) -> void:
+	var config = get_node("/root/AsyncLoaderConfig")
 	_is_running = true
 	var is_reset := false
 
@@ -63,16 +64,17 @@ func _run_adder_thread(_arg : int) -> void:
 			while _is_running and not is_reset and _can_add(group):
 				is_reset = _add_entry(_to_adds[group], group)
 
-		OS.delay_msec(2)
+		OS.delay_msec(config._thread_sleep_msec)
 
 func _add_entry(from : Array, group : String) -> bool:
+	var config = get_node("/root/AsyncLoaderConfig")
 	var entry = from.pop_front()
 	if entry["is_child"]:
 		_add_entry_child(entry, group)
 	else:
 		_add_entry_parent(entry, group)
 
-	OS.delay_msec(AsyncLoader._sleep_msec)
+	OS.delay_msec(config._post_add_sleep_msec)
 	return self._check_for_new_scenes()
 
 func _add_entry_parent(entry, group : String) -> void:

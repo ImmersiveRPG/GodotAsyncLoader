@@ -12,11 +12,11 @@ var _scene_instancer = null
 var _scene_adder = null
 var _scene_switcher = null
 
-var _sleep_msec := 0
-var _is_setup := false
 
 func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
-	_sleep_msec = sleep_msec
+	yield(get_tree(), "idle_frame")
+	var config = self.get_node_or_null("/root/AsyncLoaderConfig")
+	config._post_add_sleep_msec = sleep_msec
 	_scene_adder._set_groups(groups)
 
 	# Start the adder thread
@@ -34,7 +34,7 @@ func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	err = _scene_loader._thread.start(_scene_loader, "_run_loader_thread", 0, Thread.PRIORITY_LOW)
 	assert(err == OK)
 
-	_is_setup = true
+	config._is_setup = true
 
 
 
@@ -133,11 +133,19 @@ func _set_cached(scene_path : String, packed_scene : PackedScene) -> void:
 	_scene_cache._set_cached(scene_path, packed_scene)
 
 func _assert_is_setup() -> bool:
-	if not _is_setup:
+	var config = get_node("/root/AsyncLoaderConfig")
+	if not config._is_setup:
 		push_error("Call AsyncLoader.start to initialize the library first")
-	return _is_setup
+	return config._is_setup
 
 func _ready() -> void:
+	# Create config and make it accessible as /root/AsyncLoaderConfig
+	var config = ResourceLoader.load("res://addons/GodotAsyncLoader/Singletons/AsyncLoaderConfig.gd").new()
+	config.name = "AsyncLoaderConfig"
+	yield(get_tree(), "idle_frame")
+	self.get_tree().root.add_child(config)
+	config.owner = self.get_tree().root
+
 	_scene_cache = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneCache.gd").new()
 	_scene_loader = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneLoader.gd").new()
 	_scene_instancer = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneInstancer.gd").new()
@@ -152,24 +160,24 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	# Tell the threads to stop
-	if _scene_loader._is_running:
+	if _scene_loader and _scene_loader._is_running:
 		_scene_loader._is_running = false
 
-	if _scene_instancer._is_running:
+	if _scene_instancer and _scene_instancer._is_running:
 		_scene_instancer._is_running = false
 
-	if _scene_adder._is_running:
+	if _scene_adder and _scene_adder._is_running:
 		_scene_adder._is_running = false
 
 	# Wait for the threads to stop
-	if _scene_loader._thread:
+	if _scene_loader and _scene_loader._thread:
 		_scene_loader._thread.wait_to_finish()
 		_scene_loader._thread = null
 
-	if _scene_instancer._thread:
+	if _scene_instancer and _scene_instancer._thread:
 		_scene_instancer._thread.wait_to_finish()
 		_scene_instancer._thread = null
 
-	if _scene_adder._thread:
+	if _scene_adder and _scene_adder._thread:
 		_scene_adder._thread.wait_to_finish()
 		_scene_adder._thread = null

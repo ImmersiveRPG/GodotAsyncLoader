@@ -27,6 +27,7 @@ func load_with_cb(scene_path : String, loaded_cb : FuncRef, data := {}, has_prio
 
 func _run_loader_thread(_arg : int) -> void:
 	_is_running = true
+	var config = get_node("/root/AsyncLoaderConfig")
 
 	while _is_running:
 		_to_load_mutex.lock()
@@ -41,7 +42,7 @@ func _run_loader_thread(_arg : int) -> void:
 			var packed_scene = _load_packed_scene(scene_path)
 			loaded_cb.call_deferred("call_func", packed_scene, data)
 
-		OS.delay_msec(2)
+		OS.delay_msec(config._thread_sleep_msec)
 
 func _load_packed_scene(scene_path : String) -> PackedScene:
 	var packed_scene = null
