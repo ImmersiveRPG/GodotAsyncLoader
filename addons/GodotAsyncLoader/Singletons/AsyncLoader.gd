@@ -13,11 +13,11 @@ var _scene_adder = null
 var _scene_switcher = null
 
 
-func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
+func start(groups : Array, cant_sleep_groups := [], sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	yield(get_tree(), "idle_frame")
 	var config = self.get_node_or_null("/root/AsyncLoaderConfig")
 	config._post_add_sleep_msec = sleep_msec
-	_scene_adder._set_groups(groups)
+	_scene_adder._set_groups(groups, cant_sleep_groups)
 
 	# Start the adder thread
 	_scene_adder._thread = Thread.new()

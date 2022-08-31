@@ -10,13 +10,18 @@ var _to_add := []
 var _to_add_mutex := Mutex.new()
 var _to_adds := {}
 
-var GROUPS := []
+var GROUPS := ["default"]
+var CANT_SLEEP_GROUPS := []
+var _regex := RegEx.new()
 
-func _set_groups(groups : Array) -> void:
+func _set_groups(groups : Array, cant_sleep_groups : Array) -> void:
 	GROUPS = groups
+	CANT_SLEEP_GROUPS = cant_sleep_groups
 
 	for group in GROUPS:
 		_to_adds[group] = []
+
+	_regex.compile("Terrain_[+|-]\\d\\d_[+|-]\\d\\d")
 
 func _add_scene(instance : Node, added_cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
@@ -69,13 +74,32 @@ func _run_adder_thread(_arg : int) -> void:
 func _add_entry(from : Array, group : String) -> bool:
 	var config = get_node("/root/AsyncLoaderConfig")
 	var entry = from.pop_front()
-	if entry["is_child"]:
+	if entry.has("owner"):
+		_add_sleeping(entry)
+	elif entry["is_child"]:
 		_add_entry_child(entry, group)
 	else:
 		_add_entry_parent(entry, group)
 
 	OS.delay_msec(config._post_add_sleep_msec)
 	return self._check_for_new_scenes()
+
+func _add_sleeping(entry) -> void:
+	var node_owner = entry["owner"]
+	var parent = entry["parent"]
+	var instance = entry["instance"]
+	self.call_deferred("_on_add_sleeping_cb", node_owner, parent, instance)
+
+# FIXME: Move this into AsyncLoader and have it passed in as a callback
+func _on_add_sleeping_cb(owner : Node, parent : Node, instance : Node) -> void:
+	#print("@@@ owner.name: %s" % [owner.name])
+	if not Global._sleeping_nodes.has(owner.name):
+		Global._sleeping_nodes[owner.name] = []
+
+	Global._sleeping_nodes[owner.name].push_front({
+		"node_parent" : parent,
+		"node" : instance
+	})
 
 func _add_entry_parent(entry, group : String) -> void:
 	var added_cb = entry["added_cb"]
@@ -118,6 +142,10 @@ func _check_for_new_scenes() -> bool:
 	for entry in to_add:
 		var has_priority = entry["has_priority"]
 		var instance = entry["instance"]
+		# FIXME: Instead of hard coding this for Terrain, just check 
+		# if it in GROUP[0]
+		var is_terrain = _regex.search(instance.name) != null
+		var is_first = entry["data"].get("is_first", false)
 
 		# Get the queue for this instance type
 		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds[GROUPS[0]])
@@ -135,8 +163,20 @@ func _check_for_new_scenes() -> bool:
 				var parent = child.get_parent()
 				var owner = instance
 				if parent != null:
-					to.append({ "is_child" : true, "instance" : child, "parent" : parent, "owner" : owner, "transform" : child.transform })
 					parent.remove_child(child)
+					var data := { "is_child" : true, "instance" : child, "parent" : parent, "transform" : child.transform }
+
+					# Don't allow this child to sleep if in group
+					var cant_sleep := false
+					var groups = child.get_groups()
+					for g in CANT_SLEEP_GROUPS:
+						if groups.has(g):
+							cant_sleep = true
+							break
+
+					if is_terrain and not cant_sleep and not is_first:
+						data["owner"] = instance
+					to.append(data)
 
 	return has_new_scenes
 
