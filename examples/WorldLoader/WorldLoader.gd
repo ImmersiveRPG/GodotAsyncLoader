@@ -54,47 +54,57 @@ func load_terrain_around_player() -> void:
 		if is_player_terrain_loaded:
 			Global._is_ready_for_movement = true
 
-func load_terrain_around(center_tile : Vector3) -> void:
-	#print("??? org: %s" % org)
-	var to_load := [
+func get_cells_around(to_load : Array, center_tile : Vector3) -> Array:
+	var data := [
 		center_tile, # Center
 		center_tile + Vector3(-1.0, 0.0, 0.0), # Right
 		center_tile + Vector3(1.0, 0.0, 0.0), # Left
-#		center_tile + Vector3(0.0, 0.0, 1.0), # Up
-#		center_tile + Vector3(0.0, 0.0, -1.0), # Down
-#		center_tile + Vector3(-1.0, 0.0, 1.0), # Up Right
-#		center_tile + Vector3(1.0, 0.0, 1.0), # Up Left
-#		center_tile + Vector3(-1.0, 0.0, -1.0), # Down Right
-#		center_tile + Vector3(1.0, 0.0, -1.0), # Down Left
-#
-#		center_tile + Vector3(0.0, 0.0, 2.0),
-#		center_tile + Vector3(-1.0, 0.0, 2.0),
-#		center_tile + Vector3(1.0, 0.0, 2.0),
-#
-#		center_tile + Vector3(0.0, 0.0, -2.0),
-#		center_tile + Vector3(-1.0, 0.0, -2.0),
-#		center_tile + Vector3(1.0, 0.0, -2.0),
-#
-#		center_tile + Vector3(2.0, 0.0, 1.0),
-#		center_tile + Vector3(2.0, 0.0, 0.0),
-#		center_tile + Vector3(2.0, 0.0, -1.0),
-#
-#		center_tile + Vector3(-2.0, 0.0, 1.0),
-#		center_tile + Vector3(-2.0, 0.0, 0.0),
-#		center_tile + Vector3(-2.0, 0.0, -1.0),
+		center_tile + Vector3(0.0, 0.0, 1.0), # Up
+		center_tile + Vector3(0.0, 0.0, -1.0), # Down
+		center_tile + Vector3(-1.0, 0.0, 1.0), # Up Right
+		center_tile + Vector3(1.0, 0.0, 1.0), # Up Left
+		center_tile + Vector3(-1.0, 0.0, -1.0), # Down Right
+		center_tile + Vector3(1.0, 0.0, -1.0), # Down Left
 	]
+	for entry in data:
+		if not to_load.has(entry):
+			to_load.append(entry)
+	return to_load
+
+func load_terrain_around(center_tile : Vector3) -> void:
+	# Get the coordinates of all the tiles around the center
+	var to_load := []
+	# 1 cell away from center
+	to_load = get_cells_around(to_load, center_tile)
+	# 2 cells away from center
+	for entry in to_load.duplicate():
+		to_load = get_cells_around(to_load, entry)
+
+	# Filter out all invalid tiles
+	for entry in to_load.duplicate():
+		# Skip tiles that are outside the world
+		if entry.x <= -Global.WORLD_TILES_WIDE \
+		or entry.x >= Global.WORLD_TILES_WIDE \
+		or entry.z <= -Global.WORLD_TILES_WIDE \
+		or entry.z >= Global.WORLD_TILES_WIDE:
+			to_load.erase(entry)
+			continue
+
+		# Skip tiles that do not exist
+		var scene_path := "res://examples/Terrain/Terrain_%+03d_%+03d.tscn" % [entry.x, entry.z]
+		if not ResourceLoader.exists(scene_path):
+			to_load.erase(entry)
+			continue
+	#print(to_load)
 
 	# Tell Scene loader to load terrains
 	for entry in to_load:
-		# Skip tiles that are outside the world
-		if entry.x <= -Global.WORLD_TILES_WIDE or entry.x >= Global.WORLD_TILES_WIDE:
-			continue
-		if entry.z <= -Global.WORLD_TILES_WIDE or entry.z >= Global.WORLD_TILES_WIDE:
-			continue
-
 		# Skip tiles that are already loaded or started loading
 		if _tile_load_status[entry.z][entry.x] > 0:
 			continue
+
+		# Mark that this terrain tile is starting to load
+		_tile_load_status[entry.z][entry.x] = 1
 
 		# Instance scene asynchronously and send to callback
 		var data := {
@@ -102,10 +112,6 @@ func load_terrain_around(center_tile : Vector3) -> void:
 			"pos" : Vector3(entry.x, 0.0, entry.z),
 			"is_first" : _is_first_terrain,
 		}
-
-		# Mark that this terrain tile is starting to load
-		_tile_load_status[entry.z][entry.x] = 1
-
 		var scene_path := "res://examples/Terrain/Terrain_%+03d_%+03d.tscn" % [entry.x, entry.z]
 		#print(scene_path)
 		var cb := funcref(self, "_on_terrain_loaded")

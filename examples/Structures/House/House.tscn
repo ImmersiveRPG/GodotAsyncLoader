@@ -3,16 +3,16 @@
 [ext_resource path="res://examples/Structures/House/material.tres" type="Material" id=1]
 
 [sub_resource type="BoxShape" id=1]
-extents = Vector3( 10, 10, 10 )
+extents = Vector3( 20, 20, 20 )
 
 [sub_resource type="CubeMesh" id=2]
 material = ExtResource( 1 )
-size = Vector3( 20, 20, 20 )
+size = Vector3( 40, 40, 40 )
 
 [node name="House" type="StaticBody" groups=["structure"]]
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0 )
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]

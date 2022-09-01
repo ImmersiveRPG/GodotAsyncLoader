@@ -17,7 +17,7 @@ const CANT_SLEEP_GROUPS := [
 	"terrain",
 	"structure",
 ]
-const SLEEP_MSEC := 100
+const SLEEP_MSEC := 20
 
 func _ready() -> void:
 	AsyncLoader.start(GROUPS, CANT_SLEEP_GROUPS, SLEEP_MSEC)

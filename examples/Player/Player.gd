@@ -8,7 +8,7 @@ const FLOOR_SLOPE_MAX_THRESHOLD := deg2rad(60)
 const JUMP_IMPULSE := 20.0
 const ROTATION_SPEED := 6.0
 const ACCELERATION := 70.0
-const MAX_VELOCITY := 60.0
+const MAX_VELOCITY := 200.0
 
 var _velocity := Vector3.ZERO
 var _snap_vector := Vector3.ZERO
