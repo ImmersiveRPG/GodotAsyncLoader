@@ -147,7 +147,8 @@ func _check_for_new_scenes() -> bool:
 		# FIXME: Instead of hard coding this for Terrain, just check 
 		# if it in GROUP[0]
 		var is_terrain = _regex.search(instance.name) != null
-		var is_first = entry["data"].get("is_first", false)
+		var is_first = entry["data"]["data"].get("is_first", false)
+		#print("???? entry: %s" % [entry["data"]["data"]])
 
 		# Get the queue for this instance type
 		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds[GROUPS[0]])
