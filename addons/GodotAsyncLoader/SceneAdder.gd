@@ -106,7 +106,9 @@ func _add_entry_parent(entry, group : String) -> void:
 	var instance = entry["instance"]
 	var data = entry["data"]
 	#print(["!!! _add_entry_parent", instance, data])
-	added_cb.call_deferred("call_func", instance, data)
+	# FIXME: Should this use call_deferred?
+	#added_cb.call_deferred("call_func", instance, data)
+	added_cb.call_func(instance, data)
 
 func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
@@ -157,7 +159,7 @@ func _check_for_new_scenes() -> bool:
 		has_new_scenes = true
 
 		# Remove all the scene's children to add later
-		for child in _recursively_get_all_children_of_type(instance, Node):
+		for child in recursively_get_all_children_of_type(instance, Node):
 			to = _get_destination_queue_for_instance(child, false, null)
 			if to != null:
 				var parent = child.get_parent()
@@ -180,7 +182,7 @@ func _check_for_new_scenes() -> bool:
 
 	return has_new_scenes
 
-func _recursively_get_all_children_of_type(target : Node, target_type) -> Array:
+func recursively_get_all_children_of_type(target : Node, target_type) -> Array:
 	var matches := []
 	var to_search := [target]
 	while not to_search.empty():

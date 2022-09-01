@@ -40,7 +40,9 @@ func _run_loader_thread(_arg : int) -> void:
 			var loaded_cb = entry["loaded_cb"]
 			var data = entry["data"]
 			var packed_scene = _load_packed_scene(scene_path)
-			loaded_cb.call_deferred("call_func", packed_scene, data)
+			# FIXME: Should this use call_deferred?
+			#loaded_cb.call_deferred("call_func", packed_scene, data)
+			loaded_cb.call_func(packed_scene, data)
 
 		OS.delay_msec(config._thread_sleep_msec)
 

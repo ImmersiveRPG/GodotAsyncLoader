@@ -6,6 +6,14 @@ extends Node
 
 
 const GRAVITY := -40.0
+const WORLD_TILES_WIDE := 4
+const TILE_WIDTH := 200
+
+var _is_ready_for_movement := false
+var _world_offset := Vector3(0, 0, 0)
+var _player = null
+var _sleeping_nodes := {}
+var _player_terrain = null
 
 var _fps_timer : Timer
 
@@ -26,3 +34,17 @@ func _on_fps_timeout() -> void:
 	var fps = Engine.get_frames_per_second()
 	var title = "(Godot: %s) | FPS: %s" % [godot_debug, fps]
 	OS.set_window_title(title)
+
+func recursively_get_all_children_in_group(target : Node, group_name : String) -> Array:
+	var matches := []
+	var to_search := [target]
+	while not to_search.empty():
+		var entry = to_search.pop_front()
+
+		for child in entry.get_children():
+			to_search.append(child)
+
+		if entry.is_in_group(group_name):
+			matches.append(entry)
+
+	return matches

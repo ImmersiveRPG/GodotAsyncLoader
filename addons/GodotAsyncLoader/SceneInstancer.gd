@@ -43,7 +43,9 @@ func _run_instancer_thread(_arg : int) -> void:
 			var instance = packed_scene.instance()
 
 			# Send the instance to the callback in the main thread
-			instanced_cb.call_deferred("call_func", instance, data)
+			# FIXME: Should this use call_deferred?
+			#instanced_cb.call_deferred("call_func", instance, data)
+			instanced_cb.call_func(instance, data)
 
 		OS.delay_msec(config._thread_sleep_msec)
 

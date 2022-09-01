@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://examples/GroundWhite/GroundWhite.tscn" type="PackedScene" id=1]
+[ext_resource path="res://examples/GroundBlack/GroundBlack.tscn" type="PackedScene" id=2]
+[ext_resource path="res://examples/Structures/House/House.tscn" type="PackedScene" id=3]
+[ext_resource path="res://examples/Items/Orange/Orange.tscn" type="PackedScene" id=4]
+
+[node name="Terrain_+02_+00" type="Spatial"]
+
+[node name="GroundBlack" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
+
+[node name="GroundBlack2" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50 )
+
+[node name="GroundWhite" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 50 )
+
+[node name="GroundWhite2" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
+
+[node name="House" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -53.2933, 0, -72.879 )
+
+[node name="Orange" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -60.9679, 0, 63.573 )
+
+[node name="Orange2" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 72.1002, 0, 35.7318 )
+
+[node name="Orange3" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.771, 0, -75.301 )

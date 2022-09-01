@@ -13,13 +13,18 @@ const MAX_VELOCITY := 60.0
 var _velocity := Vector3.ZERO
 var _snap_vector := Vector3.ZERO
 var _destination := Vector3.INF
-const _destination_a := Vector3(-400, 0, 0)
-const _destination_b := Vector3(400, 0, 0)
+const _destination_a := Vector3(-600, 0, 0)
+const _destination_b := Vector3(600, 0, 0)
+
+func _init() -> void:
+	Global._player = self
 
 func _ready() -> void:
 	_destination = _destination_b
 
 func _physics_process(delta : float) -> void:
+	if not Global._is_ready_for_movement: return
+
 	# It at destination, switch to next destination
 	if self.global_transform.origin.distance_to(_destination) < 3.0:
 		if _destination_a == _destination:

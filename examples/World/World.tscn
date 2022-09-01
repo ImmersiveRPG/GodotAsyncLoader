@@ -1,26 +1,13 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://examples/Player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://examples/Plants/Cactus/Cactus.tscn" type="PackedScene" id=2]
-[ext_resource path="res://examples/Structures/Barn/Barn.tscn" type="PackedScene" id=3]
-[ext_resource path="res://examples/Items/SodaCan/SodaCan.tscn" type="PackedScene" id=4]
-[ext_resource path="res://examples/NPC/NPC.tscn" type="PackedScene" id=5]
-[ext_resource path="res://examples/Structures/House/House.tscn" type="PackedScene" id=6]
-[ext_resource path="res://examples/Items/Orange/Orange.tscn" type="PackedScene" id=7]
-[ext_resource path="res://examples/Furniture/Table/Table.tscn" type="PackedScene" id=8]
+[ext_resource path="res://examples/WorldLoader/WorldLoader.tscn" type="PackedScene" id=2]
 [ext_resource path="res://examples/World/World.gd" type="Script" id=9]
-[ext_resource path="res://examples/GroundBlack/GroundBlack.tscn" type="PackedScene" id=10]
-[ext_resource path="res://examples/GroundWhite/GroundWhite.tscn" type="PackedScene" id=11]
-
-[sub_resource type="SpatialMaterial" id=1]
-albedo_color = Color( 0.803922, 0.894118, 0.117647, 1 )
-
-[sub_resource type="PrismMesh" id=2]
-material = SubResource( 1 )
-size = Vector3( 5, 5, 5 )
 
 [node name="World" type="Spatial"]
 script = ExtResource( 9 )
+
+[node name="WorldLoader" parent="." instance=ExtResource( 2 )]
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 473.044, 332 )
@@ -49,177 +36,6 @@ margin_top = 28.0
 margin_right = 713.0
 margin_bottom = 84.0
 text = "Add orange sync"
-
-[node name="Terrain_+00_+00" type="Spatial" parent="."]
-
-[node name="GroundBlack" parent="Terrain_+00_+00" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
-
-[node name="GroundBlack2" parent="Terrain_+00_+00" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50 )
-
-[node name="GroundWhite" parent="Terrain_+00_+00" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 50 )
-
-[node name="GroundWhite2" parent="Terrain_+00_+00" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
-
-[node name="Orange" parent="Terrain_+00_+00" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.5241, 0 )
-
-[node name="Orange2" parent="Terrain_+00_+00" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -59.2142, 16.5241, 51.2526 )
-
-[node name="Orange3" parent="Terrain_+00_+00" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 57.9959, 16.5241, 51.2526 )
-
-[node name="Orange4" parent="Terrain_+00_+00" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -51.1272, 16.5241, -49.6899 )
-
-[node name="NPC" parent="Terrain_+00_+00" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -85.3164, 0, -51.1852 )
-
-[node name="Terrain_+00_+01" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 0, 0 )
-
-[node name="GroundBlack" parent="Terrain_+00_+01" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
-
-[node name="GroundBlack2" parent="Terrain_+00_+01" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50 )
-
-[node name="GroundWhite" parent="Terrain_+00_+01" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 50 )
-
-[node name="GroundWhite2" parent="Terrain_+00_+01" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
-
-[node name="Table2" parent="Terrain_+00_+01" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -40.5829, 0, -76.0398 )
-
-[node name="SodaCan2" parent="Terrain_+00_+01/Table2" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.624, 26, 11 )
-
-[node name="SodaCan3" parent="Terrain_+00_+01/Table2" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623802, 26, 11 )
-
-[node name="SodaCan4" parent="Terrain_+00_+01/Table2" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.3762, 26, 11 )
-
-[node name="SodaCan5" parent="Terrain_+00_+01/Table2" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.624, 33, 11 )
-
-[node name="SodaCan6" parent="Terrain_+00_+01/Table2" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3762, 33, 11 )
-
-[node name="SodaCan7" parent="Terrain_+00_+01/Table2" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623802, 40, 11 )
-
-[node name="SodaCan8" parent="Terrain_+00_+01/Table2" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.623802, 40, 11 )
-
-[node name="Cactus" parent="Terrain_+00_+01" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 80.9795 )
-
-[node name="Terrain_+00_+02" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 400, 0, 0 )
-
-[node name="GroundBlack" parent="Terrain_+00_+02" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
-
-[node name="GroundBlack2" parent="Terrain_+00_+02" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50 )
-
-[node name="GroundWhite" parent="Terrain_+00_+02" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 50 )
-
-[node name="GroundWhite2" parent="Terrain_+00_+02" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
-
-[node name="House" parent="Terrain_+00_+02" instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -53.2933, 0, -72.879 )
-
-[node name="Orange" parent="Terrain_+00_+02" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -60.9679, 0, 63.573 )
-
-[node name="Orange2" parent="Terrain_+00_+02" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 72.1002, 0, 35.7318 )
-
-[node name="Orange3" parent="Terrain_+00_+02" instance=ExtResource( 7 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.771, 0, -75.301 )
-
-[node name="Terrain_+00_-01" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -200, 0, 0 )
-
-[node name="GroundBlack" parent="Terrain_+00_-01" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
-
-[node name="GroundBlack2" parent="Terrain_+00_-01" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50 )
-
-[node name="GroundWhite" parent="Terrain_+00_-01" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 50 )
-
-[node name="GroundWhite2" parent="Terrain_+00_-01" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
-
-[node name="Cactus" parent="Terrain_+00_-01" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8173, 0, -71.0427 )
-
-[node name="SodaCan" parent="Terrain_+00_-01" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.23751, 68.3163 )
-
-[node name="SodaCan2" parent="Terrain_+00_-01" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3.23751, 68.3163 )
-
-[node name="SodaCan3" parent="Terrain_+00_-01" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 3.23751, 68.3163 )
-
-[node name="SodaCan4" parent="Terrain_+00_-01" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.2166, 9.62438, 68.3163 )
-
-[node name="SodaCan5" parent="Terrain_+00_-01" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.48347, 9.62438, 68.3163 )
-
-[node name="SodaCan6" parent="Terrain_+00_-01" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.97372, 16.6296, 68.3163 )
-
-[node name="Terrain_+00_-02" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -400, 0, 0 )
-
-[node name="GroundBlack" parent="Terrain_+00_-02" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
-
-[node name="GroundBlack2" parent="Terrain_+00_-02" instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50 )
-
-[node name="GroundWhite" parent="Terrain_+00_-02" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 50 )
-
-[node name="GroundWhite2" parent="Terrain_+00_-02" instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
-
-[node name="Cactus" parent="Terrain_+00_-02" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -69.735, 0, 75.3656 )
-
-[node name="Barn" parent="Terrain_+00_-02" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24.2726, 0, -72.483 )
-
-[node name="MeshInstance2" type="MeshInstance" parent="Terrain_+00_-02/Barn" groups=["etc"]]
-transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 22.3919, 29.8762, 12.9589 )
-mesh = SubResource( 2 )
-
-[node name="MeshInstance3" type="MeshInstance" parent="Terrain_+00_-02/Barn" groups=["etc"]]
-transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 22.6435, 29.8762, -11.4643 )
-mesh = SubResource( 2 )
-
-[node name="MeshInstance4" type="MeshInstance" parent="Terrain_+00_-02/Barn" groups=["etc"]]
-transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, 12.6265, 29.8762, 22.685 )
-mesh = SubResource( 2 )
-
-[node name="MeshInstance5" type="MeshInstance" parent="Terrain_+00_-02/Barn" groups=["etc"]]
-transform = Transform( 1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, -13.4682, 29.8762, 22.6228 )
-mesh = SubResource( 2 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 
