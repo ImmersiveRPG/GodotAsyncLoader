@@ -12,7 +12,6 @@ var _to_adds := {}
 
 var GROUPS := ["default"]
 var CANT_SLEEP_GROUPS := []
-var _regex := RegEx.new()
 
 func _set_groups(groups : Array, cant_sleep_groups : Array) -> void:
 	GROUPS = groups
@@ -20,8 +19,6 @@ func _set_groups(groups : Array, cant_sleep_groups : Array) -> void:
 
 	for group in GROUPS:
 		_to_adds[group] = []
-
-	_regex.compile("Terrain_[+|-]\\d\\d_[+|-]\\d\\d")
 
 func _add_scene(instance : Node, added_cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
@@ -144,9 +141,7 @@ func _check_for_new_scenes() -> bool:
 	for entry in to_add:
 		var has_priority = entry["has_priority"]
 		var instance = entry["instance"]
-		# FIXME: Instead of hard coding this for Terrain, just check 
-		# if it in GROUP[0]
-		var is_terrain = _regex.search(instance.name) != null
+		var is_terrain = instance.get_groups().has(GROUPS[0])
 		var is_first = entry["data"]["data"].get("is_first", false)
 		#print("???? entry: %s" % [entry["data"]["data"]])
 

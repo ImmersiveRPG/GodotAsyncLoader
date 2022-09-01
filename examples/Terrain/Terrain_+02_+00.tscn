@@ -5,7 +5,7 @@
 [ext_resource path="res://examples/Structures/House/House.tscn" type="PackedScene" id=3]
 [ext_resource path="res://examples/Items/Orange/Orange.tscn" type="PackedScene" id=4]
 
-[node name="Terrain_+02_+00" type="Spatial"]
+[node name="Terrain_+02_+00" type="Spatial" groups=["terrain"]]
 
 [node name="GroundBlack" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
