@@ -141,7 +141,7 @@ func _check_for_new_scenes() -> bool:
 	for entry in to_add:
 		var has_priority = entry["has_priority"]
 		var instance = entry["instance"]
-		var is_terrain = instance.get_groups().has(GROUPS[0])
+		var is_tile = instance.get_groups().has(GROUPS[0])
 		var is_first = entry["data"]["data"].get("is_first", false)
 		#print("???? entry: %s" % [entry["data"]["data"]])
 
@@ -172,7 +172,7 @@ func _check_for_new_scenes() -> bool:
 							cant_sleep = true
 							break
 
-					if is_terrain and not cant_sleep and not is_first:
+					if is_tile and not cant_sleep and not is_first:
 						data["owner"] = instance
 					to.append(data)
 

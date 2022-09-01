@@ -22,7 +22,7 @@
 4. Setup plugin in main scene
 ```GDScript
 const GROUPS := [
-	"terrain",
+	"tile",
 	"structure",
 	"furniture",
 	"plant",

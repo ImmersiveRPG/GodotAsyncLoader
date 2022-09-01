@@ -12,7 +12,7 @@ albedo_color = Color( 0.803922, 0.894118, 0.117647, 1 )
 material = SubResource( 1 )
 size = Vector3( 5, 5, 5 )
 
-[node name="Terrain_-02_+00" type="Spatial" groups=["terrain"]]
+[node name="Tile_-02_+00" type="Spatial" groups=["tile"]]
 
 [node name="GroundBlack" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )

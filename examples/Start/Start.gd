@@ -5,7 +5,7 @@
 extends Control
 
 const GROUPS := [
-	"terrain",
+	"tile",
 	"structure",
 	"furniture",
 	"plant",
@@ -14,7 +14,7 @@ const GROUPS := [
 	"etc",
 ]
 const CANT_SLEEP_GROUPS := [
-	"terrain",
+	"tile",
 	"structure",
 ]
 const SLEEP_MSEC := 20

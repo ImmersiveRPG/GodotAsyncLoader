@@ -13,7 +13,7 @@ var _is_ready_for_movement := false
 var _world_offset := Vector3(0, 0, 0)
 var _player = null
 var _sleeping_nodes := {}
-var _player_terrain = null
+var _player_tile = null
 
 var _fps_timer : Timer
 
