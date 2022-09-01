@@ -4,15 +4,13 @@
 
 extends Spatial
 
-const groups := [
+const GROUPS := [
 	#"terrain",
 	#"structure",
 	"furniture",
 	"plant",
 	"item",
-	"vehicle",
 	"npc",
-	"animal",
 	"etc",
 ]
 
@@ -78,11 +76,11 @@ func load_terrain_around(center_tile : Vector3) -> void:
 #		center_tile + Vector3(1.0, 0.0, -2.0),
 #
 #		center_tile + Vector3(2.0, 0.0, 1.0),
-		center_tile + Vector3(2.0, 0.0, 0.0),
+#		center_tile + Vector3(2.0, 0.0, 0.0),
 #		center_tile + Vector3(2.0, 0.0, -1.0),
 #
 #		center_tile + Vector3(-2.0, 0.0, 1.0),
-		center_tile + Vector3(-2.0, 0.0, 0.0),
+#		center_tile + Vector3(-2.0, 0.0, 0.0),
 #		center_tile + Vector3(-2.0, 0.0, -1.0),
 	]
 
@@ -112,7 +110,7 @@ func load_terrain_around(center_tile : Vector3) -> void:
 		#print(scene_path)
 		var cb := funcref(self, "_on_terrain_loaded")
 		#print([cb])
-		AsyncLoader.instance_with_cb(scene_path, cb, data, _is_first_terrain)
+		AsyncLoader.instance_with_cb(scene_path, cb, data, false)
 		_is_first_terrain = false
 
 func _on_terrain_loaded(instance : Node, data : Dictionary) -> void:
@@ -154,7 +152,7 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	Global._sleeping_nodes[next_player_terrain.name].clear()
 
 	# Put all the off screen nodes to sleep
-	var inverse_groups = groups.duplicate()
+	var inverse_groups = GROUPS.duplicate()
 	inverse_groups.invert()
 	if Global._player_terrain:
 		for group in inverse_groups:
