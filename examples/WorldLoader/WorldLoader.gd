@@ -72,13 +72,11 @@ func get_cells_around(to_load : Array, center_tile : Vector3) -> Array:
 	return to_load
 
 func load_tiles_around(center_tile : Vector3) -> void:
-	# Get the coordinates of all the tiles around the center
-	var to_load := []
-	# 1 cell away from center
-	to_load = get_cells_around(to_load, center_tile)
-	# 2 cells away from center
-	for entry in to_load.duplicate():
-		to_load = get_cells_around(to_load, entry)
+	# Get tile coordinates for X distance around the center
+	var to_load := [center_tile]
+	for n in 2:
+		for entry in to_load.duplicate():
+			to_load = get_cells_around(to_load, entry)
 
 	# Filter out all invalid tiles
 	for entry in to_load.duplicate():
