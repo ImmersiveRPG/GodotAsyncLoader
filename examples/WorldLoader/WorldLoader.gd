@@ -4,15 +4,6 @@
 
 extends Spatial
 
-const GROUPS := [
-	#"tile",
-	#"structure",
-	"furniture",
-	"plant",
-	"item",
-	"npc",
-	"etc",
-]
 
 var _prev_player_center_tile := Vector3.INF
 var _tile_load_status := []
@@ -132,10 +123,10 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	Global._sleeping_nodes[next_player_tile.name].clear()
 
 	# Put all the off screen nodes to sleep
-	var inverse_groups = GROUPS.duplicate()
-	inverse_groups.invert()
+	var can_sleep_groups = AsyncLoader.get_can_sleep_groups()
+	can_sleep_groups.invert()
 	if Global._player_tile:
-		for group in inverse_groups:
+		for group in can_sleep_groups:
 			var group_nodes = Global.recursively_get_all_children_in_group(Global._player_tile, group)
 			group_nodes.invert()
 			for node in group_nodes:

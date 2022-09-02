@@ -13,6 +13,13 @@ var _scene_adder = null
 var _scene_switcher = null
 var _config = null
 
+func get_can_sleep_groups() -> Array:
+	var groups := []
+	for g in _config.GROUPS:
+		if not _config.CANT_SLEEP_GROUPS.has(g):
+			groups.append(g)
+
+	return groups
 
 func start(groups : Array, cant_sleep_groups := [], sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	yield(get_tree(), "idle_frame")
