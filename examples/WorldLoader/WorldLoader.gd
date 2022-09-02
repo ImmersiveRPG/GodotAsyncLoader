@@ -29,16 +29,16 @@ func _init() -> void:
 		_tile_load_status.append(row)
 
 func _on_load_checker_timer_timeout() -> void:
-	self.load_tiles_around_player()
+	self._load_tiles_around_player()
 
-func load_tiles_around_player() -> void:
+func _load_tiles_around_player() -> void:
 	# Load around player
 	if Global._player:
 		var org = Global._player.transform.origin
-		var center_tile := position_to_tile_xz(org) - Global._world_offset
+		var center_tile := self._position_to_tile_xz(org) - Global._world_offset
 		if center_tile != _prev_player_center_tile:
 			_prev_player_center_tile = center_tile
-			load_tiles_around(center_tile)
+			self._load_tiles_around(center_tile)
 			self._sleep_and_wake_nodes(center_tile)
 
 	# Let the player move if the tiles under the player are loaded
@@ -47,12 +47,12 @@ func load_tiles_around_player() -> void:
 		if is_player_tile_loaded:
 			Global._is_ready_for_movement = true
 
-func load_tiles_around(center_tile : Vector3) -> void:
+func _load_tiles_around(center_tile : Vector3) -> void:
 	# Get tile coordinates for X distance around the center
 	var to_load := [center_tile]
 	for n in 2:
 		for entry in to_load.duplicate():
-			to_load = get_cells_around(to_load, entry)
+			to_load = self._get_cells_around(to_load, entry)
 
 	# Filter out all invalid tiles
 	for entry in to_load.duplicate():
@@ -88,12 +88,12 @@ func load_tiles_around(center_tile : Vector3) -> void:
 		}
 		var scene_path := "res://examples/Tile/Tile_%+03d_%+03d.tscn" % [entry.x, entry.z]
 		#print(scene_path)
-		var cb := funcref(self, "_on_tile_loaded")
+		var cb := funcref(self, "_on_tile_loaded_cb")
 		#print([cb])
 		AsyncLoader.instance_with_cb(scene_path, cb, data, false)
 		_is_first_tile = false
 
-func _on_tile_loaded(instance : Node, data : Dictionary) -> void:
+func _on_tile_loaded_cb(instance : Node, data : Dictionary) -> void:
 	#print([instance])
 	# Add the tile
 	var target = data["target"]
@@ -151,14 +151,14 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	Global._player_tile = next_player_tile
 	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
 
-func position_to_tile_xz(org : Vector3) -> Vector3:
+func _position_to_tile_xz(org : Vector3) -> Vector3:
 	var half := Global.TILE_WIDTH / 2.0
 	var x := round((org.x / half) / 2.0)
 	var z := round((org.z / half) / 2.0)
 
 	return Vector3(x, 0, z)
 
-func get_cells_around(to_load : Array, center_tile : Vector3) -> Array:
+func _get_cells_around(to_load : Array, center_tile : Vector3) -> Array:
 	var data := [
 		center_tile, # Center
 		center_tile + Vector3(-1.0, 0.0, 0.0), # Right
