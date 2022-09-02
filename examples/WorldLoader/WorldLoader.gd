@@ -31,13 +31,6 @@ func _init() -> void:
 func _on_load_checker_timer_timeout() -> void:
 	self.load_tiles_around_player()
 
-func position_to_tile_xz(org : Vector3) -> Vector3:
-	var half := Global.TILE_WIDTH / 2.0
-	var x := round((org.x / half) / 2.0)
-	var z := round((org.z / half) / 2.0)
-
-	return Vector3(x, 0, z)
-
 func load_tiles_around_player() -> void:
 	# Load around player
 	if Global._player:
@@ -53,23 +46,6 @@ func load_tiles_around_player() -> void:
 		var is_player_tile_loaded : bool = _tile_load_status[_prev_player_center_tile.z][_prev_player_center_tile.x] == 2
 		if is_player_tile_loaded:
 			Global._is_ready_for_movement = true
-
-func get_cells_around(to_load : Array, center_tile : Vector3) -> Array:
-	var data := [
-		center_tile, # Center
-		center_tile + Vector3(-1.0, 0.0, 0.0), # Right
-		center_tile + Vector3(1.0, 0.0, 0.0), # Left
-		center_tile + Vector3(0.0, 0.0, 1.0), # Up
-		center_tile + Vector3(0.0, 0.0, -1.0), # Down
-		center_tile + Vector3(-1.0, 0.0, 1.0), # Up Right
-		center_tile + Vector3(1.0, 0.0, 1.0), # Up Left
-		center_tile + Vector3(-1.0, 0.0, -1.0), # Down Right
-		center_tile + Vector3(1.0, 0.0, -1.0), # Down Left
-	]
-	for entry in data:
-		if not to_load.has(entry):
-			to_load.append(entry)
-	return to_load
 
 func load_tiles_around(center_tile : Vector3) -> void:
 	# Get tile coordinates for X distance around the center
@@ -174,3 +150,27 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 
 	Global._player_tile = next_player_tile
 	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
+
+func position_to_tile_xz(org : Vector3) -> Vector3:
+	var half := Global.TILE_WIDTH / 2.0
+	var x := round((org.x / half) / 2.0)
+	var z := round((org.z / half) / 2.0)
+
+	return Vector3(x, 0, z)
+
+func get_cells_around(to_load : Array, center_tile : Vector3) -> Array:
+	var data := [
+		center_tile, # Center
+		center_tile + Vector3(-1.0, 0.0, 0.0), # Right
+		center_tile + Vector3(1.0, 0.0, 0.0), # Left
+		center_tile + Vector3(0.0, 0.0, 1.0), # Up
+		center_tile + Vector3(0.0, 0.0, -1.0), # Down
+		center_tile + Vector3(-1.0, 0.0, 1.0), # Up Right
+		center_tile + Vector3(1.0, 0.0, 1.0), # Up Left
+		center_tile + Vector3(-1.0, 0.0, -1.0), # Down Right
+		center_tile + Vector3(1.0, 0.0, -1.0), # Down Left
+	]
+	for entry in data:
+		if not to_load.has(entry):
+			to_load.append(entry)
+	return to_load
