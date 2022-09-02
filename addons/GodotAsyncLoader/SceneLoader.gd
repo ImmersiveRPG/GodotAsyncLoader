@@ -9,7 +9,10 @@ var _thread : Thread
 
 var _to_load := []
 var _to_load_mutex := Mutex.new()
+var _config = null
 
+func _setup(config : Node) -> void:
+	_config = config
 
 func load_with_cb(scene_path : String, loaded_cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {
@@ -27,7 +30,6 @@ func load_with_cb(scene_path : String, loaded_cb : FuncRef, data := {}, has_prio
 
 func _run_loader_thread(_arg : int) -> void:
 	_is_running = true
-	var config = get_node("/root/AsyncLoaderConfig")
 
 	while _is_running:
 		_to_load_mutex.lock()
@@ -44,7 +46,7 @@ func _run_loader_thread(_arg : int) -> void:
 			#loaded_cb.call_deferred("call_func", packed_scene, data)
 			loaded_cb.call_func(packed_scene, data)
 
-		OS.delay_msec(config._thread_sleep_msec)
+		OS.delay_msec(_config._thread_sleep_msec)
 
 func _load_packed_scene(scene_path : String) -> PackedScene:
 	var packed_scene = null

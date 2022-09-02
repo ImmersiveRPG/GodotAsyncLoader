@@ -11,30 +11,35 @@ var _scene_loader = null
 var _scene_instancer = null
 var _scene_adder = null
 var _scene_switcher = null
+var _config = null
 
 
 func start(groups : Array, cant_sleep_groups := [], sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	yield(get_tree(), "idle_frame")
-	var config = self.get_node_or_null("/root/AsyncLoaderConfig")
-	config._post_add_sleep_msec = sleep_msec
-	_scene_adder._set_groups(groups, cant_sleep_groups)
+	_config = self.get_node_or_null("/root/AsyncLoaderConfig")
+	_config._post_add_sleep_msec = sleep_msec
+	_config.GROUPS = groups
+	_config.CANT_SLEEP_GROUPS = cant_sleep_groups
 
 	# Start the adder thread
+	_scene_adder._setup(_config)
 	_scene_adder._thread = Thread.new()
 	var err = _scene_adder._thread.start(_scene_adder, "_run_adder_thread", 0, Thread.PRIORITY_LOW)
 	assert(err == OK)
 
 	# Start the instancer thread
+	_scene_instancer._setup(_config)
 	_scene_instancer._thread = Thread.new()
 	err = _scene_instancer._thread.start(_scene_instancer, "_run_instancer_thread", 0, Thread.PRIORITY_LOW)
 	assert(err == OK)
 
 	# Start the loader thread
+	_scene_loader._setup(_config)
 	_scene_loader._thread = Thread.new()
 	err = _scene_loader._thread.start(_scene_loader, "_run_loader_thread", 0, Thread.PRIORITY_LOW)
 	assert(err == OK)
 
-	config._is_setup = true
+	_config._is_setup = true
 
 
 
@@ -133,10 +138,9 @@ func _set_cached(scene_path : String, packed_scene : PackedScene) -> void:
 	_scene_cache._set_cached(scene_path, packed_scene)
 
 func _assert_is_setup() -> bool:
-	var config = get_node("/root/AsyncLoaderConfig")
-	if not config._is_setup:
+	if not _config._is_setup:
 		push_error("Call AsyncLoader.start to initialize the library first")
-	return config._is_setup
+	return _config._is_setup
 
 func _ready() -> void:
 	# Create config and make it accessible as /root/AsyncLoaderConfig

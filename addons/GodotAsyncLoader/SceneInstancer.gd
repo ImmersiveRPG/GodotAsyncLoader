@@ -8,7 +8,10 @@ var _is_running := false
 var _thread : Thread
 var _to_instance := []
 var _to_instance_mutex := Mutex.new()
+var _config = null
 
+func _setup(config : Node) -> void:
+	_config = config
 
 func instance_with_cb(packed_scene : PackedScene, instanced_cb : FuncRef, data := {}, has_priority := false) -> void:
 	var entry := {
@@ -26,7 +29,6 @@ func instance_with_cb(packed_scene : PackedScene, instanced_cb : FuncRef, data :
 
 func _run_instancer_thread(_arg : int) -> void:
 	_is_running = true
-	var config = get_node("/root/AsyncLoaderConfig")
 
 	while _is_running:
 		_to_instance_mutex.lock()
@@ -47,6 +49,6 @@ func _run_instancer_thread(_arg : int) -> void:
 			#instanced_cb.call_deferred("call_func", instance, data)
 			instanced_cb.call_func(instance, data)
 
-		OS.delay_msec(config._thread_sleep_msec)
+		OS.delay_msec(_config._thread_sleep_msec)
 
 

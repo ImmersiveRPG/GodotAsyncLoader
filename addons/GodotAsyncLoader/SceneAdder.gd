@@ -9,15 +9,11 @@ var _thread : Thread
 var _to_add := []
 var _to_add_mutex := Mutex.new()
 var _to_adds := {}
+var _config = null
 
-var GROUPS := ["default"]
-var CANT_SLEEP_GROUPS := []
-
-func _set_groups(groups : Array, cant_sleep_groups : Array) -> void:
-	GROUPS = groups
-	CANT_SLEEP_GROUPS = cant_sleep_groups
-
-	for group in GROUPS:
+func _setup(config : Node) -> void:
+	_config = config
+	for group in _config.GROUPS:
 		_to_adds[group] = []
 
 func _add_scene(instance : Node, added_cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
@@ -36,7 +32,7 @@ func _add_scene(instance : Node, added_cb : FuncRef, data : Dictionary, has_prio
 	_to_add_mutex.unlock()
 
 func _can_add(group : String) -> bool:
-	var i := GROUPS.find(group)
+	var i : int = _config.GROUPS.find(group)
 
 	match i:
 		# Return false if unknown group
@@ -48,13 +44,12 @@ func _can_add(group : String) -> bool:
 		# Return true if there are any instances of this group to add
 		# and the previous group has no more instances to add
 		_:
-			var prev_group = GROUPS[i - 1]
+			var prev_group = _config.GROUPS[i - 1]
 			return not _to_adds[group].empty() and not _can_add(prev_group)
 
 	return false
 
 func _run_adder_thread(_arg : int) -> void:
-	var config = get_node("/root/AsyncLoaderConfig")
 	_is_running = true
 	var is_reset := false
 
@@ -62,14 +57,13 @@ func _run_adder_thread(_arg : int) -> void:
 		is_reset = false
 		self._check_for_new_scenes()
 
-		for group in GROUPS:
+		for group in _config.GROUPS:
 			while _is_running and not is_reset and _can_add(group):
 				is_reset = _add_entry(_to_adds[group], group)
 
-		OS.delay_msec(config._thread_sleep_msec)
+		OS.delay_msec(_config._thread_sleep_msec)
 
 func _add_entry(from : Array, group : String) -> bool:
-	var config = get_node("/root/AsyncLoaderConfig")
 	var entry = from.pop_front()
 	if entry.has("owner"):
 		_add_sleeping(entry)
@@ -78,7 +72,7 @@ func _add_entry(from : Array, group : String) -> bool:
 	else:
 		_add_entry_parent(entry, group)
 
-	OS.delay_msec(config._post_add_sleep_msec)
+	OS.delay_msec(_config._post_add_sleep_msec)
 	return self._check_for_new_scenes()
 
 func _add_sleeping(entry) -> void:
@@ -122,12 +116,12 @@ func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group 
 
 func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
 	if has_priority:
-		return _to_adds[GROUPS[0]]
+		return _to_adds[_config.GROUPS[0]]
 
 	for group in instance.get_groups():
-		var i := GROUPS.find(group)
+		var i : int = _config.GROUPS.find(group)
 		if i != -1:
-			return _to_adds[GROUPS[i]]
+			return _to_adds[_config.GROUPS[i]]
 
 	return default_queue
 
@@ -141,12 +135,12 @@ func _check_for_new_scenes() -> bool:
 	for entry in to_add:
 		var has_priority = entry["has_priority"]
 		var instance = entry["instance"]
-		var is_tile = instance.get_groups().has(GROUPS[0])
+		var is_tile = instance.get_groups().has(_config.GROUPS[0])
 		var is_first = entry["data"]["data"].get("is_first", false)
 		#print("???? entry: %s" % [entry["data"]["data"]])
 
 		# Get the queue for this instance type
-		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds[GROUPS[0]])
+		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds[_config.GROUPS[0]])
 
 		# Add the scene
 		var entry_copy = entry.duplicate()
@@ -167,7 +161,7 @@ func _check_for_new_scenes() -> bool:
 					# Don't allow this child to sleep if in group
 					var cant_sleep := false
 					var groups = child.get_groups()
-					for g in CANT_SLEEP_GROUPS:
+					for g in _config.CANT_SLEEP_GROUPS:
 						if groups.has(g):
 							cant_sleep = true
 							break

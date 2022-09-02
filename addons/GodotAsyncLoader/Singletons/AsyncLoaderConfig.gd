@@ -4,7 +4,9 @@
 
 extends Node
 
-
+var GROUPS := ["default"]
+var CANT_SLEEP_GROUPS := []
 var _post_add_sleep_msec := 10
 var _thread_sleep_msec := 2
 var _is_setup := false
+
