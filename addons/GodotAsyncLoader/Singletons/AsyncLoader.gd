@@ -101,7 +101,6 @@ func _added_cb(instance : Node, data : Dictionary) -> void:
 	else:
 		push_error("!!! Warning: cb was null!!!!")
 
-
 func instance(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
 	if not self._assert_is_setup(): return
 

@@ -10,6 +10,7 @@ var _to_add := []
 var _to_add_mutex := Mutex.new()
 var _to_adds := {}
 var _config = null
+var _sleep_cb = null
 
 func _setup(config : Node) -> void:
 	_config = config
@@ -65,8 +66,8 @@ func _run_adder_thread(_arg : int) -> void:
 
 func _add_entry(from : Array, group : String) -> bool:
 	var entry = from.pop_front()
-	if entry.has("owner"):
-		_add_sleeping(entry)
+	if entry.has("owner") and _sleep_cb != null:
+		_add_entry_sleeping(entry)
 	elif entry["is_child"]:
 		_add_entry_child(entry, group)
 	else:
@@ -75,22 +76,11 @@ func _add_entry(from : Array, group : String) -> bool:
 	OS.delay_msec(_config._post_add_sleep_msec)
 	return self._check_for_new_scenes()
 
-func _add_sleeping(entry) -> void:
+func _add_entry_sleeping(entry) -> void:
 	var node_owner = entry["owner"]
 	var parent = entry["parent"]
 	var instance = entry["instance"]
-	self.call_deferred("_on_add_sleeping_cb", node_owner, parent, instance)
-
-# FIXME: Move this into AsyncLoader and have it passed in as a callback
-func _on_add_sleeping_cb(owner : Node, parent : Node, instance : Node) -> void:
-	#print("@@@ owner.name: %s" % [owner.name])
-	if not Global._sleeping_nodes.has(owner.name):
-		Global._sleeping_nodes[owner.name] = []
-
-	Global._sleeping_nodes[owner.name].push_front({
-		"node_parent" : parent,
-		"node" : instance
-	})
+	_sleep_cb.call_deferred("call_func", node_owner, parent, instance)
 
 func _add_entry_parent(entry, group : String) -> void:
 	var added_cb = entry["added_cb"]
