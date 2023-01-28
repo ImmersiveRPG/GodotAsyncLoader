@@ -37,3 +37,7 @@ func _on_add_orange_sync_pressed() -> void:
 	var scene_file := "res://examples/Items/Orange/Orange.tscn"
 	var instance := SceneLoader.load_scene_sync(target, scene_file)
 	instance.transform.origin = pos
+
+
+func _on_change_scene_pressed() -> void:
+	SceneSwitcher.change_scene("res://examples/World2/World2.tscn", "res://examples/Loading/Loading.tscn")
