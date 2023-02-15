@@ -103,3 +103,16 @@ var target = get_tree().get_current_scene()
 var instance := AsyncLoader.instance_sync(scene_path)
 target.add_child(instance)
 ```
+
+## AsyncLoader.change_scene
+
+```GDScript
+# Instance the scene asynchronously and change to it
+var scene_path := "res://examples/World/World.tscn"
+AsyncLoader.change_scene(scene_path)
+
+# Instance the scene asynchronously and change to it
+# An optional loading scene can be shown while the scene is loading
+var loading_path := "res://examples/Loading/Loading.tscn"
+AsyncLoader.change_scene(scene_path, loading_path)
+```
