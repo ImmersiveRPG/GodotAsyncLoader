@@ -280,6 +280,14 @@ margin_right = 713.0
 margin_bottom = 84.0
 text = "Add orange sync"
 
+[node name="ButtonChangeScene" type="Button" parent="."]
+margin_left = 735.0
+margin_top = 21.0
+margin_right = 901.0
+margin_bottom = 81.0
+text = "Change to different scene"
+
 [connection signal="pressed" from="ButtonAddOrangeAsyncWithCB" to="." method="_on_add_orange_async_with_cb_pressed"]
 [connection signal="pressed" from="ButtonAddOrangeAsync" to="." method="_on_add_orange_async_pressed"]
 [connection signal="pressed" from="ButtonAddOrangeSync" to="." method="_on_add_orange_sync_pressed"]
+[connection signal="pressed" from="ButtonChangeScene" to="." method="_on_change_scene_pressed"]

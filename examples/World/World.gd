@@ -56,3 +56,7 @@ func _on_add_orange_sync_pressed() -> void:
 	target.add_child(orange)
 	orange.transform.origin = pos
 
+
+
+func _on_change_scene_pressed() -> void:
+	AsyncLoader.change_scene("res://examples/World2/World2.tscn", "res://examples/Loading/Loading.tscn")

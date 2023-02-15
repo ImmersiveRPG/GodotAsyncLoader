@@ -91,6 +91,7 @@ func _add_entry_child(entry, group : String) -> void:
 	var instance = entry["instance"]
 	var transform = entry["transform"]
 	instance.transform = transform
+
 	#self.call_deferred("_on_add_entry_child_cb", parent, owner, instance, group)
 	Helpers.call_deferred_and_return_yielded(self, "_on_add_entry_child_cb", [parent, owner, instance, group])
 
