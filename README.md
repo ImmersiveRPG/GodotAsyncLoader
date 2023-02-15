@@ -67,11 +67,13 @@ AsyncLoader.change_scene(scene_path : String) -> void
 ## AsyncLoader.instance
 
 ```GDScript
-# Instance scene asynchronously and add to current scene
+# Instance scene asynchronously and add to target scene
 var target = get_tree().get_current_scene()
 var scene_path := "res://examples/Animals/Puma.tscn"
 var pos := Vector3(0, 1, 0)
-AsyncLoader.instance(target, scene_path, pos, true)
+var is_pos_global := true
+var has_priority := false
+AsyncLoader.instance(target, scene_path, pos, is_pos_global, has_priority)
 ```
 
 ## AsyncLoader.instance_with_cb
@@ -84,7 +86,8 @@ var data := {
 }
 var scene_path := "res://examples/Animals/Puma.tscn"
 var cb := funcref(self, "on_animal_loaded")
-AsyncLoader.instance_with_cb(scene_path, cb, data, true)
+var has_priority := false
+AsyncLoader.instance_with_cb(scene_path, cb, data, has_priority)
 
 func on_animal_loaded(instance : Node, data : Dictionary) -> void:
 	var target = data["target"]
