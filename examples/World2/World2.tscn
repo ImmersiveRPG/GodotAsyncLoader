@@ -55,10 +55,10 @@ transform = Transform( -2.18557e-08, -0.866025, 0.5, -3.78552e-08, 0.5, 0.866025
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 143.501, 100, -124.754 )
 
 [node name="ButtonChangeScene" type="Button" parent="."]
-margin_left = 442.0
-margin_top = 26.0
-margin_right = 617.0
-margin_bottom = 87.0
+margin_left = 761.0
+margin_top = 22.0
+margin_right = 936.0
+margin_bottom = 83.0
 text = "Change to different scene"
 
 [connection signal="pressed" from="ButtonChangeScene" to="." method="_on_change_scene_pressed"]

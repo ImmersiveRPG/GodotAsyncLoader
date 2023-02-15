@@ -263,21 +263,21 @@ transform = Transform( -0.238106, -0.652098, 0.719773, -0.254325, 0.757091, 0.60
 margin_left = 37.0
 margin_top = 27.0
 margin_right = 219.0
-margin_bottom = 79.0
+margin_bottom = 61.0
 text = "Add orange async with cb"
 
 [node name="ButtonAddOrangeAsync" type="Button" parent="."]
-margin_left = 268.0
-margin_top = 26.0
-margin_right = 450.0
-margin_bottom = 78.0
+margin_left = 37.0
+margin_top = 70.0
+margin_right = 219.0
+margin_bottom = 99.0
 text = "Add orange async"
 
 [node name="ButtonAddOrangeSync" type="Button" parent="."]
-margin_left = 540.0
-margin_top = 28.0
-margin_right = 713.0
-margin_bottom = 84.0
+margin_left = 39.0
+margin_top = 107.0
+margin_right = 220.0
+margin_bottom = 135.0
 text = "Add orange sync"
 
 [node name="ButtonChangeScene" type="Button" parent="."]
