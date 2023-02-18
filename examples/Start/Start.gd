@@ -16,6 +16,18 @@ const GROUPS := [
 const SLEEP_MSEC := 100
 
 func _ready() -> void:
+	var err = AsyncLoader.connect("loading_started", Global, "_on_loading_started")
+	assert(err == OK)
+
+	err = AsyncLoader.connect("loading_progress", Global, "_on_loading_progress")
+	assert(err == OK)
+
+	err = AsyncLoader.connect("loading_done", Global, "_on_loading_done")
+	assert(err == OK)
+
+	err = AsyncLoader.connect("scene_changed", Global, "_on_scene_changed")
+	assert(err == OK)
+
 	AsyncLoader.start(GROUPS, SLEEP_MSEC)
 
 func _on_StartAsyncButton_pressed() -> void:

@@ -12,6 +12,13 @@ var _scene_instancer = null
 var _scene_adder = null
 var _scene_switcher = null
 
+signal loading_started(total)
+signal loading_progress(current, total)
+signal loading_done(total)
+signal scene_changed
+
+var _was_queue_empty := true
+var _total_queue_count := 0
 
 func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 	yield(get_tree(), "idle_frame")

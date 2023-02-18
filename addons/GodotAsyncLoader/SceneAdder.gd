@@ -51,6 +51,12 @@ func _can_add(group : String) -> bool:
 
 	return false
 
+func _get_queue_count() -> int:
+	var count := 0
+	for group in GROUPS:
+		count += _to_adds[group].size()
+	return count
+
 func _run_adder_thread(_arg : int) -> void:
 	var config = get_node("/root/AsyncLoaderConfig")
 	_is_running = true
@@ -60,9 +66,26 @@ func _run_adder_thread(_arg : int) -> void:
 		is_reset = false
 		self._check_for_new_scenes()
 
+		# Check for loading started event
+		var is_started := false
+		if AsyncLoader._was_queue_empty and _get_queue_count() > 0:
+			is_started = true
+			AsyncLoader._was_queue_empty = false
+
 		for group in GROUPS:
 			while _is_running and not is_reset and _can_add(group):
+				var count := _get_queue_count()
 				is_reset = _add_entry(_to_adds[group], group)
+				if is_started:
+					AsyncLoader.call_deferred("emit_signal", "loading_started", AsyncLoader._total_queue_count)
+					is_started = false
+				AsyncLoader.call_deferred("emit_signal", "loading_progress", count, AsyncLoader._total_queue_count)
+
+				# Check for loading done event
+				if _get_queue_count() == 0:
+					AsyncLoader.call_deferred("emit_signal", "loading_done", AsyncLoader._total_queue_count)
+					AsyncLoader._total_queue_count = 0
+					AsyncLoader._was_queue_empty = true
 
 		OS.delay_msec(config._thread_sleep_msec)
 
@@ -129,6 +152,7 @@ func _check_for_new_scenes() -> bool:
 		var entry_copy = entry.duplicate()
 		entry_copy["is_child"] = false
 		to.append(entry_copy)
+		AsyncLoader._total_queue_count += 1
 		has_new_scenes = true
 
 		# Remove all the scene's children to add later
@@ -140,6 +164,7 @@ func _check_for_new_scenes() -> bool:
 				if parent != null:
 					to.append({ "is_child" : true, "instance" : child, "parent" : parent, "owner" : owner, "transform" : child.transform })
 					parent.remove_child(child)
+					AsyncLoader._total_queue_count += 1
 
 	return has_new_scenes
 

@@ -40,3 +40,5 @@ func _on_scene_loaded(instance : Node, data : Dictionary) -> void:
 
 	# Free old scene
 	old_scene.queue_free()
+
+	AsyncLoader.call_deferred("emit_signal", "scene_changed", AsyncLoader._total_queue_count)

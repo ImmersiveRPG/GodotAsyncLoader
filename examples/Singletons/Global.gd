@@ -26,3 +26,16 @@ func _on_fps_timeout() -> void:
 	var fps = Engine.get_frames_per_second()
 	var title = "(Godot: %s) | FPS: %s" % [godot_debug, fps]
 	OS.set_window_title(title)
+
+func _on_loading_started(total : int) -> void:
+	print("called _on_loading_started: %s" % [total])
+
+func _on_loading_progress(current : int, total : int) -> void:
+	print("called _on_loading_progress: %s of %s" % [current, total])
+
+func _on_loading_done(total : int) -> void:
+	print("called _on_loading_done: %s" % [total])
+
+func _on_scene_changed(total : int) -> void:
+	var scene = self.get_tree().current_scene
+	print("called _on_scene_changed: %s, %s" % [scene.name, total])
