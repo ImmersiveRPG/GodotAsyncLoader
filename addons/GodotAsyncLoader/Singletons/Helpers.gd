@@ -4,6 +4,20 @@
 
 class_name Helpers
 
+static func recursively_get_all_children_of_type(target : Node, target_type) -> Array:
+	var matches := []
+	var to_search := [target]
+	while not to_search.empty():
+		var entry = to_search.pop_front()
+
+		for child in entry.get_children():
+			to_search.append(child)
+
+		if entry is target_type:
+			matches.append(entry)
+
+	return matches
+
 static func call_deferred_and_return_yielded(obj : Object, method : String, args := []):
 	var fn := _CallDeferredReturnYield.new(obj, method, args)
 	var retval = fn._call()
