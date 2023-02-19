@@ -52,20 +52,20 @@ func _update_cache_list() -> void:
 		var path : String = paths.pop_front()
 		#print("path: %s" % [path])
 		for entry in Helpers.DirectoryIterator.new(path, true, true):
+			var full_path : String = path + entry.name
+
 			if entry.is_dir:
 				#print("    dir: %s" % [entry.name])
-				paths.append(path + entry.name + '/')
+				paths.append(full_path + '/')
 			else:
-				var full_entry : String = path + entry.name
 				#print("    file: %s" % [entry.name])
-				if full_entry.get_extension() == "tscn":
-
+				if full_path.get_extension() == "tscn":
 					_cached_mutex.lock()
-					var is_cached := _cached.has(full_entry)
+					var is_cached := _cached.has(full_path)
 					_cached_mutex.unlock()
 
-					if not is_cached and ResourceLoader.has_cached(full_entry):
+					if not is_cached and ResourceLoader.has_cached(full_path):
 						_cached_mutex.lock()
-						_cached[full_entry] = ResourceLoader.load(full_entry)
+						_cached[full_path] = ResourceLoader.load(full_path)
 						_cached_mutex.unlock()
-						#print("Added to cache: %s" % [full_entry])
+						#print("Added to cache: %s" % [full_path])
