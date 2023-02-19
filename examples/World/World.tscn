@@ -287,7 +287,15 @@ margin_right = 901.0
 margin_bottom = 81.0
 text = "Change to different scene"
 
+[node name="ButtonListCached" type="Button" parent="."]
+margin_left = 396.0
+margin_top = 24.0
+margin_right = 540.0
+margin_bottom = 60.0
+text = "List cached scenes"
+
 [connection signal="pressed" from="ButtonAddOrangeAsyncWithCB" to="." method="_on_add_orange_async_with_cb_pressed"]
 [connection signal="pressed" from="ButtonAddOrangeAsync" to="." method="_on_add_orange_async_pressed"]
 [connection signal="pressed" from="ButtonAddOrangeSync" to="." method="_on_add_orange_sync_pressed"]
 [connection signal="pressed" from="ButtonChangeScene" to="." method="_on_change_scene_pressed"]
+[connection signal="pressed" from="ButtonListCached" to="." method="_on_button_list_cached_pressed"]

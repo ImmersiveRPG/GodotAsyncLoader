@@ -15,6 +15,7 @@ const GROUPS := [
 ]
 const SLEEP_MSEC := 100
 
+
 func _ready() -> void:
 	var err = AsyncLoader.connect("loading_started", Global, "_on_loading_started")
 	assert(err == OK)

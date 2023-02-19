@@ -136,8 +136,8 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 	_scene_switcher.change_scene(scene_path, loading_path)
 
 
-func _set_cached(scene_path : String, packed_scene : PackedScene) -> void:
-	_scene_cache._set_cached(scene_path, packed_scene)
+func _load_and_cache_scene(scene_path : String) -> PackedScene:
+	return _scene_cache._load_and_cache(scene_path)
 
 func _assert_is_setup() -> bool:
 	var config = get_node("/root/AsyncLoaderConfig")

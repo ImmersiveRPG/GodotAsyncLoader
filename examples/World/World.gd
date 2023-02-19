@@ -4,6 +4,7 @@
 
 extends Spatial
 
+
 func _on_add_orange_async_pressed() -> void:
 	var r := 100.0
 	var pos := Vector3(
@@ -60,3 +61,8 @@ func _on_add_orange_sync_pressed() -> void:
 
 func _on_change_scene_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World2/World2.tscn", "res://examples/Loading/Loading.tscn")
+
+
+func _on_button_list_cached_pressed() -> void:
+	for scene in AsyncLoader._scene_cache._get_all_cached_paths():
+		print(scene)
