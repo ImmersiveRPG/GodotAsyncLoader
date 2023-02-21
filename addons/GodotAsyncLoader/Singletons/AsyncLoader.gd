@@ -126,7 +126,7 @@ func _default_instance_cb(instance : Node, data : Dictionary) -> void:
 func instance_sync(scene_path : String) -> Node:
 	if not self._assert_is_setup(): return null
 
-	var scene = _scene_loader._load_packed_scene(scene_path)
+	var scene = _scene_cache._load_and_cache(scene_path)
 	var instance = scene.instance()
 	return instance
 
