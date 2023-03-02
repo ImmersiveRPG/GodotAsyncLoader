@@ -3,7 +3,7 @@
 # https://github.com/ImmersiveRPG/GodotAsyncLoader
 
 
-extends Spatial
+extends Node3D
 
 
 func _on_change_scene_pressed() -> void:

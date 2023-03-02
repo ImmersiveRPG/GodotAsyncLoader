@@ -1,64 +1,70 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://d23upiaejl6h5"]
 
-[ext_resource path="res://examples/World2/World2.gd" type="Script" id=1]
-[ext_resource path="res://examples/Terrain/Terrain.tscn" type="PackedScene" id=2]
-[ext_resource path="res://examples/Structures/Barn/Barn.tscn" type="PackedScene" id=3]
-[ext_resource path="res://examples/Plants/Cactus/Cactus.tscn" type="PackedScene" id=4]
+[ext_resource type="Script" path="res://examples/World2/World2.gd" id="1"]
+[ext_resource type="PackedScene" path="res://examples/Terrain/Terrain.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://examples/Structures/Barn/Barn.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://bd8f1l1406pct" path="res://examples/Plants/Cactus/Cactus.tscn" id="4"]
 
-[node name="World2" type="Spatial"]
-script = ExtResource( 1 )
+[sub_resource type="Environment" id="Environment_2cm3v"]
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 0.824225, 0.390269, -0.410296, 0, 0.724569, 0.689202, 0.566262, -0.568058, 0.597208, -122.893, 503.783, 452.834 )
+[node name="World2" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2cm3v")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.824225, 0.390269, -0.410296, 0, 0.724569, 0.689202, 0.566262, -0.568058, 0.597208, -122.893, 503.783, 452.834)
 far = 2000.0
 
-[node name="Terrain" type="Spatial" parent="."]
+[node name="Terrain" type="Node3D" parent="."]
 
-[node name="Terrain" parent="Terrain" instance=ExtResource( 2 )]
+[node name="Terrain" parent="Terrain" instance=ExtResource("2")]
 
-[node name="Terrain2" parent="Terrain" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -50, 0 )
+[node name="Terrain2" parent="Terrain" instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -50, 0)
 
-[node name="Terrain3" parent="Terrain" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -50, -300 )
+[node name="Terrain3" parent="Terrain" instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -50, -300)
 
-[node name="Terrain4" parent="Terrain" instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, -300 )
+[node name="Terrain4" parent="Terrain" instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, -300)
 
-[node name="Plants" type="Spatial" parent="."]
+[node name="Plants" type="Node3D" parent="."]
 
-[node name="Cactus" parent="Plants" instance=ExtResource( 4 )]
-transform = Transform( 0.886608, -0.462523, 0, 0.462523, 0.886608, 0, 0, 0, 1, 54.7247, 195.525, -78.2289 )
+[node name="Cactus" parent="Plants" instance=ExtResource("4")]
+transform = Transform3D(0.886608, -0.462523, 0, 0.462523, 0.886608, 0, 0, 0, 1, 54.7247, 195.525, -78.2289)
 
-[node name="Cactus2" parent="Plants" instance=ExtResource( 4 )]
-transform = Transform( 0.891078, 0.453851, 0, -0.453851, 0.891078, 0, 0, 0, 1, 196.242, 195.525, -78.2289 )
+[node name="Cactus2" parent="Plants" instance=ExtResource("4")]
+transform = Transform3D(0.891078, 0.453851, 0, -0.453851, 0.891078, 0, 0, 0, 1, 196.242, 195.525, -78.2289)
 
-[node name="Cactus3" parent="Plants" instance=ExtResource( 4 )]
-transform = Transform( 0.355545, 0.181089, 0.916949, -0.453851, 0.891078, 0, -0.817073, -0.416158, 0.399005, 196.242, 195.525, -190.229 )
+[node name="Cactus3" parent="Plants" instance=ExtResource("4")]
+transform = Transform3D(0.355545, 0.181089, 0.916949, -0.453851, 0.891078, 0, -0.817073, -0.416158, 0.399005, 196.242, 195.525, -190.229)
 
-[node name="Cactus4" parent="Plants" instance=ExtResource( 4 )]
-transform = Transform( -0.757853, -0.385995, 0.525991, -0.453851, 0.891078, 0, -0.468699, -0.238721, -0.85049, 57.6977, 195.525, -190.229 )
+[node name="Cactus4" parent="Plants" instance=ExtResource("4")]
+transform = Transform3D(-0.757853, -0.385995, 0.525991, -0.453851, 0.891078, 0, -0.468699, -0.238721, -0.85049, 57.6977, 195.525, -190.229)
 
-[node name="Cactus5" parent="Plants" instance=ExtResource( 4 )]
-transform = Transform( -0.437243, -0.0938333, -0.894435, -0.867298, 0.307115, 0.391759, 0.237934, 0.947035, -0.215665, 182.922, 111.504, -41.8262 )
+[node name="Cactus5" parent="Plants" instance=ExtResource("4")]
+transform = Transform3D(-0.437243, -0.0938333, -0.894435, -0.867298, 0.307115, 0.391759, 0.237934, 0.947035, -0.215665, 182.922, 111.504, -41.8262)
 
-[node name="Cactus6" parent="Plants" instance=ExtResource( 4 )]
-transform = Transform( -0.467601, -0.772532, -0.429585, -0.867298, 0.307115, 0.391759, -0.170714, 0.555765, -0.813622, 40.5499, 111.504, -45.2844 )
+[node name="Cactus6" parent="Plants" instance=ExtResource("4")]
+transform = Transform3D(-0.467601, -0.772532, -0.429585, -0.867298, 0.307115, 0.391759, -0.170714, 0.555765, -0.813622, 40.5499, 111.504, -45.2844)
 
-[node name="Cactus7" parent="Plants" instance=ExtResource( 4 )]
-transform = Transform( -0.318718, -0.947131, 0.0368976, -0.867298, 0.307115, 0.391759, -0.382379, 0.0928593, -0.919328, 40.5499, 111.504, -163.922 )
+[node name="Cactus7" parent="Plants" instance=ExtResource("4")]
+transform = Transform3D(-0.318718, -0.947131, 0.0368976, -0.867298, 0.307115, 0.391759, -0.382379, 0.0928593, -0.919328, 40.5499, 111.504, -163.922)
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( -2.18557e-08, -0.866025, 0.5, -3.78552e-08, 0.5, 0.866025, -1, 1.77636e-15, -4.37114e-08, 0, 891, 0 )
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-2.18557e-08, -0.866025, 0.5, -3.78552e-08, 0.5, 0.866025, -1, 1.77636e-15, -4.37114e-08, 0, 891, 0)
+shadow_enabled = true
 
-[node name="Barn" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 143.501, 100, -124.754 )
+[node name="Barn" parent="." instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 143.501, 100, -124.754)
 
 [node name="ButtonChangeScene" type="Button" parent="."]
-margin_left = 761.0
-margin_top = 22.0
-margin_right = 936.0
-margin_bottom = 83.0
+offset_left = 761.0
+offset_top = 22.0
+offset_right = 936.0
+offset_bottom = 83.0
 text = "Change to different scene"
 
 [connection signal="pressed" from="ButtonChangeScene" to="." method="_on_change_scene_pressed"]

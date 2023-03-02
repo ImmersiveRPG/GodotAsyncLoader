@@ -4,8 +4,6 @@
 
 extends Node
 
-const DEFAULT_SLEEP_MSEC := 10
-
 var _scene_cache = null
 var _scene_loader = null
 var _scene_instancer = null
@@ -20,25 +18,25 @@ signal scene_changed
 var _was_queue_empty := true
 var _total_queue_count := 0
 
-func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
-	yield(get_tree(), "idle_frame")
+func start(groups : Array, sleep_msec : int) -> void:
+	await get_tree().process_frame
 	var config = self.get_node_or_null("/root/AsyncLoaderConfig")
 	config._post_add_sleep_msec = sleep_msec
 	_scene_adder._set_groups(groups)
 
 	# Start the adder thread
 	_scene_adder._thread = Thread.new()
-	var err = _scene_adder._thread.start(_scene_adder, "_run_adder_thread", 0, Thread.PRIORITY_LOW)
+	var err = _scene_adder._thread.start(Callable(_scene_adder, "_run_adder_thread"), Thread.PRIORITY_LOW)
 	assert(err == OK)
 
 	# Start the instancer thread
 	_scene_instancer._thread = Thread.new()
-	err = _scene_instancer._thread.start(_scene_instancer, "_run_instancer_thread", 0, Thread.PRIORITY_LOW)
+	err = _scene_instancer._thread.start(Callable(_scene_instancer, "_run_instancer_thread"), Thread.PRIORITY_LOW)
 	assert(err == OK)
 
 	# Start the loader thread
 	_scene_loader._thread = Thread.new()
-	err = _scene_loader._thread.start(_scene_loader, "_run_loader_thread", 0, Thread.PRIORITY_LOW)
+	err = _scene_loader._thread.start(Callable(_scene_loader, "_run_loader_thread"), Thread.PRIORITY_LOW)
 	assert(err == OK)
 
 	config._is_setup = true
@@ -47,7 +45,7 @@ func start(groups : Array, sleep_msec := DEFAULT_SLEEP_MSEC) -> void:
 
 
 
-func instance_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priority := false) -> void:
+func instance_with_cb(scene_path : String, cb : Callable, data := {}, has_priority := false) -> void:
 	if not self._assert_is_setup(): return
 
 	var cb_data := {
@@ -57,18 +55,18 @@ func instance_with_cb(scene_path : String, cb : FuncRef, data := {}, has_priorit
 		"has_priority" : has_priority
 	}
 
-	var _loaded_cb := funcref(self, "_loaded_cb")
+	var _loaded_cb := Callable(self, "_loaded_cb")
 	_scene_loader.load_with_cb(scene_path, _loaded_cb, cb_data, has_priority)
 
 func _loaded_cb(packed_scene : PackedScene, data : Dictionary) -> void:
 	#print(["!!! _loaded_cb", data])
-	var _instanced_cb := funcref(self, "_instanced_cb")
+	var _instanced_cb := Callable(self, "_instanced_cb")
 	var has_priority = data["has_priority"]
 	_scene_instancer.instance_with_cb(packed_scene, _instanced_cb, data, has_priority)
 
 func _instanced_cb(instance : Node, data : Dictionary) -> void:
 	#print(["!!! _instanced_cb", data])
-	var _added_cb := funcref(self, "_added_cb")
+	var _added_cb := Callable(self, "_added_cb")
 	var has_priority = data["has_priority"]
 	_scene_adder._add_scene(instance, _added_cb, data, has_priority)
 
@@ -90,9 +88,9 @@ func _added_cb(instance : Node, data : Dictionary) -> void:
 		return
 
 	if cb != null:
-		#cb.call_deferred("call_func", instance, data)
+		#cb.call_deferred("call", instance, data)
 		#print([cb, instance, data])
-		cb.call_func(instance, cb_data)
+		cb.call(instance, cb_data)
 	else:
 		push_error("!!! Warning: cb was null!!!!")
 
@@ -105,7 +103,7 @@ func instance(target : Node, scene_path : String, pos : Vector3, is_pos_global :
 		"pos" : pos,
 		"is_pos_global" : is_pos_global,
 	}
-	var cb := funcref(self, "_default_instance_cb")
+	var cb := Callable(self, "_default_instance_cb")
 	AsyncLoader.instance_with_cb(scene_path, cb, data, has_priority)
 
 func _default_instance_cb(instance : Node, data : Dictionary) -> void:
@@ -127,7 +125,7 @@ func instance_sync(scene_path : String) -> Node:
 	if not self._assert_is_setup(): return null
 
 	var scene = _scene_cache._load_and_cache(scene_path)
-	var instance = scene.instance()
+	var instance = scene.instantiate()
 	return instance
 
 func change_scene(scene_path : String, loading_path := "") -> void:
@@ -149,7 +147,7 @@ func _ready() -> void:
 	# Create config and make it accessible as /root/AsyncLoaderConfig
 	var config = ResourceLoader.load("res://addons/GodotAsyncLoader/Singletons/AsyncLoaderConfig.gd").new()
 	config.name = "AsyncLoaderConfig"
-	yield(get_tree(), "idle_frame")
+	await get_tree().process_frame
 	self.get_tree().root.add_child(config)
 	config.owner = self.get_tree().root
 

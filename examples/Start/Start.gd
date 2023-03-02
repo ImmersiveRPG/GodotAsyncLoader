@@ -4,31 +4,30 @@
 
 extends Control
 
-const GROUPS := [
-	"terrain",
-	"structure",
-	"furniture",
-	"plant",
-	"item",
-	"npc",
-	"etc",
-]
-const SLEEP_MSEC := 100
-
 
 func _ready() -> void:
-	var err = AsyncLoader.connect("loading_started", Global, "_on_loading_started")
+	var err = AsyncLoader.connect("loading_started", Callable(Global,"_on_loading_started"))
 	assert(err == OK)
 
-	err = AsyncLoader.connect("loading_progress", Global, "_on_loading_progress")
+	err = AsyncLoader.connect("loading_progress", Callable(Global,"_on_loading_progress"))
 	assert(err == OK)
 
-	err = AsyncLoader.connect("loading_done", Global, "_on_loading_done")
+	err = AsyncLoader.connect("loading_done", Callable(Global,"_on_loading_done"))
 	assert(err == OK)
 
-	err = AsyncLoader.connect("scene_changed", Global, "_on_scene_changed")
+	err = AsyncLoader.connect("scene_changed", Callable(Global,"_on_scene_changed"))
 	assert(err == OK)
 
+	const GROUPS := [
+		"terrain",
+		"structure",
+		"furniture",
+		"plant",
+		"item",
+		"npc",
+		"etc",
+	]
+	const SLEEP_MSEC := 50
 	AsyncLoader.start(GROUPS, SLEEP_MSEC)
 
 func _on_StartAsyncButton_pressed() -> void:
@@ -36,26 +35,26 @@ func _on_StartAsyncButton_pressed() -> void:
 
 func _on_StartSyncButton_pressed() -> void:
 	# Remove the old scene
-	var start := OS.get_ticks_msec()
+	var start := Time.get_ticks_msec()
 	var tree = self.get_tree()
 	var old_scene = tree.current_scene
 	tree.root.remove_child(old_scene)
 	old_scene.queue_free()
-	print("Removing old scene took %sms" % [OS.get_ticks_msec() - start])
+	print("Removing old scene took %sms" % [Time.get_ticks_msec() - start])
 
 	# Load the new scene
-	start = OS.get_ticks_msec()
+	start = Time.get_ticks_msec()
 	var scene := ResourceLoader.load("res://examples/World/World.tscn")
-	print("Loading scene took %sms" % [OS.get_ticks_msec() - start])
+	print("Loading scene took %sms" % [Time.get_ticks_msec() - start])
 
 	# Instance the new scene
-	start = OS.get_ticks_msec()
-	var instance = scene.instance()
-	print("Instancing scene took %sms" % [OS.get_ticks_msec() - start])
+	start = Time.get_ticks_msec()
+	var instance = scene.instantiate()
+	print("Instancing scene took %sms" % [Time.get_ticks_msec() - start])
 
 	# Add the new scene
-	start = OS.get_ticks_msec()
+	start = Time.get_ticks_msec()
 	tree.root.add_child(instance)
-	print("Adding scene took %sms" % [OS.get_ticks_msec() - start])
+	print("Adding scene took %sms" % [Time.get_ticks_msec() - start])
 
 	tree.set_current_scene(instance)

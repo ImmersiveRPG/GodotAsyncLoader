@@ -10,7 +10,7 @@ var _to_instance := []
 var _to_instance_mutex := Mutex.new()
 
 
-func instance_with_cb(packed_scene : PackedScene, instanced_cb : FuncRef, data := {}, has_priority := false) -> void:
+func instance_with_cb(packed_scene : PackedScene, instanced_cb : Callable, data := {}, has_priority := false) -> void:
 	var entry := {
 		"packed_scene" : packed_scene,
 		"instanced_cb" : instanced_cb,
@@ -24,7 +24,7 @@ func instance_with_cb(packed_scene : PackedScene, instanced_cb : FuncRef, data :
 		_to_instance.push_back(entry)
 	_to_instance_mutex.unlock()
 
-func _run_instancer_thread(_arg : int) -> void:
+func _run_instancer_thread() -> void:
 	_is_running = true
 	var config = get_node("/root/AsyncLoaderConfig")
 
@@ -40,10 +40,10 @@ func _run_instancer_thread(_arg : int) -> void:
 			var data = entry["data"]
 
 			# Instance the scene
-			var instance = packed_scene.instance()
+			var instance = packed_scene.instantiate()
 
 			# Send the instance to the callback in the main thread
-			instanced_cb.call_deferred("call_func", instance, data)
+			instanced_cb.call_deferred(instance, data)
 
 		OS.delay_msec(config._thread_sleep_msec)
 

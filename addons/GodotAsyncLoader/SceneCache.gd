@@ -48,7 +48,7 @@ func _get_all_cached_paths() -> Array:
 func _update_cache_list() -> void:
 	# Cache the scenes that are not already cached
 	var paths := ["res://"]
-	while not paths.empty():
+	while not paths.is_empty():
 		var path : String = paths.pop_front()
 		#print("path: %s" % [path])
 		for entry in Helpers.DirectoryIterator.new(path, true, true):

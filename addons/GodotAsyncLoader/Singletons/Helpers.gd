@@ -6,7 +6,7 @@ class_name Helpers
 
 class DirectoryIterator:
 	var _path : String
-	var _dir : Directory
+	var _dir : DirAccess
 	var _file_name := ""
 	var _skip_navigational := false
 	var _skip_hidden := false
@@ -17,12 +17,12 @@ class DirectoryIterator:
 		_skip_hidden = skip_hidden
 
 	func should_continue() -> bool:
-		return not _file_name.empty()
+		return not _file_name.is_empty()
 
 	func _iter_init(arg) -> bool:
-		_dir = Directory.new()
-		assert(_dir.open(_path) == OK)
-		assert(_dir.list_dir_begin(_skip_navigational, _skip_hidden) == OK)
+		_dir = DirAccess.open(_path)
+		assert(DirAccess.get_open_error() == OK)
+		assert(_dir.list_dir_begin() == OK)
 		_file_name = _dir.get_next()
 		return should_continue()
 
@@ -41,23 +41,23 @@ class DirectoryIterator:
 			"is_dir" : _dir.current_is_dir()
 		}
 
-static func recursively_get_all_children_of_type(target : Node, target_type) -> Array:
+static func recursively_filter_all_children(target : Node, filter_cb : Callable) -> Array:
 	var matches := []
 	var to_search := [target]
-	while not to_search.empty():
+	while not to_search.is_empty():
 		var entry = to_search.pop_front()
 
 		for child in entry.get_children():
 			to_search.append(child)
 
-		if entry is target_type:
+		if filter_cb.call(entry):
 			matches.append(entry)
 
 	return matches
 
 static func call_deferred_and_return_yielded(obj : Object, method : String, args := []):
 	var fn := _CallDeferredReturnYield.new(obj, method, args)
-	var retval = fn._call()
+	var retval = null#fn._call()
 	#print("retval: %s" % [retval])
 	return retval
 
@@ -67,14 +67,14 @@ class _CallDeferredReturnYield:
 	var _method : String
 	var _args := []
 
-	func _init(obj : Object, method : String, args := []) -> void:
+	func _init(obj : Object, method : String,args := []) -> void:
 		_obj = obj
 		_method = method
 		_args = args
 
 	func _call():
 		self.call_deferred("_call_and_emit_signal_on_done", _obj, _method, _args)
-		var retval = yield(self, "on_done")
+		var retval = await self.on_done
 		return retval
 
 	func _call_and_emit_signal_on_done(obj : Object, method : String, args := []) -> void:

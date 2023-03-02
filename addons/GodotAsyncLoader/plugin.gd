@@ -2,7 +2,7 @@
 # This file is licensed under the MIT License
 # https://github.com/ImmersiveRPG/GodotAsyncLoader
 
-tool
+@tool
 extends EditorPlugin
 
 # Get the name and paths of all the autoloads
@@ -22,7 +22,7 @@ func _enter_tree() -> void:
 func _exit_tree() -> void:
 	# Uninstall all the autoloads
 	var reverse_autoloads := autoloads.duplicate()
-	reverse_autoloads.invert()
+	reverse_autoloads.reverse()
 	for entry in reverse_autoloads:
 		print("Removing Autoload: %s" % [entry.name])
 		if ProjectSettings.has_setting("autoload/%s" % [entry.name]):

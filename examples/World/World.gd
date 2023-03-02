@@ -2,15 +2,15 @@
 # This file is licensed under the MIT License
 # https://github.com/ImmersiveRPG/GodotAsyncLoader
 
-extends Spatial
+extends Node3D
 
 
 func _on_add_orange_async_pressed() -> void:
 	var r := 100.0
 	var pos := Vector3(
-		rand_range(-r, r),
+		randf_range(-r, r),
 		20.0,
-		rand_range(-r, r)
+		randf_range(-r, r)
 	)
 
 	var target = self.get_tree().get_current_scene()
@@ -21,9 +21,9 @@ func _on_add_orange_async_pressed() -> void:
 func _on_add_orange_async_with_cb_pressed() -> void:
 	var r := 100.0
 	var pos := Vector3(
-		rand_range(-r, r),
+		randf_range(-r, r),
 		20.0,
-		rand_range(-r, r)
+		randf_range(-r, r)
 	)
 
 	var data := {
@@ -31,7 +31,7 @@ func _on_add_orange_async_with_cb_pressed() -> void:
 		"pos" : pos,
 	}
 	var scene_path := "res://examples/Items/Orange/Orange.tscn"
-	var cb := funcref(self, "_on_orange_loaded_cb")
+	var cb := Callable(self, "_on_orange_loaded_cb")
 	AsyncLoader.instance_with_cb(scene_path, cb, data, true)
 
 func _on_orange_loaded_cb(instance : Node, data : Dictionary) -> void:
@@ -46,9 +46,9 @@ func _on_orange_loaded_cb(instance : Node, data : Dictionary) -> void:
 func _on_add_orange_sync_pressed() -> void:
 	var r := 100.0
 	var pos := Vector3(
-		rand_range(-r, r),
+		randf_range(-r, r),
 		20.0,
-		rand_range(-r, r)
+		randf_range(-r, r)
 	)
 
 	var target = self.get_tree().get_current_scene()

@@ -1,20 +1,20 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://dd5lmtejtl08d"]
 
-[ext_resource path="res://examples/Structures/House/material.tres" type="Material" id=1]
+[ext_resource type="Material" path="res://examples/Structures/House/material.tres" id="1"]
 
-[sub_resource type="BoxShape" id=1]
-extents = Vector3( 50, 50, 50 )
+[sub_resource type="BoxShape3D" id="1"]
+size = Vector3(50, 50, 50)
 
-[sub_resource type="CubeMesh" id=2]
-material = ExtResource( 1 )
-size = Vector3( 100, 100, 100 )
+[sub_resource type="BoxMesh" id="2"]
+material = ExtResource("1")
+size = Vector3(100, 100, 100)
 
-[node name="House" type="StaticBody" groups=["structure"]]
+[node name="House" type="StaticBody3D" groups=["structure"]]
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0 )
-shape = SubResource( 1 )
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+shape = SubResource("1")
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0 )
-mesh = SubResource( 2 )
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+mesh = SubResource("2")

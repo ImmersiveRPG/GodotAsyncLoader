@@ -1,58 +1,58 @@
 [gd_scene format=2]
 
-[node name="Terrain" type="CSGCombiner" groups=["terrain"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, 0 )
+[node name="Terrain" type="CSGCombiner3D" groups=["terrain"]]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, 0 )
 use_collision = true
 
-[node name="CSGBox" type="CSGBox" parent="."]
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
 width = 100.0
 height = 100.0
 depth = 100.0
 
-[node name="CSGBox2" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0 )
+[node name="CSGBox2" type="CSGBox3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 0 )
 width = 100.0
 height = 100.0
 depth = 100.0
 
-[node name="CSGBox3" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 0 )
+[node name="CSGBox3" type="CSGBox3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 0 )
 width = 100.0
 height = 100.0
 depth = 100.0
 
-[node name="CSGBox7" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100 )
+[node name="CSGBox7" type="CSGBox3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100 )
 width = 100.0
 height = 100.0
 depth = 100.0
 
-[node name="CSGBox8" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, -100 )
+[node name="CSGBox8" type="CSGBox3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, -100 )
 width = 100.0
 height = 100.0
 depth = 100.0
 
-[node name="CSGBox9" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, -100 )
+[node name="CSGBox9" type="CSGBox3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, -100 )
 width = 100.0
 height = 100.0
 depth = 100.0
 
-[node name="CSGBox4" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100 )
+[node name="CSGBox4" type="CSGBox3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100 )
 width = 100.0
 height = 100.0
 depth = 100.0
 
-[node name="CSGBox5" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 100 )
+[node name="CSGBox5" type="CSGBox3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 100 )
 width = 100.0
 height = 100.0
 depth = 100.0
 
-[node name="CSGBox6" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 100 )
+[node name="CSGBox6" type="CSGBox3D" parent="."]
+transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, -100, 0, 100 )
 width = 100.0
 height = 100.0
 depth = 100.0

@@ -2,7 +2,7 @@
 
 [ext_resource path="res://examples/Items/SodaCan/material.tres" type="Material" id=1]
 
-[sub_resource type="CylinderShape" id=1]
+[sub_resource type="CylinderShape3D" id=1]
 height = 6.0
 radius = 3.0
 
@@ -12,10 +12,10 @@ top_radius = 3.0
 bottom_radius = 3.0
 height = 6.0
 
-[node name="SodaCan" type="RigidBody" groups=["item"]]
+[node name="SodaCan" type="RigidBody3D" groups=["item"]]
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource( 1 )
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource( 2 )
