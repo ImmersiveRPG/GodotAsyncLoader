@@ -17,6 +17,8 @@ func _on_add_orange_async_pressed() -> void:
 	var scene_path := "res://examples/Items/Orange/Orange.tscn"
 	AsyncLoader.instance(target, scene_path, pos, false, true)
 
+	AsyncLoaderHelpers.recursively_get_all_children_of_type(self, Node)
+
 
 func _on_add_orange_async_with_cb_pressed() -> void:
 	var r := 100.0

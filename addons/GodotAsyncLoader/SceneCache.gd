@@ -51,7 +51,7 @@ func _update_cache_list() -> void:
 	while not paths.empty():
 		var path : String = paths.pop_front()
 		#print("path: %s" % [path])
-		for entry in Helpers.DirectoryIterator.new(path, true, true):
+		for entry in AsyncLoaderHelpers.DirectoryIterator.new(path, true, true):
 			var full_path : String = path + entry.name
 
 			if entry.is_dir:

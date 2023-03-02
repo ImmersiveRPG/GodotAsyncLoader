@@ -10,12 +10,12 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
-"class": "Helpers",
+"class": "AsyncLoaderHelpers",
 "language": "GDScript",
-"path": "res://addons/GodotAsyncLoader/Singletons/Helpers.gd"
+"path": "res://addons/GodotAsyncLoader/Singletons/AsyncLoaderHelpers.gd"
 } ]
 _global_script_class_icons={
-"Helpers": ""
+"AsyncLoaderHelpers": ""
 }
 
 [application]
