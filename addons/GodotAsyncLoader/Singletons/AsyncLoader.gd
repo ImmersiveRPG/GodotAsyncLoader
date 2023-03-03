@@ -73,6 +73,7 @@ func _instanced_cb(instance : Node, data : Dictionary) -> void:
 	_scene_adder._add_scene(instance, _added_cb, data, has_priority)
 
 func _added_cb(instance : Node, data : Dictionary) -> void:
+	#print("      AsyncLoader._added_cb: %s" % [data["scene_path"].split('/')[-1]])
 	#print(["!!! _added_cb", instance, data])
 	var cb = data["cb"]
 	var cb_data = data["data"]
@@ -83,18 +84,21 @@ func _added_cb(instance : Node, data : Dictionary) -> void:
 
 	# Just return if instance is invalid
 	if not is_instance_valid(instance):
+		push_error("!!! Warning: instance is not valid!!!!")
 		return
 
 	# Just return if the cb is invalid
 	if cb != null and not cb.is_valid():
+		push_error("!!! Warning: cb is not valid!!!!")
 		return
 
-	if cb != null:
-		#cb.call_deferred("call_func", instance, data)
-		#print([cb, instance, data])
-		cb.call_func(instance, cb_data)
-	else:
+	if cb == null:
 		push_error("!!! Warning: cb was null!!!!")
+		return
+
+	#cb.call_deferred("call_func", instance, data)
+	#print([cb, instance, data])
+	cb.call_func(instance, cb_data)
 
 
 func instance(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:
