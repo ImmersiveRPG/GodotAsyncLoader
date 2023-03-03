@@ -106,7 +106,7 @@ func _add_entry_parent(entry, group : String) -> void:
 	var data = entry["data"]
 	#print(["!!! _add_entry_parent", instance, data])
 	added_cb.call_deferred(instance, data)
-	#Helpers.call_deferred_and_return_yielded(added_cb, "call", [instance, data])
+	#AsyncLoaderHelpers.call_deferred_and_return_yielded(added_cb, "call", [instance, data])
 
 func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
@@ -116,7 +116,7 @@ func _add_entry_child(entry, group : String) -> void:
 	instance.transform = transform
 
 	self.call_deferred("_on_add_entry_child_cb", parent, owner, instance, group)
-	#Helpers.call_deferred_and_return_yielded(self, "_on_add_entry_child_cb", [parent, owner, instance, group])
+	#AsyncLoaderHelpers.call_deferred_and_return_yielded(self, "_on_add_entry_child_cb", [parent, owner, instance, group])
 
 func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group : String) -> void:
 	parent.add_child(instance)
@@ -157,7 +157,7 @@ func _check_for_new_scenes() -> bool:
 
 		# Remove all the scene's children to add later
 		var is_type_cb := func(e): return e is Node
-		for child in Helpers.recursively_filter_all_children(instance, is_type_cb):
+		for child in AsyncLoaderHelpers.recursively_filter_all_children(instance, is_type_cb):
 			to = _get_destination_queue_for_instance(child, false, null)
 			if to != null:
 				var parent = child.get_parent()

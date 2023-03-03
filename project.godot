@@ -22,7 +22,7 @@ AsyncLoader="*res://addons/GodotAsyncLoader/Singletons/AsyncLoader.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/GodotAsyncLoader/plugin.cfg")
 
 [physics]
 

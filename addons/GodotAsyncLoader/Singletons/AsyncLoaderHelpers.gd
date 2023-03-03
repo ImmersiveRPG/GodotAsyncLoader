@@ -2,7 +2,7 @@
 # This file is licensed under the MIT License
 # https://github.com/ImmersiveRPG/GodotAsyncLoader
 
-class_name Helpers
+class_name AsyncLoaderHelpers
 
 class DirectoryIterator:
 	var _path : String
