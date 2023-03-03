@@ -168,13 +168,28 @@ func _check_for_new_scenes() -> bool:
 		# Remove all the scene's children to add later
 		var is_type_cb := func(e): return e is Node
 		for child in AsyncLoaderHelpers.recursively_filter_all_children(instance, is_type_cb):
+			# Get destination queue
 			to = _get_destination_queue_for_instance(child, false, null)
-			if to != null:
-				var parent = child.get_parent()
-				var owner = instance
-				if parent != null:
-					to.append({ "is_child" : true, "instance" : child, "parent" : parent, "owner" : owner, "transform" : child.transform })
-					parent.remove_child(child)
-					AsyncLoader._total_queue_count += 1
+			if to == null:
+				continue
+
+			# Get parent
+			var parent = child.get_parent()
+			if parent == null:
+				continue
+
+			# Get data
+			var data := {
+				"is_child" : true,
+				"instance" : child,
+				"parent" : parent,
+				"owner" : instance,
+				"transform" : child.transform
+			}
+
+			# Remove node from parent and add to queue
+			parent.remove_child(child)
+			to.append(data)
+			AsyncLoader._total_queue_count += 1
 
 	return has_new_scenes
