@@ -64,5 +64,5 @@ func _on_change_scene_pressed() -> void:
 
 
 func _on_button_list_cached_pressed() -> void:
-	for scene in AsyncLoader._scene_cache._get_all_cached_paths():
+	for scene in AsyncLoader._scene_cache.get_all_cached_paths():
 		print(scene)
