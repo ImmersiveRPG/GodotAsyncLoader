@@ -75,24 +75,28 @@ func _added_cb(instance : Node, data : Dictionary) -> void:
 	var cb = data["cb"]
 	var cb_data = data["data"]
 
-#	# Just return if target is invalid
-#	if not is_instance_valid(target):
-#		return
-
 	# Just return if instance is invalid
 	if not is_instance_valid(instance):
+		push_error("!!! Warning: instance is not valid!!!!")
 		return
 
-	# Just return if the cb is invalid
-	if cb != null and not cb.is_valid():
-		return
-
-	if cb != null:
-		#cb.call_deferred("call", instance, data)
-		#print([cb, instance, data])
-		cb.call(instance, cb_data)
-	else:
+	# Just return if the cb is null
+	if cb == null:
 		push_error("!!! Warning: cb was null!!!!")
+		return
+
+	# Just return if the cb is not valid
+	if not cb.is_valid():
+		push_error("!!! Warning: cb is not valid!!!!")
+		return
+
+	# Just return if the cb target is null
+	if cb.is_null():
+		push_error("!!! Warning: cb target is null!!!!")
+		return
+
+	#print([cb, instance, data])
+	cb.call(instance, cb_data)
 
 
 func instance(target : Node, scene_path : String, pos : Vector3, is_pos_global : bool, has_priority := false) -> void:

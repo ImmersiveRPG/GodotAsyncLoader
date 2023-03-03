@@ -119,6 +119,16 @@ func _add_entry_child(entry, group : String) -> void:
 	#AsyncLoaderHelpers.call_deferred_and_return_yielded(self, "_on_add_entry_child_cb", [parent, owner, instance, group])
 
 func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group : String) -> void:
+	# Make sure there is a parent, and it is valid
+	if parent == null or not is_instance_valid(parent):
+		push_error("!!! Warning: parent is not valid!!!!")
+		return
+
+	# If there is an owner, make sure it is valid
+	if owner != null and not is_instance_valid(owner):
+		push_error("!!! Warning: owner is not valid!!!!")
+		return
+
 	parent.add_child(instance)
 	if owner:
 		instance.set_owner(owner)
