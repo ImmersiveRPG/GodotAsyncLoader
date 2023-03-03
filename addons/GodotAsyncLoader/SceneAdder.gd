@@ -12,13 +12,13 @@ var _to_adds := {}
 
 var GROUPS := []
 
-func _set_groups(groups : Array) -> void:
+func set_groups(groups : Array) -> void:
 	GROUPS = groups
 
 	for group in GROUPS:
 		_to_adds[group] = []
 
-func _add_scene(instance : Node, added_cb : Callable, data : Dictionary, has_priority : bool) -> void:
+func add_scene(instance : Node, added_cb : Callable, data : Dictionary, has_priority : bool) -> void:
 	var entry := {
 		"added_cb" : added_cb,
 		"instance" : instance,

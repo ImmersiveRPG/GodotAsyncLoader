@@ -22,7 +22,7 @@ func start(groups : Array, sleep_msec : int) -> void:
 	await get_tree().process_frame
 	var config = self.get_node_or_null("/root/AsyncLoaderConfig")
 	config._post_add_sleep_msec = sleep_msec
-	_scene_adder._set_groups(groups)
+	_scene_adder.set_groups(groups)
 
 	# Start the adder thread
 	_scene_adder._thread = Thread.new()
@@ -68,7 +68,7 @@ func _instanced_cb(instance : Node, data : Dictionary) -> void:
 	#print(["!!! _instanced_cb", data])
 	var _added_cb := Callable(self, "_added_cb")
 	var has_priority = data["has_priority"]
-	_scene_adder._add_scene(instance, _added_cb, data, has_priority)
+	_scene_adder.add_scene(instance, _added_cb, data, has_priority)
 
 func _added_cb(instance : Node, data : Dictionary) -> void:
 	#print(["!!! _added_cb", instance, data])
@@ -128,7 +128,7 @@ func _default_instance_cb(instance : Node, data : Dictionary) -> void:
 func instance_sync(scene_path : String) -> Node:
 	if not self._assert_is_setup(): return null
 
-	var scene = _scene_cache._load_and_cache(scene_path)
+	var scene = _scene_cache.load_and_cache(scene_path)
 	var instance = scene.instantiate()
 	return instance
 
@@ -138,8 +138,8 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 	_scene_switcher.change_scene(scene_path, loading_path)
 
 
-func _load_and_cache_scene(scene_path : String) -> PackedScene:
-	return _scene_cache._load_and_cache(scene_path)
+func load_and_cache_scene(scene_path : String) -> PackedScene:
+	return _scene_cache.load_and_cache(scene_path)
 
 func _assert_is_setup() -> bool:
 	var config = get_node("/root/AsyncLoaderConfig")

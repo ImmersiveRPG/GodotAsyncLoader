@@ -39,7 +39,7 @@ func _run_loader_thread() -> void:
 			var scene_path = entry["scene_path"]
 			var loaded_cb = entry["loaded_cb"]
 			var data = entry["data"]
-			var packed_scene = AsyncLoader._load_and_cache_scene(scene_path)
+			var packed_scene = AsyncLoader.load_and_cache_scene(scene_path)
 			loaded_cb.call_deferred(packed_scene, data)
 
 		OS.delay_msec(config._thread_sleep_msec)

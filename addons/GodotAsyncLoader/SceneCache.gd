@@ -7,7 +7,7 @@ extends Node
 var _cached := {}
 var _cached_mutex := Mutex.new()
 
-func _load_and_cache(scene_path : String) -> PackedScene:
+func load_and_cache(scene_path : String) -> PackedScene:
 	# Make sure the scene exists
 	if not ResourceLoader.exists(scene_path):
 		push_error("Scene files does not exist: %s" % [scene_path])
@@ -22,7 +22,7 @@ func _load_and_cache(scene_path : String) -> PackedScene:
 	var packed_scene = ResourceLoader.load(scene_path)
 	return packed_scene
 
-func _is_cached(scene_path : String) -> bool:
+func is_cached(scene_path : String) -> bool:
 	var is_cached = false
 
 	self._update_cache_list()
@@ -33,7 +33,7 @@ func _is_cached(scene_path : String) -> bool:
 
 	return is_cached
 
-func _get_all_cached_paths() -> Array:
+func get_all_cached_paths() -> Array:
 	var cached := []
 
 	self._update_cache_list()
