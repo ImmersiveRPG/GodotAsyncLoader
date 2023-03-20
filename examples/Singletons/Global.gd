@@ -31,7 +31,7 @@ func _on_loading_started(total : int) -> void:
 	print("called _on_loading_started: %s" % [total])
 
 func _on_loading_progress(current : int, total : int) -> void:
-	print("called _on_loading_progress: %s of %s" % [current, total])
+	pass#print("called _on_loading_progress: %s of %s" % [current, total])
 
 func _on_loading_done(total : int) -> void:
 	print("called _on_loading_done: %s" % [total])

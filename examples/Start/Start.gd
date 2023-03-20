@@ -13,8 +13,6 @@ const GROUPS := [
 	"npc",
 	"etc",
 ]
-const SLEEP_MSEC := 100
-
 
 func _ready() -> void:
 	var err = AsyncLoader.connect("loading_started", Global, "_on_loading_started")
@@ -29,7 +27,7 @@ func _ready() -> void:
 	err = AsyncLoader.connect("scene_changed", Global, "_on_scene_changed")
 	assert(err == OK)
 
-	AsyncLoader.start(GROUPS, SLEEP_MSEC)
+	AsyncLoader.start(GROUPS)
 
 func _on_StartAsyncButton_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")
