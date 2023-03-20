@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" path="res://examples/Items/SodaCan/SodaCan.tscn" id="3"]
 [ext_resource type="PackedScene" uid="uid://bd8f1l1406pct" path="res://examples/Plants/Cactus/Cactus.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://examples/Furniture/Table/Table.tscn" id="5"]
-[ext_resource type="PackedScene" path="res://examples/Structures/Barn/Barn.tscn" id="6"]
+[ext_resource type="PackedScene" uid="uid://bhvsupxdgafkk" path="res://examples/Structures/Barn/Barn.tscn" id="6"]
 [ext_resource type="PackedScene" uid="uid://x631hmvq8tuc" path="res://examples/NPC/NPC.tscn" id="7"]
 [ext_resource type="PackedScene" uid="uid://dd5lmtejtl08d" path="res://examples/Structures/House/House.tscn" id="8"]
 [ext_resource type="Script" path="res://examples/World/World.gd" id="9"]

@@ -5,6 +5,6 @@
 extends Node
 
 
-var _post_add_sleep_msec := 10
-var _thread_sleep_msec := 2
+var _post_add_sleep_msec := 3
+var _thread_sleep_msec := 3
 var _is_setup := false

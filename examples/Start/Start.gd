@@ -27,8 +27,8 @@ func _ready() -> void:
 		"npc",
 		"etc",
 	]
-	const SLEEP_MSEC := 50
-	AsyncLoader.start(GROUPS, SLEEP_MSEC)
+
+	AsyncLoader.start(GROUPS)
 
 func _on_StartAsyncButton_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")

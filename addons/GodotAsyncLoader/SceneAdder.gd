@@ -77,13 +77,13 @@ func _run_adder_thread() -> void:
 				var count := _get_queue_count()
 				is_reset = _add_entry(_to_adds[group], group)
 				if is_started:
-					AsyncLoader.call_deferred("emit_signal", "loading_started", AsyncLoader._total_queue_count)
+					AsyncLoader.call_throttled(Callable(AsyncLoader, "emit_signal").bind("loading_started", AsyncLoader._total_queue_count))
 					is_started = false
-				AsyncLoader.call_deferred("emit_signal", "loading_progress", count, AsyncLoader._total_queue_count)
+				AsyncLoader.call_throttled(Callable(AsyncLoader, "emit_signal").bind("loading_progress", count, AsyncLoader._total_queue_count))
 
 				# Check for loading done event
 				if _get_queue_count() == 0:
-					AsyncLoader.call_deferred("emit_signal", "loading_done", AsyncLoader._total_queue_count)
+					AsyncLoader.call_throttled(Callable(AsyncLoader, "emit_signal").bind("loading_done", AsyncLoader._total_queue_count))
 					AsyncLoader._total_queue_count = 0
 					AsyncLoader._was_queue_empty = true
 
@@ -105,8 +105,8 @@ func _add_entry_parent(entry, group : String) -> void:
 	var instance = entry["instance"]
 	var data = entry["data"]
 	#print(["!!! _add_entry_parent", instance, data])
-	added_cb.call_deferred(instance, data)
-	#AsyncLoaderHelpers.call_deferred_and_return_yielded(added_cb, "call", [instance, data])
+	var cb : Callable = added_cb.bind(instance, data)
+	AsyncLoader.call_throttled(cb)
 
 func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
@@ -115,8 +115,8 @@ func _add_entry_child(entry, group : String) -> void:
 	var transform = entry["transform"]
 	instance.transform = transform
 
-	self.call_deferred("_on_add_entry_child_cb", parent, owner, instance, group)
-	#AsyncLoaderHelpers.call_deferred_and_return_yielded(self, "_on_add_entry_child_cb", [parent, owner, instance, group])
+	var cb := Callable(self, "_on_add_entry_child_cb").bind(parent, owner, instance, group)
+	AsyncLoader.call_throttled(cb)
 
 func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group : String) -> void:
 	# Make sure there is a parent, and it is valid

@@ -1,19 +1,19 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=4 format=3 uid="uid://bhvsupxdgafkk"]
 
-[ext_resource path="res://examples/Structures/Barn/material.tres" type="Material" id=1]
+[ext_resource type="Material" path="res://examples/Structures/Barn/material.tres" id="1"]
 
-[sub_resource type="BoxShape3D" id=1]
-size = Vector3( 100, 100, 100 )
+[sub_resource type="BoxShape3D" id="1"]
+size = Vector3(100, 100, 100)
 
-[sub_resource type="BoxMesh" id=2]
-material = ExtResource( 1 )
-size = Vector3( 200, 200, 200 )
+[sub_resource type="BoxMesh" id="2"]
+material = ExtResource("1")
+size = Vector3(200, 200, 200)
 
 [node name="Barn" type="StaticBody3D" groups=["structure"]]
-transform = Transform3D( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0 )
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource("1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource( 2 )
+mesh = SubResource("2")
