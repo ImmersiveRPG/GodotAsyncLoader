@@ -14,9 +14,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
 margin_left = 105.0
@@ -70,5 +67,13 @@ margin_right = 358.0
 margin_bottom = 144.0
 text = "This won't block the game. It loads the scene in chunks."
 
+[node name="StartAsyncOpenWorldButton" type="Button" parent="."]
+margin_left = 354.0
+margin_top = 448.0
+margin_right = 687.0
+margin_bottom = 559.0
+text = "Start Open World"
+
 [connection signal="pressed" from="CenterContainer/HBoxContainer/VBoxContainer/VBoxContainer/StartSyncButton" to="." method="_on_StartSyncButton_pressed"]
 [connection signal="pressed" from="CenterContainer/HBoxContainer/VBoxContainer2/VBoxContainer/StartAsyncButton" to="." method="_on_StartAsyncButton_pressed"]
+[connection signal="pressed" from="StartAsyncOpenWorldButton" to="." method="_on_start_async_open_world_button_pressed"]

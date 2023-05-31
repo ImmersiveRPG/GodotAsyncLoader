@@ -11,19 +11,22 @@ var _to_add_mutex := Mutex.new()
 var _to_adds := {}
 
 var GROUPS := []
+var CAN_SLEEP_GROUPS := []
 
-func set_groups(groups : Array) -> void:
+func set_groups(groups : Array, can_sleep_groups : Array) -> void:
 	GROUPS = groups
+	CAN_SLEEP_GROUPS = can_sleep_groups
 
 	for group in GROUPS:
 		_to_adds[group] = []
 
-func add_scene(instance : Node, added_cb : FuncRef, data : Dictionary, has_priority : bool) -> void:
+func add_scene(instance : Node, added_cb : FuncRef, data : Dictionary, has_priority : bool, is_sleeping_children : bool) -> void:
 	var entry := {
 		"added_cb" : added_cb,
 		"instance" : instance,
 		"data" : data,
 		"has_priority" : has_priority,
+		"is_sleeping_children" : is_sleeping_children,
 	}
 
 	_to_add_mutex.lock()
@@ -93,7 +96,15 @@ func _run_adder_thread(_arg : int) -> void:
 func _add_entry(from : Array, group : String) -> bool:
 	var config = get_node("/root/AsyncLoaderConfig")
 	var entry = from.pop_front()
-	if entry["is_child"]:
+	#print([entry["instance"], entry.get("has_priority", null)])
+	# FIXME: Move all sleep code into SceneSleeper
+	if entry.get("is_sleeping", false):
+		#_add_sleeping(entry)
+		var node = entry["instance"]
+		var node_parent = entry["parent"]
+		var node_owner = entry["owner"]
+		AsyncLoader.sleep_scene_child(node, node_parent, node_owner)
+	elif entry["is_child"]:
 		_add_entry_child(entry, group)
 	else:
 		_add_entry_parent(entry, group)
@@ -132,6 +143,8 @@ func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group 
 	parent.add_child(instance)
 	if owner:
 		instance.set_owner(owner)
+	print("! adding %s" % [instance])
+	#yield(instance, "ready")
 
 func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
 	if has_priority:
@@ -154,6 +167,7 @@ func _check_for_new_scenes() -> bool:
 	for entry in to_add:
 		var has_priority = entry["has_priority"]
 		var instance = entry["instance"]
+		var is_sleeping_children = entry["is_sleeping_children"]
 
 		# Get the queue for this instance type
 		var to = _get_destination_queue_for_instance(instance, has_priority, _to_adds[GROUPS[0]])
@@ -177,12 +191,21 @@ func _check_for_new_scenes() -> bool:
 			if parent == null:
 				continue
 
+			# Get if node is sleeping
+			var is_sleeping := false
+			if is_sleeping_children:
+				var groups = child.get_groups()
+				for g in CAN_SLEEP_GROUPS:
+					if groups.has(g):
+						is_sleeping = true
+
 			# Get data
 			var data := {
 				"is_child" : true,
 				"instance" : child,
 				"parent" : parent,
 				"owner" : instance,
+				"is_sleeping" : is_sleeping,
 				"transform" : child.transform
 			}
 

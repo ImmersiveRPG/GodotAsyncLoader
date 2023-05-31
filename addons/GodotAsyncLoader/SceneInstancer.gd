@@ -10,11 +10,13 @@ var _to_instance := []
 var _to_instance_mutex := Mutex.new()
 
 
-func instance_with_cb(packed_scene : PackedScene, instanced_cb : FuncRef, data := {}, has_priority := false) -> void:
+func instance_with_cb(packed_scene : PackedScene, instanced_cb : FuncRef, data : Dictionary, has_priority : bool, is_sleeping_children : bool) -> void:
 	var entry := {
 		"packed_scene" : packed_scene,
 		"instanced_cb" : instanced_cb,
 		"data" : data,
+		"has_priority" : has_priority,
+		"is_sleeping_children" : is_sleeping_children,
 	}
 
 	_to_instance_mutex.lock()
@@ -44,6 +46,7 @@ func _run_instancer_thread(_arg : int) -> void:
 
 			# Send the instance to the callback in the main thread
 			instanced_cb.call_deferred("call_func", instance, data)
+			#print("  SceneInstancer.thread: %s, instanced_cb: %s, instance: %s" % [data["scene_path"].split('/')[-1], instanced_cb.function, instance])
 
 		OS.delay_msec(config._thread_sleep_msec)
 

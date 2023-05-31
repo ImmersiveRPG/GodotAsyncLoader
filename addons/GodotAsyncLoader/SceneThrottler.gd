@@ -18,6 +18,7 @@ func _start_loop() -> void:
 		var is_sleeping := false
 		var call_count := 0
 		while not is_sleeping:
+			#yield(get_tree().create_timer(0.1), "timeout")
 			var before := Time.get_ticks_msec()
 
 			_mutex_out.lock()
@@ -29,13 +30,15 @@ func _start_loop() -> void:
 			if entry:
 				callable = entry["callable"]
 				args = entry["args"]
-				if callable:
-					if args and not args.empty():
+				if callable != null and callable.is_valid():
+					if args != null and typeof(args) == TYPE_ARRAY and not args.empty():
+						#FIXME print(entry)
 						callable.call_funcv(args)
 					else:
 						callable.call_func()
 					call_count += 1
 					consecutive_no_work_count = 0
+					#yield(get_tree().create_timer(0.1), "timeout")
 
 			var after := Time.get_ticks_msec()
 			var used := after - before
@@ -47,12 +50,13 @@ func _start_loop() -> void:
 				is_sleeping = true
 				consecutive_no_work_count += 1
 
-		if call_count > 0:
-			print("budget_remaining:%s, call_count:%s" % [budget_remaining, call_count])
+#		if call_count > 0:
+#			print("budget_remaining:%s, call_count:%s" % [budget_remaining, call_count])
 
 		# Sleep, and do it longer if we had no work for X consecutive loops
 		var sleep_sec := 0.05 if consecutive_no_work_count > 10 else 0.001 
 		yield(get_tree().create_timer(sleep_sec), "timeout")
+		#yield(get_tree().create_timer(0.1), "timeout")
 
 func start() -> void:
 	_is_running = true

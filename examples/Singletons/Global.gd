@@ -6,6 +6,13 @@ extends Node
 
 
 const GRAVITY := -40.0
+const WORLD_TILES_WIDE := 4
+const TILE_WIDTH := 200
+
+var _is_ready_for_movement := false
+var _world_offset := Vector3(0, 0, 0)
+var _player = null
+var _player_tile = null
 
 var _fps_timer : Timer
 
@@ -39,3 +46,21 @@ func _on_loading_done(total : int) -> void:
 func _on_scene_changed(total : int) -> void:
 	var scene = self.get_tree().current_scene
 	print("called _on_scene_changed: %s, %s" % [scene.name, total])
+
+
+# FIXME: These should be moved inside GodotAsyncLoader
+var _sleeping_nodes := {}
+
+func recursively_get_all_children_in_group(target : Node, group_name : String) -> Array:
+	var matches := []
+	var to_search := [target]
+	while not to_search.empty():
+		var entry = to_search.pop_front()
+
+		for child in entry.get_children():
+			to_search.append(child)
+
+		if entry.is_in_group(group_name):
+			matches.append(entry)
+
+	return matches

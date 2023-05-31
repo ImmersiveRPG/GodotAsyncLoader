@@ -14,6 +14,16 @@ const GROUPS := [
 	"etc",
 ]
 
+var can_sleep_groups := [
+#	"terrain",
+#	"structure",
+	"furniture",
+	"plant",
+	"item",
+	"npc",
+	"etc",
+]
+
 func _ready() -> void:
 	var err = AsyncLoader.connect("loading_started", Global, "_on_loading_started")
 	assert(err == OK)
@@ -27,7 +37,7 @@ func _ready() -> void:
 	err = AsyncLoader.connect("scene_changed", Global, "_on_scene_changed")
 	assert(err == OK)
 
-	AsyncLoader.start(GROUPS)
+	AsyncLoader.start(GROUPS, can_sleep_groups)
 
 func _on_StartAsyncButton_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")
@@ -57,3 +67,7 @@ func _on_StartSyncButton_pressed() -> void:
 	print("Adding scene took %sms" % [OS.get_ticks_msec() - start])
 
 	tree.set_current_scene(instance)
+
+
+func _on_start_async_open_world_button_pressed() -> void:
+	AsyncLoader.change_scene("res://examples/WorldOpen/WorldOpen.tscn", "res://examples/Loading/Loading.tscn")

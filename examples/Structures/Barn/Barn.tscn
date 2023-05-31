@@ -3,14 +3,14 @@
 [ext_resource path="res://examples/Structures/Barn/material.tres" type="Material" id=1]
 
 [sub_resource type="BoxShape" id=1]
-extents = Vector3( 100, 100, 100 )
+extents = Vector3( 50, 50, 50 )
 
 [sub_resource type="CubeMesh" id=2]
 material = ExtResource( 1 )
-size = Vector3( 200, 200, 200 )
+size = Vector3( 100, 100, 100 )
 
 [node name="Barn" type="StaticBody" groups=["structure"]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 shape = SubResource( 1 )

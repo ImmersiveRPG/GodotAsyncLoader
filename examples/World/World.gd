@@ -41,6 +41,7 @@ func _on_orange_loaded_cb(instance : Node, data : Dictionary) -> void:
 	#print(["_on_orange_loaded_cb", instance, target, pos])
 	target.add_child(instance)
 	instance.transform.origin = pos
+	#yield(instance, "ready")
 
 
 func _on_add_orange_sync_pressed() -> void:
@@ -56,7 +57,7 @@ func _on_add_orange_sync_pressed() -> void:
 	var orange = AsyncLoader.instance_sync(scene_path)
 	target.add_child(orange)
 	orange.transform.origin = pos
-
+	#yield(orange, "ready")
 
 
 func _on_change_scene_pressed() -> void:

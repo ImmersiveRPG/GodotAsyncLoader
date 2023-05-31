@@ -1,0 +1,132 @@
+# Copyright (c) 2021-2023 Matthew Brennan Jones <matthew.brennan.jones@gmail.com>
+# This file is licensed under the MIT License
+# https://github.com/ImmersiveRPG/GodotAsyncLoader
+
+extends Node
+
+var _is_running := false
+var _thread : Thread
+var _to_sleep := []
+var _to_sleep_child := []
+var _to_wake := []
+var _to_sleep_mutex := Mutex.new()
+var _to_sleep_child_mutex := Mutex.new()
+var _to_wake_mutex := Mutex.new()
+
+# FIXME: Set this in start, instead of duplicating it here
+const groups := [
+#	"terrain",
+#	"structure",
+	"furniture",
+	"plant",
+	"item",
+	"npc",
+	"etc",
+]
+
+func sleep_scene(node_owner : Node) -> void:
+	_to_sleep_mutex.lock()
+	_to_sleep.push_back(node_owner)
+	_to_sleep_mutex.unlock()
+
+func sleep_scene_child(node : Node, node_parent : Node, node_owner : Node) -> void:
+	var entry := {
+		"node" : node,
+		"node_parent" : node_parent,
+		"node_owner" : node_owner,
+	}
+
+	_to_sleep_child_mutex.lock()
+	_to_sleep_child.push_back(entry)
+	_to_sleep_child_mutex.unlock()
+
+func wake_scene(node_owner : Node) -> void:
+	_to_wake_mutex.lock()
+	_to_wake.push_back(node_owner)
+	_to_wake_mutex.unlock()
+
+func _run_sleeper_thread(_arg : int) -> void:
+	var config = get_node("/root/AsyncLoaderConfig")
+	_is_running = true
+	var is_reset := false
+
+	while _is_running:
+		_to_wake_mutex.lock()
+		var node_owner = _to_wake.pop_front()
+		_to_wake_mutex.unlock()
+		if node_owner:
+			#self._wake_owner(node_owner)
+			var cb := funcref(self, "_wake_owner")
+			AsyncLoader.call_throttled(cb, [node_owner])
+		OS.delay_msec(100)
+
+		_to_sleep_mutex.lock()
+		node_owner = _to_sleep.pop_front()
+		_to_sleep_mutex.unlock()
+		if node_owner:
+			#self._sleep_owner(node_owner)
+			var cb := funcref(self, "_sleep_owner")
+			AsyncLoader.call_throttled(cb, [node_owner])
+		OS.delay_msec(100)
+
+		_to_sleep_child_mutex.lock()
+		var entry = _to_sleep_child.pop_front()
+		_to_sleep_child_mutex.unlock()
+		if entry:
+			var node = entry["node"]
+			var node_parent = entry["node_parent"]
+			node_owner = entry["node_owner"]
+			#self._sleep_child(node, node_parent, node_owner, false)
+			var cb := funcref(self, "_sleep_child")
+			AsyncLoader.call_throttled(cb, [node, node_parent, node_owner, false])
+		OS.delay_msec(100)
+
+func _sleep_owner(node_owner : Node) -> void:
+	#print("! sleep %s" % [node_owner])
+	if node_owner == null:
+		return
+
+	var inverse_groups = groups.duplicate()
+	inverse_groups.invert()
+	for group in inverse_groups:
+		var group_nodes = Global.recursively_get_all_children_in_group(node_owner, group)
+		group_nodes.invert()
+		for node in group_nodes:
+			var node_parent = node.get_parent()
+			var cb := funcref(self, "_sleep_child")
+			AsyncLoader.call_throttled(cb, [node, node_parent, node_owner, true])
+
+func _sleep_child(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
+	if not Global._sleeping_nodes.has(node_owner.name):
+		Global._sleeping_nodes[node_owner.name] = []
+
+	if is_to_be_removed:
+		node_parent.remove_child(node)
+	#print("! sleeping %s, %s, %s, %s" % [node, node_parent, node.get_parent(), is_to_be_removed])
+	Global._sleeping_nodes[node_owner.name].append({
+		"node_parent" : node_parent,
+		"node" : node
+	})
+	print("- sleeping %s" % [node])
+
+func _wake_owner(node_owner : Node) -> void:
+	#print("! wake %s" % [node_owner])
+	if node_owner == null:
+		return
+
+	if not Global._sleeping_nodes.has(node_owner.name):
+		Global._sleeping_nodes[node_owner.name] = []
+
+	var inverse_entries = Global._sleeping_nodes[node_owner.name]
+	inverse_entries.invert()
+	for entry in inverse_entries:
+		var node_parent = entry["node_parent"]
+		var node = entry["node"]
+		var cb := funcref(self, "_wake_child")
+		AsyncLoader.call_throttled(cb, [node, node_parent, node_owner])
+	Global._sleeping_nodes[node_owner.name].clear()
+
+func _wake_child(node : Node, node_parent : Node, node_owner : Node) -> void:
+	node_parent.add_child(node)
+	print("+ waking %s" % [node])
+	#yield(node, "ready")
