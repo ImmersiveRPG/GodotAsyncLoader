@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://examples/Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://examples/WorldLoader/WorldLoader.tscn" type="PackedScene" id=2]
+[ext_resource path="res://examples/WorldOpen/WorldOpen.gd" type="Script" id=9]
+
+[node name="WorldOpen" type="Spatial"]
+script = ExtResource( 9 )
+
+[node name="WorldLoader" parent="." instance=ExtResource( 2 )]
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 473.044, 332 )
+far = 2000.0
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( -0.238106, -0.652098, 0.719773, -0.254325, 0.757091, 0.601774, -0.93735, -0.0397703, -0.346113, 375, 508, -383 )
+
+[node name="ButtonAddOrangeAsyncWithCB" type="Button" parent="."]
+margin_left = 37.0
+margin_top = 27.0
+margin_right = 219.0
+margin_bottom = 79.0
+text = "Add orange async with cb"
+
+[node name="ButtonAddOrangeAsync" type="Button" parent="."]
+margin_left = 268.0
+margin_top = 26.0
+margin_right = 450.0
+margin_bottom = 78.0
+text = "Add orange async"
+
+[node name="ButtonAddOrangeSync" type="Button" parent="."]
+margin_left = 540.0
+margin_top = 28.0
+margin_right = 713.0
+margin_bottom = 84.0
+text = "Add orange sync"
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+
+[connection signal="pressed" from="ButtonAddOrangeAsyncWithCB" to="." method="_on_add_orange_async_with_cb_pressed"]
+[connection signal="pressed" from="ButtonAddOrangeAsync" to="." method="_on_add_orange_async_pressed"]
+[connection signal="pressed" from="ButtonAddOrangeSync" to="." method="_on_add_orange_sync_pressed"]

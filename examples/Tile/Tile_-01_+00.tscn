@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://examples/GroundWhite/GroundWhite.tscn" type="PackedScene" id=1]
+[ext_resource path="res://examples/Plants/Cactus/Cactus.tscn" type="PackedScene" id=2]
+[ext_resource path="res://examples/GroundBlack/GroundBlack.tscn" type="PackedScene" id=3]
+[ext_resource path="res://examples/Items/SodaCan/SodaCan.tscn" type="PackedScene" id=4]
+
+[node name="Tile_-01_+00" type="Spatial" groups=["tile"]]
+
+[node name="GroundBlack" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
+
+[node name="GroundBlack2" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50 )
+
+[node name="GroundWhite" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 50 )
+
+[node name="GroundWhite2" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
+
+[node name="Cactus" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8173, 0, -71.0427 )
+
+[node name="SodaCan" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.23751, 68.3163 )
+
+[node name="SodaCan2" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3.23751, 68.3163 )
+
+[node name="SodaCan3" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 3.23751, 68.3163 )
+
+[node name="SodaCan4" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.2166, 9.62438, 68.3163 )
+
+[node name="SodaCan5" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.48347, 9.62438, 68.3163 )
+
+[node name="SodaCan6" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.97372, 16.6296, 68.3163 )
