@@ -162,13 +162,16 @@ func sleep_and_wake_child_nodes(next_player_tile : Node) -> void:
 	AsyncLoader.call_throttled(cb, [next_player_tile])
 	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
 
+# FIXME: Make this a callback a funcref passed in from game
 func _wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
 	print("!!! Waking: %s" % [node.name])
 	node_parent.add_child(node)
 
+# FIXME: Make this a callback a funcref passed in from game
 func _after_wake_child_nodes_cb(next_player_tile : Node) -> void:
 	Global._sleeping_nodes[next_player_tile.name].clear()
 
+# FIXME: Make this a callback a funcref passed in from game
 func _sleep_child_nodes_cb(node : Node) -> void:
 	print("!!! Sleeping: %s" % [node.name])
 	var node_parent = node.get_parent()
@@ -178,5 +181,6 @@ func _sleep_child_nodes_cb(node : Node) -> void:
 		"node" : node
 	})
 
+# FIXME: Make this a callback a funcref passed in from game
 func _after_sleep_child_nodes_cb(next_player_tile : Node) -> void:
 	Global._player_tile = next_player_tile
