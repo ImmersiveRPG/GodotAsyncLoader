@@ -113,36 +113,9 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 		if not Global._sleeping_nodes.has(next_player_tile.name):
 			Global._sleeping_nodes[next_player_tile.name] = []
 
-	# Wake up the on screen nodes
-	var inverse_entries = Global._sleeping_nodes[next_player_tile.name]
-	inverse_entries.invert()
-	for entry in inverse_entries:
-		var node_parent = entry["node_parent"]
-		var node = entry["node"]
-		#print("!!! Waking: %s" % [node.name])
-		node_parent.add_child(node)
-		#BlockingActionThrottler.call_on_main_thread_when_idle(node_parent, "add_child", [node], false)
-	Global._sleeping_nodes[next_player_tile.name].clear()
-
-	# Put all the off screen nodes to sleep
-	var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS
-	#can_sleep_groups.invert()
-	if Global._player_tile:
-		for group in can_sleep_groups:
-			var group_nodes = Global.recursively_get_all_children_in_group(Global._player_tile, group)
-			group_nodes.invert()
-			for node in group_nodes:
-				#print("!!! Sleeping: %s" % [node.name])
-				var node_parent = node.get_parent()
-				node_parent.remove_child(node)
-				#BlockingActionThrottler.call_on_main_thread_when_idle(node_parent, "remove_child", [node], false)
-				Global._sleeping_nodes[Global._player_tile.name].append({
-					"node_parent" : node_parent,
-					"node" : node
-				})
-
-	Global._player_tile = next_player_tile
-	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
+	# Wake up and sleep child nodes
+	AsyncLoader.sleep_and_wake_child_nodes(next_player_tile)
+#	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
 
 #func _sleep_cb(owner : Node, parent : Node, instance : Node) -> void:
 #	#print("@@@ owner.name: %s" % [owner.name])

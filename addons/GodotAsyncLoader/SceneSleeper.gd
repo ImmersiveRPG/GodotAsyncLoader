@@ -96,6 +96,8 @@ func _sleep_owner(node_owner : Node) -> void:
 			var cb := funcref(self, "_sleep_child")
 			AsyncLoader.call_throttled(cb, [node, node_parent, node_owner, true])
 
+
+
 func _sleep_child(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
 	if not Global._sleeping_nodes.has(node_owner.name):
 		Global._sleeping_nodes[node_owner.name] = []
@@ -130,3 +132,51 @@ func _wake_child(node : Node, node_parent : Node, node_owner : Node) -> void:
 	node_parent.add_child(node)
 	print("+ waking %s" % [node])
 	#yield(node, "ready")
+
+func sleep_and_wake_child_nodes(next_player_tile : Node) -> void:
+	# Wake up the on screen nodes
+	var inverse_entries = Global._sleeping_nodes[next_player_tile.name]
+	inverse_entries.invert()
+	for entry in inverse_entries:
+		var node_parent = entry["node_parent"]
+		var node = entry["node"]
+		var cb := funcref(self, "_wake_child_nodes_cb")
+		AsyncLoader.call_throttled(cb, [node_parent, node])
+
+	if true:
+		var cb := funcref(self, "_after_wake_child_nodes_cb")
+		AsyncLoader.call_throttled(cb, [next_player_tile])
+
+	# Put all the off screen nodes to sleep
+	var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS
+	can_sleep_groups.invert()
+	if Global._player_tile:
+		for group in can_sleep_groups:
+			var group_nodes = Global.recursively_get_all_children_in_group(Global._player_tile, group)
+			group_nodes.invert()
+			for node in group_nodes:
+				var cb := funcref(self, "_sleep_child_nodes_cb")
+				AsyncLoader.call_throttled(cb, [node])
+
+	var cb := funcref(self, "_after_sleep_child_nodes_cb")
+	AsyncLoader.call_throttled(cb, [next_player_tile])
+	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
+
+func _wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
+	print("!!! Waking: %s" % [node.name])
+	node_parent.add_child(node)
+
+func _after_wake_child_nodes_cb(next_player_tile : Node) -> void:
+	Global._sleeping_nodes[next_player_tile.name].clear()
+
+func _sleep_child_nodes_cb(node : Node) -> void:
+	print("!!! Sleeping: %s" % [node.name])
+	var node_parent = node.get_parent()
+	node_parent.remove_child(node)
+	Global._sleeping_nodes[Global._player_tile.name].append({
+		"node_parent" : node_parent,
+		"node" : node
+	})
+
+func _after_sleep_child_nodes_cb(next_player_tile : Node) -> void:
+	Global._player_tile = next_player_tile
