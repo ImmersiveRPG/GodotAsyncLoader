@@ -58,7 +58,6 @@ func _run_sleeper_thread(_arg : int) -> void:
 			#self._wake_owner(node_owner)
 			var cb := funcref(self, "_wake_owner")
 			AsyncLoader.call_throttled(cb, [node_owner])
-		OS.delay_msec(100)
 
 		_to_sleep_mutex.lock()
 		node_owner = _to_sleep.pop_front()
@@ -67,7 +66,6 @@ func _run_sleeper_thread(_arg : int) -> void:
 			#self._sleep_owner(node_owner)
 			var cb := funcref(self, "_sleep_owner")
 			AsyncLoader.call_throttled(cb, [node_owner])
-		OS.delay_msec(100)
 
 		_to_sleep_child_mutex.lock()
 		var entry = _to_sleep_child.pop_front()
@@ -79,7 +77,7 @@ func _run_sleeper_thread(_arg : int) -> void:
 			#self._sleep_child(node, node_parent, node_owner, false)
 			var cb := funcref(self, "_sleep_child")
 			AsyncLoader.call_throttled(cb, [node, node_parent, node_owner, false])
-		OS.delay_msec(100)
+		OS.delay_msec(config._thread_sleep_msec)
 
 func _sleep_owner(node_owner : Node) -> void:
 	#print("! sleep %s" % [node_owner])

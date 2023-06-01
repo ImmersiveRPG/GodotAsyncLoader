@@ -54,7 +54,7 @@ func _start_loop() -> void:
 #			print("budget_remaining:%s, call_count:%s" % [budget_remaining, call_count])
 
 		# Sleep, and do it longer if we had no work for X consecutive loops
-		var sleep_sec := 0.05 if consecutive_no_work_count > 10 else 0.001 
+		var sleep_sec := 0.05 if consecutive_no_work_count > 10 else 0.001
 		yield(get_tree().create_timer(sleep_sec), "timeout")
 		#yield(get_tree().create_timer(0.1), "timeout")
 
