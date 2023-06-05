@@ -13,6 +13,11 @@ var _to_sleep_mutex := Mutex.new()
 var _to_sleep_child_mutex := Mutex.new()
 var _to_wake_mutex := Mutex.new()
 
+var _wake_child_cb : FuncRef = null
+var _wake_child_done_cb : FuncRef = null
+var _sleep_child_cb : FuncRef = null
+var _sleep_child_done_cb : FuncRef = null
+
 # FIXME: Set this in start, instead of duplicating it here
 const groups := [
 #	"terrain",
@@ -133,52 +138,28 @@ func _wake_child(node : Node, node_parent : Node, node_owner : Node) -> void:
 
 func sleep_and_wake_child_nodes(next_player_tile : Node) -> void:
 	# Wake up the on screen nodes
-	var inverse_entries = Global._sleeping_nodes[next_player_tile.name]
-	inverse_entries.invert()
-	for entry in inverse_entries:
-		var node_parent = entry["node_parent"]
-		var node = entry["node"]
-		var cb := funcref(self, "_wake_child_nodes_cb")
-		AsyncLoader.call_throttled(cb, [node_parent, node])
+	if _wake_child_cb:
+		var inverse_entries = Global._sleeping_nodes[next_player_tile.name]
+		inverse_entries.invert()
+		for entry in inverse_entries:
+			var node_parent = entry["node_parent"]
+			var node = entry["node"]
+			AsyncLoader.call_throttled(_wake_child_cb, [node_parent, node])
 
-	if true:
-		var cb := funcref(self, "_after_wake_child_nodes_cb")
-		AsyncLoader.call_throttled(cb, [next_player_tile])
+	if _wake_child_done_cb:
+		AsyncLoader.call_throttled(_wake_child_done_cb, [next_player_tile])
 
 	# Put all the off screen nodes to sleep
-	var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS
-	can_sleep_groups.invert()
-	if Global._player_tile:
+	if _sleep_child_cb and Global._player_tile:
+		var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS
+		can_sleep_groups.invert()
+
 		for group in can_sleep_groups:
 			var group_nodes = Global.recursively_get_all_children_in_group(Global._player_tile, group)
 			group_nodes.invert()
 			for node in group_nodes:
-				var cb := funcref(self, "_sleep_child_nodes_cb")
-				AsyncLoader.call_throttled(cb, [node])
+				AsyncLoader.call_throttled(_sleep_child_cb, [node])
 
-	var cb := funcref(self, "_after_sleep_child_nodes_cb")
-	AsyncLoader.call_throttled(cb, [next_player_tile])
+	if _sleep_child_done_cb:
+		AsyncLoader.call_throttled(_sleep_child_done_cb, [next_player_tile])
 	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
-
-# FIXME: Make this a callback a funcref passed in from game
-func _wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
-	print("!!! Waking: %s" % [node.name])
-	node_parent.add_child(node)
-
-# FIXME: Make this a callback a funcref passed in from game
-func _after_wake_child_nodes_cb(next_player_tile : Node) -> void:
-	Global._sleeping_nodes[next_player_tile.name].clear()
-
-# FIXME: Make this a callback a funcref passed in from game
-func _sleep_child_nodes_cb(node : Node) -> void:
-	print("!!! Sleeping: %s" % [node.name])
-	var node_parent = node.get_parent()
-	node_parent.remove_child(node)
-	Global._sleeping_nodes[Global._player_tile.name].append({
-		"node_parent" : node_parent,
-		"node" : node
-	})
-
-# FIXME: Make this a callback a funcref passed in from game
-func _after_sleep_child_nodes_cb(next_player_tile : Node) -> void:
-	Global._player_tile = next_player_tile

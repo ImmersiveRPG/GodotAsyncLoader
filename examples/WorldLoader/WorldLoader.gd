@@ -19,8 +19,12 @@ func _init() -> void:
 			row.append(0)
 		_tile_load_status.append(row)
 
-#func _ready() -> void:
-#	AsyncLoader._scene_adder._sleep_cb = funcref(self, "_sleep_cb")
+func _ready() -> void:
+	AsyncLoader._scene_sleeper._wake_child_cb = funcref(self, "_on_wake_child_nodes_cb")
+	AsyncLoader._scene_sleeper._wake_child_done_cb = funcref(self, "_on_wake_child_nodes_done_cb")
+	AsyncLoader._scene_sleeper._sleep_child_cb = funcref(self, "_on_sleep_child_nodes_cb")
+	AsyncLoader._scene_sleeper._sleep_child_done_cb = funcref(self, "_on_sleep_child_nodes_done_cb")
+
 
 func _on_load_checker_timer_timeout() -> void:
 	self._load_tiles_around_player()
@@ -117,15 +121,24 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	AsyncLoader.sleep_and_wake_child_nodes(next_player_tile)
 #	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
 
-#func _sleep_cb(owner : Node, parent : Node, instance : Node) -> void:
-#	#print("@@@ owner.name: %s" % [owner.name])
-#	if not Global._sleeping_nodes.has(owner.name):
-#		Global._sleeping_nodes[owner.name] = []
-#
-#	Global._sleeping_nodes[owner.name].push_front({
-#		"node_parent" : parent,
-#		"node" : instance
-#	})
+func _on_wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
+	print("!!! Waking: %s" % [node.name])
+	node_parent.add_child(node)
+
+func _on_wake_child_nodes_done_cb(next_player_tile : Node) -> void:
+	Global._sleeping_nodes[next_player_tile.name].clear()
+
+func _on_sleep_child_nodes_cb(node : Node) -> void:
+	print("!!! Sleeping: %s" % [node.name])
+	var node_parent = node.get_parent()
+	node_parent.remove_child(node)
+	Global._sleeping_nodes[Global._player_tile.name].append({
+		"node_parent" : node_parent,
+		"node" : node
+	})
+
+func _on_sleep_child_nodes_done_cb(next_player_tile : Node) -> void:
+	Global._player_tile = next_player_tile
 
 func _position_to_tile_xz(org : Vector3) -> Vector3:
 	var half := Global.TILE_WIDTH / 2.0
