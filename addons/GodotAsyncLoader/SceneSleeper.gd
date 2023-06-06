@@ -17,6 +17,8 @@ var _wake_child_cb : FuncRef = null
 var _wake_child_done_cb : FuncRef = null
 var _sleep_child_cb : FuncRef = null
 var _sleep_child_done_cb : FuncRef = null
+var _xxx_sleep_cb : FuncRef = null
+var _xxx_wake_cb : FuncRef = null
 
 
 func sleep_scene(node_owner : Node) -> void:
@@ -70,8 +72,7 @@ func _run_sleeper_thread(_arg : int) -> void:
 			var node_parent = entry["node_parent"]
 			node_owner = entry["node_owner"]
 			#self._sleep_child(node, node_parent, node_owner, false)
-			var cb := funcref(self, "_sleep_child")
-			AsyncLoader.call_throttled(cb, [node, node_parent, node_owner, false])
+			AsyncLoader.call_throttled(_xxx_sleep_cb, [node, node_parent, node_owner, false])
 		OS.delay_msec(config._thread_sleep_msec)
 
 func _sleep_owner(node_owner : Node) -> void:
@@ -86,23 +87,8 @@ func _sleep_owner(node_owner : Node) -> void:
 		group_nodes.invert()
 		for node in group_nodes:
 			var node_parent = node.get_parent()
-			var cb := funcref(self, "_sleep_child")
-			AsyncLoader.call_throttled(cb, [node, node_parent, node_owner, true])
+			AsyncLoader.call_throttled(_xxx_sleep_cb, [node, node_parent, node_owner, true])
 
-
-
-func _sleep_child(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
-	if not Global._sleeping_nodes.has(node_owner.name):
-		Global._sleeping_nodes[node_owner.name] = []
-
-	if is_to_be_removed:
-		node_parent.remove_child(node)
-	#print("! sleeping %s, %s, %s, %s" % [node, node_parent, node.get_parent(), is_to_be_removed])
-	Global._sleeping_nodes[node_owner.name].append({
-		"node_parent" : node_parent,
-		"node" : node
-	})
-	print("- sleeping %s" % [node])
 
 func _wake_owner(node_owner : Node) -> void:
 	#print("! wake %s" % [node_owner])
@@ -112,19 +98,12 @@ func _wake_owner(node_owner : Node) -> void:
 	if not Global._sleeping_nodes.has(node_owner.name):
 		Global._sleeping_nodes[node_owner.name] = []
 
-	var inverse_entries = Global._sleeping_nodes[node_owner.name]
-	inverse_entries.invert()
-	for entry in inverse_entries:
+	var entries = Global._sleeping_nodes[node_owner.name]
+	while not entries.empty():
+		var entry = entries.pop_back()
 		var node_parent = entry["node_parent"]
 		var node = entry["node"]
-		var cb := funcref(self, "_wake_child")
-		AsyncLoader.call_throttled(cb, [node, node_parent, node_owner])
-	Global._sleeping_nodes[node_owner.name].clear()
-
-func _wake_child(node : Node, node_parent : Node, node_owner : Node) -> void:
-	node_parent.add_child(node)
-	print("+ waking %s" % [node])
-	#yield(node, "ready")
+		AsyncLoader.call_throttled(_xxx_wake_cb, [node, node_parent, node_owner])
 
 func sleep_and_wake_child_nodes(next_player_tile : Node) -> void:
 	# Wake up the on screen nodes
