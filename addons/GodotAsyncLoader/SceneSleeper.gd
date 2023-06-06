@@ -108,9 +108,9 @@ func _wake_owner(node_owner : Node) -> void:
 func sleep_and_wake_child_nodes(current_tile : Node, next_tile : Node) -> void:
 	# Wake up the on screen nodes
 	if _wake_child_cb:
-		var inverse_entries = Global._sleeping_nodes[next_tile.name]
-		inverse_entries.invert()
-		for entry in inverse_entries:
+		var entries = Global._sleeping_nodes[next_tile.name]
+		while not entries.empty():
+			var entry = entries.pop_back()
 			var node_parent = entry["node_parent"]
 			var node = entry["node"]
 			AsyncLoader.call_throttled(_wake_child_cb, [node_parent, node])

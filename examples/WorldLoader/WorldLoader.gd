@@ -135,7 +135,7 @@ func _on_wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
 	print("!!! Waking: %s" % [node.name])
 
 func _on_wake_child_nodes_done_cb(next_player_tile : Node) -> void:
-	Global._sleeping_nodes[next_player_tile.name].clear()
+	pass
 
 # Sleep child directly from instanced scene
 func _on_sleep_child_cb(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
