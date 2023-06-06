@@ -18,16 +18,6 @@ var _wake_child_done_cb : FuncRef = null
 var _sleep_child_cb : FuncRef = null
 var _sleep_child_done_cb : FuncRef = null
 
-# FIXME: Set this in start, instead of duplicating it here
-const groups := [
-#	"terrain",
-#	"structure",
-	"furniture",
-	"plant",
-	"item",
-	"npc",
-	"etc",
-]
 
 func sleep_scene(node_owner : Node) -> void:
 	_to_sleep_mutex.lock()
@@ -89,7 +79,7 @@ func _sleep_owner(node_owner : Node) -> void:
 	if node_owner == null:
 		return
 
-	var inverse_groups = groups.duplicate()
+	var inverse_groups = AsyncLoader._scene_adder.GROUPS.duplicate()
 	inverse_groups.invert()
 	for group in inverse_groups:
 		var group_nodes = Global.recursively_get_all_children_in_group(node_owner, group)
@@ -151,7 +141,7 @@ func sleep_and_wake_child_nodes(next_player_tile : Node) -> void:
 
 	# Put all the off screen nodes to sleep
 	if _sleep_child_cb and Global._player_tile:
-		var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS
+		var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS.duplicate()
 		can_sleep_groups.invert()
 
 		for group in can_sleep_groups:
