@@ -14,9 +14,8 @@ var _to_sleep_child_mutex := Mutex.new()
 var _to_wake_mutex := Mutex.new()
 
 var _wake_child_cb : FuncRef = null
-var _wake_child_done_cb : FuncRef = null
 var _sleep_child_cb : FuncRef = null
-var _sleep_child_done_cb : FuncRef = null
+var _changed_tile_cb : FuncRef = null
 var _xxx_sleep_cb : FuncRef = null
 var _xxx_wake_cb : FuncRef = null
 
@@ -115,9 +114,6 @@ func sleep_and_wake_child_nodes(current_tile : Node, next_tile : Node) -> void:
 			var node = entry["node"]
 			AsyncLoader.call_throttled(_wake_child_cb, [node_parent, node])
 
-	if _wake_child_done_cb:
-		AsyncLoader.call_throttled(_wake_child_done_cb, [next_tile])
-
 	# Put all the off screen nodes to sleep
 	if _sleep_child_cb and current_tile:
 		var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS.duplicate()
@@ -129,5 +125,6 @@ func sleep_and_wake_child_nodes(current_tile : Node, next_tile : Node) -> void:
 			for node in group_nodes:
 				AsyncLoader.call_throttled(_sleep_child_cb, [node])
 
-	if _sleep_child_done_cb:
-		AsyncLoader.call_throttled(_sleep_child_done_cb, [next_tile])
+	# Done changing tile
+	if _changed_tile_cb:
+		AsyncLoader.call_throttled(_changed_tile_cb, [next_tile])
