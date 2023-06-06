@@ -123,18 +123,21 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	AsyncLoader.sleep_and_wake_child_nodes(next_player_tile)
 #	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
 
+# Wake child directly from instanced scene
 func _on_wake_child_cb(node : Node, node_parent : Node, node_owner : Node) -> void:
 	node_parent.add_child(node)
 	print("+ waking %s" % [node])
 	#yield(node, "ready")
 
+# Wake child that is in the scene tree
 func _on_wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
-	print("!!! Waking: %s" % [node.name])
 	node_parent.add_child(node)
+	print("!!! Waking: %s" % [node.name])
 
 func _on_wake_child_nodes_done_cb(next_player_tile : Node) -> void:
 	Global._sleeping_nodes[next_player_tile.name].clear()
 
+# Sleep child directly from instanced scene
 func _on_sleep_child_cb(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
 	if not Global._sleeping_nodes.has(node_owner.name):
 		Global._sleeping_nodes[node_owner.name] = []
@@ -148,14 +151,15 @@ func _on_sleep_child_cb(node : Node, node_parent : Node, node_owner : Node, is_t
 	})
 	print("- sleeping %s" % [node])
 
+# Sleep child that is in the scene tree
 func _on_sleep_child_nodes_cb(node : Node) -> void:
-	print("!!! Sleeping: %s" % [node.name])
 	var node_parent = node.get_parent()
 	node_parent.remove_child(node)
 	Global._sleeping_nodes[Global._player_tile.name].append({
 		"node_parent" : node_parent,
 		"node" : node
 	})
+	print("!!! Sleeping: %s" % [node.name])
 
 func _on_sleep_child_nodes_done_cb(next_player_tile : Node) -> void:
 	Global._player_tile = next_player_tile
