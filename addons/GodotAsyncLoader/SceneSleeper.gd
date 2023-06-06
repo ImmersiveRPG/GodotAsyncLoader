@@ -105,10 +105,10 @@ func _wake_owner(node_owner : Node) -> void:
 		var node = entry["node"]
 		AsyncLoader.call_throttled(_xxx_wake_cb, [node, node_parent, node_owner])
 
-func sleep_and_wake_child_nodes(current_tile : Node, next_player_tile : Node) -> void:
+func sleep_and_wake_child_nodes(current_tile : Node, next_tile : Node) -> void:
 	# Wake up the on screen nodes
 	if _wake_child_cb:
-		var inverse_entries = Global._sleeping_nodes[next_player_tile.name]
+		var inverse_entries = Global._sleeping_nodes[next_tile.name]
 		inverse_entries.invert()
 		for entry in inverse_entries:
 			var node_parent = entry["node_parent"]
@@ -116,7 +116,7 @@ func sleep_and_wake_child_nodes(current_tile : Node, next_player_tile : Node) ->
 			AsyncLoader.call_throttled(_wake_child_cb, [node_parent, node])
 
 	if _wake_child_done_cb:
-		AsyncLoader.call_throttled(_wake_child_done_cb, [next_player_tile])
+		AsyncLoader.call_throttled(_wake_child_done_cb, [next_tile])
 
 	# Put all the off screen nodes to sleep
 	if _sleep_child_cb and current_tile:
@@ -130,4 +130,4 @@ func sleep_and_wake_child_nodes(current_tile : Node, next_player_tile : Node) ->
 				AsyncLoader.call_throttled(_sleep_child_cb, [node])
 
 	if _sleep_child_done_cb:
-		AsyncLoader.call_throttled(_sleep_child_done_cb, [next_player_tile])
+		AsyncLoader.call_throttled(_sleep_child_done_cb, [next_tile])
