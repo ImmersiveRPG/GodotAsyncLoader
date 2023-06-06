@@ -120,7 +120,7 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 			Global._sleeping_nodes[next_player_tile.name] = []
 
 	# Wake up and sleep child nodes
-	AsyncLoader.sleep_and_wake_child_nodes(next_player_tile)
+	AsyncLoader.sleep_and_wake_child_nodes(Global._player_tile, next_player_tile)
 #	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
 
 # Wake child directly from instanced scene
@@ -163,6 +163,7 @@ func _on_sleep_child_nodes_cb(node : Node) -> void:
 
 func _on_sleep_child_nodes_done_cb(next_player_tile : Node) -> void:
 	Global._player_tile = next_player_tile
+	print("!! Player(%s) is on Tile (%s)" % [Global._player.name, next_player_tile.name])
 
 func _position_to_tile_xz(org : Vector3) -> Vector3:
 	var half := Global.TILE_WIDTH / 2.0

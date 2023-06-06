@@ -105,7 +105,7 @@ func _wake_owner(node_owner : Node) -> void:
 		var node = entry["node"]
 		AsyncLoader.call_throttled(_xxx_wake_cb, [node, node_parent, node_owner])
 
-func sleep_and_wake_child_nodes(next_player_tile : Node) -> void:
+func sleep_and_wake_child_nodes(current_tile : Node, next_player_tile : Node) -> void:
 	# Wake up the on screen nodes
 	if _wake_child_cb:
 		var inverse_entries = Global._sleeping_nodes[next_player_tile.name]
@@ -119,16 +119,15 @@ func sleep_and_wake_child_nodes(next_player_tile : Node) -> void:
 		AsyncLoader.call_throttled(_wake_child_done_cb, [next_player_tile])
 
 	# Put all the off screen nodes to sleep
-	if _sleep_child_cb and Global._player_tile:
+	if _sleep_child_cb and current_tile:
 		var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS.duplicate()
 		can_sleep_groups.invert()
 
 		for group in can_sleep_groups:
-			var group_nodes = Global.recursively_get_all_children_in_group(Global._player_tile, group)
+			var group_nodes = Global.recursively_get_all_children_in_group(current_tile, group)
 			group_nodes.invert()
 			for node in group_nodes:
 				AsyncLoader.call_throttled(_sleep_child_cb, [node])
 
 	if _sleep_child_done_cb:
 		AsyncLoader.call_throttled(_sleep_child_done_cb, [next_player_tile])
-	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
