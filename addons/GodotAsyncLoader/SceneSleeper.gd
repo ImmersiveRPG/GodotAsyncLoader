@@ -104,16 +104,7 @@ func _wake_owner(node_owner : Node) -> void:
 		var node = entry["node"]
 		AsyncLoader.call_throttled(_xxx_wake_cb, [node, node_parent, node_owner])
 
-func sleep_and_wake_child_nodes(current_tile : Node, next_tile : Node) -> void:
-	# Wake up the on screen nodes
-	if _wake_child_cb:
-		var entries = Global._sleeping_nodes[next_tile.name]
-		while not entries.empty():
-			var entry = entries.pop_back()
-			var node_parent = entry["node_parent"]
-			var node = entry["node"]
-			AsyncLoader.call_throttled(_wake_child_cb, [node_parent, node])
-
+func sleep_child_nodes(current_tile : Node) -> void:
 	# Put all the off screen nodes to sleep
 	if _sleep_child_cb and current_tile:
 		var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS.duplicate()
@@ -125,6 +116,17 @@ func sleep_and_wake_child_nodes(current_tile : Node, next_tile : Node) -> void:
 			for node in group_nodes:
 				AsyncLoader.call_throttled(_sleep_child_cb, [node])
 
+func wake_child_nodes(next_tile : Node) -> void:
+	# Wake up the on screen nodes
+	if _wake_child_cb:
+		var entries = Global._sleeping_nodes[next_tile.name]
+		while not entries.empty():
+			var entry = entries.pop_back()
+			var node_parent = entry["node_parent"]
+			var node = entry["node"]
+			AsyncLoader.call_throttled(_wake_child_cb, [node_parent, node])
+
+func change_tile(next_tile : Node) -> void:
 	# Done changing tile
 	if _changed_tile_cb:
 		AsyncLoader.call_throttled(_changed_tile_cb, [next_tile])
