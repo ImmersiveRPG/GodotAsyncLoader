@@ -5,8 +5,6 @@
 extends Control
 
 # TODO:
-# . Make _sleeping_nodes only accessible from game, not plugin
-# . Replace 2 different wake/sleep callbacks with one
 # . Make throttler configurable
 # . Add distance zones for waking/sleeping
 # . Make it save sleeping nodes in tscn files in FS
