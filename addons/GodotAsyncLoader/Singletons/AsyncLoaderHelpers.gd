@@ -54,3 +54,17 @@ static func recursively_get_all_children_of_type(target : Node, target_type) -> 
 			matches.append(entry)
 
 	return matches
+
+static func recursively_get_all_children_in_group(target : Node, group_name : String) -> Array:
+	var matches := []
+	var to_search := [target]
+	while not to_search.empty():
+		var entry = to_search.pop_front()
+
+		for child in entry.get_children():
+			to_search.append(child)
+
+		if entry.is_in_group(group_name):
+			matches.append(entry)
+
+	return matches

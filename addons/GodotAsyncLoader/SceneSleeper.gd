@@ -84,7 +84,7 @@ func _sleep_owner(node_owner : Node, is_can_sleep := true) -> void:
 	to_sleep_groups.invert()
 
 	for group in to_sleep_groups:
-		var group_nodes = Global.recursively_get_all_children_in_group(node_owner, group)
+		var group_nodes = AsyncLoaderHelpers.recursively_get_all_children_in_group(node_owner, group)
 		group_nodes.invert()
 		for node in group_nodes:
 			var node_parent = node.get_parent()
