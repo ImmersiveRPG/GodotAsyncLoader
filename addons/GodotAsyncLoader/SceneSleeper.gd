@@ -13,7 +13,6 @@ var _to_sleep_mutex := Mutex.new()
 var _to_sleep_child_mutex := Mutex.new()
 var _to_wake_mutex := Mutex.new()
 
-var _wake_child_cb : FuncRef = null
 var _changed_tile_cb : FuncRef = null
 var _xxx_sleep_cb : FuncRef = null
 var _xxx_wake_cb : FuncRef = null
@@ -106,15 +105,8 @@ func _wake_owner(node_owner : Node) -> void:
 		var node = entry["node"]
 		AsyncLoader.call_throttled(_xxx_wake_cb, [node, node_parent, node_owner])
 
-func wake_child_nodes(next_tile : Node) -> void:
-	# Wake up the on screen nodes
-	if _wake_child_cb:
-		var entries = _get_sleeping_children_cb.call_func(next_tile)
-		while not entries.empty():
-			var entry = entries.pop_back()
-			var node_parent = entry["node_parent"]
-			var node = entry["node"]
-			AsyncLoader.call_throttled(_wake_child_cb, [node_parent, node])
+func wake_child_nodes(node_owner : Node) -> void:
+	_wake_owner(node_owner)
 
 func change_tile(next_tile : Node) -> void:
 	# Done changing tile

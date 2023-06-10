@@ -20,7 +20,6 @@ func _init() -> void:
 		_tile_load_status.append(row)
 
 func _ready() -> void:
-	AsyncLoader._scene_sleeper._wake_child_cb = funcref(self, "_on_wake_child_nodes_cb")
 	AsyncLoader._scene_sleeper._changed_tile_cb = funcref(self, "_on_changed_tile_cb")
 	AsyncLoader._scene_sleeper._xxx_wake_cb = funcref(self, "_on_wake_child_cb")
 	AsyncLoader._scene_sleeper._xxx_sleep_cb = funcref(self, "_on_sleep_child_cb")
@@ -121,16 +120,12 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	AsyncLoader.change_tile(next_player_tile)
 #	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
 
-# Wake child directly from instanced scene
+# Wake child
 func _on_wake_child_cb(node : Node, node_parent : Node, node_owner : Node) -> void:
+	var in_tree := node.is_inside_tree()
 	node_parent.add_child(node)
-	print("+ waking %s" % [node])
+	print("+ waking %s, %s" % [node, in_tree])
 	#yield(node, "ready")
-
-# Wake child that is in the scene tree
-func _on_wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
-	node_parent.add_child(node)
-	print("!!! Waking: %s" % [node.name])
 
 # Sleep child
 func _on_sleep_child_cb(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
