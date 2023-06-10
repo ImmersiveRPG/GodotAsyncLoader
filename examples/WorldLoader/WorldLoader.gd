@@ -26,6 +26,27 @@ func _ready() -> void:
 	AsyncLoader._scene_sleeper._sleep_cb = funcref(self, "_on_sleep_child_cb")
 	AsyncLoader._scene_sleeper._get_sleeping_children_cb = funcref(self, "_get_sleeping_children_cb")
 
+func _on_changed_tile_cb(next_player_tile : Node) -> void:
+	Global._player_tile = next_player_tile
+	print("!! Player(%s) is on Tile (%s)" % [Global._player.name, next_player_tile.name])
+
+func _on_wake_child_cb(node : Node, node_parent : Node, node_owner : Node) -> void:
+	var in_tree := node.is_inside_tree()
+	node_parent.add_child(node)
+	print("+ waking %s, %s" % [node, in_tree])
+	#yield(node, "ready")
+
+func _on_sleep_child_cb(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
+	var in_tree := node.is_inside_tree()
+	if is_to_be_removed:
+		node_parent.remove_child(node)
+
+	_get_sleeping_children_cb(node_owner).append({
+		"node_parent" : node_parent,
+		"node" : node
+	})
+	print("- sleeping %s, %s" % [node, in_tree])
+
 func _get_sleeping_children_cb(node : Node) -> Array:
 	if not _sleeping_nodes.has(node.name):
 		_sleeping_nodes[node.name] = []
@@ -120,29 +141,6 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	AsyncLoader.sleep_child_nodes(Global._player_tile)
 	AsyncLoader.change_tile(next_player_tile)
 #	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
-
-# Wake child
-func _on_wake_child_cb(node : Node, node_parent : Node, node_owner : Node) -> void:
-	var in_tree := node.is_inside_tree()
-	node_parent.add_child(node)
-	print("+ waking %s, %s" % [node, in_tree])
-	#yield(node, "ready")
-
-# Sleep child
-func _on_sleep_child_cb(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
-	var in_tree := node.is_inside_tree()
-	if is_to_be_removed:
-		node_parent.remove_child(node)
-
-	_get_sleeping_children_cb(node_owner).append({
-		"node_parent" : node_parent,
-		"node" : node
-	})
-	print("- sleeping %s, %s" % [node, in_tree])
-
-func _on_changed_tile_cb(next_player_tile : Node) -> void:
-	Global._player_tile = next_player_tile
-	print("!! Player(%s) is on Tile (%s)" % [Global._player.name, next_player_tile.name])
 
 func _position_to_tile_xz(org : Vector3) -> Vector3:
 	var half := Global.TILE_WIDTH / 2.0
