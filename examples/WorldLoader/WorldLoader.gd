@@ -7,6 +7,7 @@ extends Spatial
 
 var _prev_player_center_tile := Vector3.INF
 var _tile_load_status := []
+var _sleeping_nodes := {}
 var _is_first_tile := true
 
 onready var _tile = $Tile
@@ -26,10 +27,10 @@ func _ready() -> void:
 	AsyncLoader._scene_sleeper._get_sleeping_children_cb = funcref(self, "_get_sleeping_children_cb")
 
 func _get_sleeping_children_cb(node : Node) -> Array:
-	if not Global._sleeping_nodes.has(node.name):
-		Global._sleeping_nodes[node.name] = []
+	if not _sleeping_nodes.has(node.name):
+		_sleeping_nodes[node.name] = []
 
-	return Global._sleeping_nodes[node.name]
+	return _sleeping_nodes[node.name]
 
 func _on_load_checker_timer_timeout() -> void:
 	self._load_tiles_around_player()

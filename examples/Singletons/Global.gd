@@ -48,9 +48,6 @@ func _on_scene_changed(total : int) -> void:
 	print("called _on_scene_changed: %s, %s" % [scene.name, total])
 
 
-# FIXME: These should be moved inside GodotAsyncLoader
-var _sleeping_nodes := {}
-
 func recursively_get_all_children_in_group(target : Node, group_name : String) -> Array:
 	var matches := []
 	var to_search := [target]
