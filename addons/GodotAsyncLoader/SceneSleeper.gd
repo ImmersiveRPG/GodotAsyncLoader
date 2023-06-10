@@ -14,8 +14,8 @@ var _to_sleep_child_mutex := Mutex.new()
 var _to_wake_mutex := Mutex.new()
 
 var _changed_tile_cb : FuncRef = null
-var _xxx_sleep_cb : FuncRef = null
-var _xxx_wake_cb : FuncRef = null
+var _sleep_cb : FuncRef = null
+var _wake_cb : FuncRef = null
 var _get_sleeping_children_cb : FuncRef = null
 
 
@@ -68,7 +68,7 @@ func _run_sleeper_thread(_arg : int) -> void:
 			var node_parent = entry["node_parent"]
 			node_owner = entry["node_owner"]
 			#self._sleep_child(node, node_parent, node_owner, false)
-			AsyncLoader.call_throttled(_xxx_sleep_cb, [node, node_parent, node_owner, false])
+			AsyncLoader.call_throttled(_sleep_cb, [node, node_parent, node_owner, false])
 		OS.delay_msec(config._thread_sleep_msec)
 
 func _sleep_owner(node_owner : Node, is_can_sleep := true) -> void:
@@ -88,7 +88,7 @@ func _sleep_owner(node_owner : Node, is_can_sleep := true) -> void:
 		group_nodes.invert()
 		for node in group_nodes:
 			var node_parent = node.get_parent()
-			AsyncLoader.call_throttled(_xxx_sleep_cb, [node, node_parent, node_owner, true])
+			AsyncLoader.call_throttled(_sleep_cb, [node, node_parent, node_owner, true])
 
 func sleep_child_nodes(node_owner : Node, is_can_sleep := true) -> void:
 	_sleep_owner(node_owner, is_can_sleep)
@@ -103,7 +103,7 @@ func _wake_owner(node_owner : Node) -> void:
 		var entry = entries.pop_back()
 		var node_parent = entry["node_parent"]
 		var node = entry["node"]
-		AsyncLoader.call_throttled(_xxx_wake_cb, [node, node_parent, node_owner])
+		AsyncLoader.call_throttled(_wake_cb, [node, node_parent, node_owner])
 
 func wake_child_nodes(node_owner : Node) -> void:
 	_wake_owner(node_owner)

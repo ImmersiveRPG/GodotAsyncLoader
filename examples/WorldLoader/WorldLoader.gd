@@ -21,8 +21,8 @@ func _init() -> void:
 
 func _ready() -> void:
 	AsyncLoader._scene_sleeper._changed_tile_cb = funcref(self, "_on_changed_tile_cb")
-	AsyncLoader._scene_sleeper._xxx_wake_cb = funcref(self, "_on_wake_child_cb")
-	AsyncLoader._scene_sleeper._xxx_sleep_cb = funcref(self, "_on_sleep_child_cb")
+	AsyncLoader._scene_sleeper._wake_cb = funcref(self, "_on_wake_child_cb")
+	AsyncLoader._scene_sleeper._sleep_cb = funcref(self, "_on_sleep_child_cb")
 	AsyncLoader._scene_sleeper._get_sleeping_children_cb = funcref(self, "_get_sleeping_children_cb")
 
 func _get_sleeping_children_cb(node : Node) -> Array:
