@@ -25,7 +25,13 @@ func _ready() -> void:
 	AsyncLoader._scene_sleeper._changed_tile_cb = funcref(self, "_on_changed_tile_cb")
 	AsyncLoader._scene_sleeper._xxx_wake_cb = funcref(self, "_on_wake_child_cb")
 	AsyncLoader._scene_sleeper._xxx_sleep_cb = funcref(self, "_on_sleep_child_cb")
+	AsyncLoader._scene_sleeper._get_sleeping_children_cb = funcref(self, "_get_sleeping_children_cb")
 
+func _get_sleeping_children_cb(node : Node) -> Array:
+	if not Global._sleeping_nodes.has(node.name):
+		Global._sleeping_nodes[node.name] = []
+
+	return Global._sleeping_nodes[node.name]
 
 func _on_load_checker_timer_timeout() -> void:
 	self._load_tiles_around_player()
@@ -110,14 +116,6 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	if next_player_tile == null:
 		return
 
-	if Global._player_tile:
-		if not Global._sleeping_nodes.has(Global._player_tile.name):
-			Global._sleeping_nodes[Global._player_tile.name] = []
-
-	if next_player_tile:
-		if not Global._sleeping_nodes.has(next_player_tile.name):
-			Global._sleeping_nodes[next_player_tile.name] = []
-
 	# Wake up and sleep child nodes
 	AsyncLoader.wake_child_nodes(next_player_tile)
 	AsyncLoader.sleep_child_nodes(Global._player_tile)
@@ -137,27 +135,24 @@ func _on_wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
 
 # Sleep child directly from instanced scene
 func _on_sleep_child_cb(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
-	if not Global._sleeping_nodes.has(node_owner.name):
-		Global._sleeping_nodes[node_owner.name] = []
-
 	if is_to_be_removed:
 		node_parent.remove_child(node)
 	#print("! sleeping %s, %s, %s, %s" % [node, node_parent, node.get_parent(), is_to_be_removed])
-	Global._sleeping_nodes[node_owner.name].append({
+	_get_sleeping_children_cb(node_owner).append({
 		"node_parent" : node_parent,
 		"node" : node
 	})
-	print("- sleeping %s" % [node])
+	print("- sleeping %s, %s" % [node, node.is_inside_tree()])
 
 # Sleep child that is in the scene tree
 func _on_sleep_child_nodes_cb(node : Node) -> void:
 	var node_parent = node.get_parent()
 	node_parent.remove_child(node)
-	Global._sleeping_nodes[Global._player_tile.name].append({
+	_get_sleeping_children_cb(Global._player_tile).append({
 		"node_parent" : node_parent,
 		"node" : node
 	})
-	print("!!! Sleeping: %s" % [node.name])
+	print("!!! Sleeping: %s, %s" % [node.name, node.is_inside_tree()])
 
 func _on_changed_tile_cb(next_player_tile : Node) -> void:
 	Global._player_tile = next_player_tile

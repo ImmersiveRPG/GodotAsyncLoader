@@ -18,6 +18,7 @@ var _sleep_child_cb : FuncRef = null
 var _changed_tile_cb : FuncRef = null
 var _xxx_sleep_cb : FuncRef = null
 var _xxx_wake_cb : FuncRef = null
+var _get_sleeping_children_cb : FuncRef = null
 
 
 func sleep_scene(node_owner : Node) -> void:
@@ -51,7 +52,6 @@ func _run_sleeper_thread(_arg : int) -> void:
 		var node_owner = _to_wake.pop_front()
 		_to_wake_mutex.unlock()
 		if node_owner:
-			#self._wake_owner(node_owner)
 			var cb := funcref(self, "_wake_owner")
 			AsyncLoader.call_throttled(cb, [node_owner])
 
@@ -59,7 +59,6 @@ func _run_sleeper_thread(_arg : int) -> void:
 		node_owner = _to_sleep.pop_front()
 		_to_sleep_mutex.unlock()
 		if node_owner:
-			#self._sleep_owner(node_owner)
 			var cb := funcref(self, "_sleep_owner")
 			AsyncLoader.call_throttled(cb, [node_owner])
 
@@ -94,10 +93,7 @@ func _wake_owner(node_owner : Node) -> void:
 	if node_owner == null:
 		return
 
-	if not Global._sleeping_nodes.has(node_owner.name):
-		Global._sleeping_nodes[node_owner.name] = []
-
-	var entries = Global._sleeping_nodes[node_owner.name]
+	var entries = _get_sleeping_children_cb.call_func(node_owner)
 	while not entries.empty():
 		var entry = entries.pop_back()
 		var node_parent = entry["node_parent"]
@@ -119,7 +115,7 @@ func sleep_child_nodes(current_tile : Node) -> void:
 func wake_child_nodes(next_tile : Node) -> void:
 	# Wake up the on screen nodes
 	if _wake_child_cb:
-		var entries = Global._sleeping_nodes[next_tile.name]
+		var entries = _get_sleeping_children_cb.call_func(next_tile)
 		while not entries.empty():
 			var entry = entries.pop_back()
 			var node_parent = entry["node_parent"]
