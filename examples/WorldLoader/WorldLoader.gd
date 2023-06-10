@@ -21,7 +21,6 @@ func _init() -> void:
 
 func _ready() -> void:
 	AsyncLoader._scene_sleeper._wake_child_cb = funcref(self, "_on_wake_child_nodes_cb")
-	AsyncLoader._scene_sleeper._sleep_child_cb = funcref(self, "_on_sleep_child_nodes_cb")
 	AsyncLoader._scene_sleeper._changed_tile_cb = funcref(self, "_on_changed_tile_cb")
 	AsyncLoader._scene_sleeper._xxx_wake_cb = funcref(self, "_on_wake_child_cb")
 	AsyncLoader._scene_sleeper._xxx_sleep_cb = funcref(self, "_on_sleep_child_cb")
@@ -133,26 +132,17 @@ func _on_wake_child_nodes_cb(node_parent : Node, node : Node) -> void:
 	node_parent.add_child(node)
 	print("!!! Waking: %s" % [node.name])
 
-# Sleep child directly from instanced scene
+# Sleep child
 func _on_sleep_child_cb(node : Node, node_parent : Node, node_owner : Node, is_to_be_removed : bool) -> void:
+	var in_tree := node.is_inside_tree()
 	if is_to_be_removed:
 		node_parent.remove_child(node)
-	#print("! sleeping %s, %s, %s, %s" % [node, node_parent, node.get_parent(), is_to_be_removed])
+
 	_get_sleeping_children_cb(node_owner).append({
 		"node_parent" : node_parent,
 		"node" : node
 	})
-	print("- sleeping %s, %s" % [node, node.is_inside_tree()])
-
-# Sleep child that is in the scene tree
-func _on_sleep_child_nodes_cb(node : Node) -> void:
-	var node_parent = node.get_parent()
-	node_parent.remove_child(node)
-	_get_sleeping_children_cb(Global._player_tile).append({
-		"node_parent" : node_parent,
-		"node" : node
-	})
-	print("!!! Sleeping: %s, %s" % [node.name, node.is_inside_tree()])
+	print("- sleeping %s, %s" % [node, in_tree])
 
 func _on_changed_tile_cb(next_player_tile : Node) -> void:
 	Global._player_tile = next_player_tile

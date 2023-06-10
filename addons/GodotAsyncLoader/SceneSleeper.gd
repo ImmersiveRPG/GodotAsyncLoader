@@ -14,7 +14,6 @@ var _to_sleep_child_mutex := Mutex.new()
 var _to_wake_mutex := Mutex.new()
 
 var _wake_child_cb : FuncRef = null
-var _sleep_child_cb : FuncRef = null
 var _changed_tile_cb : FuncRef = null
 var _xxx_sleep_cb : FuncRef = null
 var _xxx_wake_cb : FuncRef = null
@@ -60,7 +59,7 @@ func _run_sleeper_thread(_arg : int) -> void:
 		_to_sleep_mutex.unlock()
 		if node_owner:
 			var cb := funcref(self, "_sleep_owner")
-			AsyncLoader.call_throttled(cb, [node_owner])
+			AsyncLoader.call_throttled(cb, [node_owner, false])
 
 		_to_sleep_child_mutex.lock()
 		var entry = _to_sleep_child.pop_front()
@@ -73,20 +72,27 @@ func _run_sleeper_thread(_arg : int) -> void:
 			AsyncLoader.call_throttled(_xxx_sleep_cb, [node, node_parent, node_owner, false])
 		OS.delay_msec(config._thread_sleep_msec)
 
-func _sleep_owner(node_owner : Node) -> void:
+func _sleep_owner(node_owner : Node, is_can_sleep := true) -> void:
 	#print("! sleep %s" % [node_owner])
 	if node_owner == null:
 		return
 
-	var inverse_groups = AsyncLoader._scene_adder.GROUPS.duplicate()
-	inverse_groups.invert()
-	for group in inverse_groups:
+	var to_sleep_groups : Array
+	if is_can_sleep:
+		to_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS.duplicate()
+	else:
+		to_sleep_groups = AsyncLoader._scene_adder.GROUPS.duplicate()
+	to_sleep_groups.invert()
+
+	for group in to_sleep_groups:
 		var group_nodes = Global.recursively_get_all_children_in_group(node_owner, group)
 		group_nodes.invert()
 		for node in group_nodes:
 			var node_parent = node.get_parent()
 			AsyncLoader.call_throttled(_xxx_sleep_cb, [node, node_parent, node_owner, true])
 
+func sleep_child_nodes(node_owner : Node, is_can_sleep := true) -> void:
+	_sleep_owner(node_owner, is_can_sleep)
 
 func _wake_owner(node_owner : Node) -> void:
 	#print("! wake %s" % [node_owner])
@@ -99,18 +105,6 @@ func _wake_owner(node_owner : Node) -> void:
 		var node_parent = entry["node_parent"]
 		var node = entry["node"]
 		AsyncLoader.call_throttled(_xxx_wake_cb, [node, node_parent, node_owner])
-
-func sleep_child_nodes(current_tile : Node) -> void:
-	# Put all the off screen nodes to sleep
-	if _sleep_child_cb and current_tile:
-		var can_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS.duplicate()
-		can_sleep_groups.invert()
-
-		for group in can_sleep_groups:
-			var group_nodes = Global.recursively_get_all_children_in_group(current_tile, group)
-			group_nodes.invert()
-			for node in group_nodes:
-				AsyncLoader.call_throttled(_sleep_child_cb, [node])
 
 func wake_child_nodes(next_tile : Node) -> void:
 	# Wake up the on screen nodes
