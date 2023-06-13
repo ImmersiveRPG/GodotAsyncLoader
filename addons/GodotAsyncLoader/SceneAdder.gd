@@ -11,11 +11,11 @@ var _to_add_mutex := Mutex.new()
 var _to_adds := {}
 
 var GROUPS := []
-var CAN_SLEEP_GROUPS := []
+var GROUP_SLEEP_DISTANCES := []
 
-func set_groups(groups : Array, can_sleep_groups : Array) -> void:
+func set_groups(groups : Array, group_sleep_distances : Array) -> void:
 	GROUPS = groups
-	CAN_SLEEP_GROUPS = can_sleep_groups
+	GROUP_SLEEP_DISTANCES = group_sleep_distances
 
 	for group in GROUPS:
 		_to_adds[group] = []
@@ -195,8 +195,9 @@ func _check_for_new_scenes() -> bool:
 			var is_sleeping := false
 			if is_sleeping_children:
 				var groups = child.get_groups()
-				for g in CAN_SLEEP_GROUPS:
-					if groups.has(g):
+				for sleep_dis in GROUP_SLEEP_DISTANCES:
+					var name = sleep_dis["name"]
+					if groups.has(name):
 						is_sleeping = true
 
 			# Get data

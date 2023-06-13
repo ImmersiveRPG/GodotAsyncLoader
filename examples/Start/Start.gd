@@ -8,6 +8,7 @@ extends Control
 # . Make throttler configurable
 # . Add distance zones for waking/sleeping
 # . Make it save sleeping nodes in tscn files in FS
+# . Get rid of _world_offset to simplify code
 
 const GROUPS := [
 	"terrain",
@@ -19,14 +20,14 @@ const GROUPS := [
 	"etc",
 ]
 
-var CAN_SLEEP_GROUPS := [
-#	"terrain",
-#	"structure",
-	"furniture",
-	"plant",
-	"item",
-	"npc",
-	"etc",
+var GROUP_SLEEP_DISTANCES := [
+	#{ "terrain" : 99 },
+	#{ "structure" : 99 },
+	{ "name" : "furniture", "distance" : 2 },
+	{ "name" : "plant", "distance" : 2 },
+	{ "name" : "item", "distance" : 1 },
+	{ "name" : "npc", "distance" : 1 },
+	{ "name" : "etc", "distance" : 1 },
 ]
 
 func _ready() -> void:
@@ -42,7 +43,7 @@ func _ready() -> void:
 	err = AsyncLoader.connect("scene_changed", Global, "_on_scene_changed")
 	assert(err == OK)
 
-	AsyncLoader.start(GROUPS, CAN_SLEEP_GROUPS)
+	AsyncLoader.start(GROUPS, GROUP_SLEEP_DISTANCES)
 
 func _on_StartAsyncButton_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")

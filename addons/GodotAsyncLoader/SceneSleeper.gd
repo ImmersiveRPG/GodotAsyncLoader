@@ -76,14 +76,16 @@ func _sleep_owner(node_owner : Node, is_can_sleep := true) -> void:
 	if node_owner == null:
 		return
 
-	var to_sleep_groups : Array
+	var group_sleep_distances : Array
 	if is_can_sleep:
-		to_sleep_groups = AsyncLoader._scene_adder.CAN_SLEEP_GROUPS.duplicate()
+		group_sleep_distances = AsyncLoader._scene_adder.GROUP_SLEEP_DISTANCES.duplicate()
 	else:
-		to_sleep_groups = AsyncLoader._scene_adder.GROUPS.duplicate()
-	to_sleep_groups.invert()
+		group_sleep_distances = AsyncLoader._scene_adder.GROUPS.duplicate()
+	group_sleep_distances.invert()
 
-	for group in to_sleep_groups:
+	for entry in group_sleep_distances:
+		var group = entry["name"]
+		var distance = entry["distance"]
 		var group_nodes = AsyncLoaderHelpers.recursively_get_all_children_in_group(node_owner, group)
 		group_nodes.invert()
 		for node in group_nodes:
