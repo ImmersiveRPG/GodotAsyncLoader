@@ -54,16 +54,13 @@ func _get_sleeping_children_cb(node : Node) -> Array:
 	return _sleeping_nodes[node.name]
 
 func _on_load_checker_timer_timeout() -> void:
-	self._load_tiles_around_player()
-
-func _load_tiles_around_player() -> void:
 	# Load around player
 	if Global._player:
 		var org = Global._player.transform.origin
 		var center_tile := self._position_to_tile_xz(org) - Global._world_offset
 		if center_tile != _prev_player_center_tile:
 			_prev_player_center_tile = center_tile
-			self._load_tiles_around(center_tile)
+			self._load_tiles_around(center_tile, 6.0) # FIXME: This should not be hard coded
 			self._sleep_and_wake_nodes(center_tile)
 
 	# Let the player move if the tiles under the player are loaded
@@ -72,11 +69,11 @@ func _load_tiles_around_player() -> void:
 		if is_player_tile_loaded:
 			Global._is_ready_for_movement = true
 
-func _load_tiles_around(center_tile : Vector3) -> void:
+func _load_tiles_around(center_tile : Vector3, distance : float) -> void:
 	# Get tile coordinates for X distance around the center
 	var to_load := [center_tile]
 	for entry in to_load.duplicate():
-		to_load = self._get_cells_around(to_load, entry)
+		to_load = self._get_cells_around(to_load, entry, distance)
 
 	# Filter out all invalid tiles
 	for entry in to_load.duplicate():
@@ -136,11 +133,32 @@ func _sleep_and_wake_nodes(center_tile : Vector3) -> void:
 	if next_player_tile == null:
 		return
 
-	# Wake up and sleep child nodes
-	AsyncLoader.wake_child_nodes(next_player_tile)
-	AsyncLoader.sleep_child_nodes(Global._player_tile)
+	# Wake the current tile
+	AsyncLoader.wake_child_nodes(next_player_tile, 0.0)
+
+	# Get all the children sorted by distance
+	var children := []
+	for tile in _tile.get_children():
+		if tile != next_player_tile:
+			var distance := round(next_player_tile.global_transform.origin.distance_to(tile.global_transform.origin)) / Global.TILE_WIDTH
+			children.append([tile, distance])
+	children.sort_custom(SortByDistance, "sort_distance")
+
+	# Wake or sleep depending on distance
+	#print("*** next: ", next_player_tile.name)
+	for entry in children:
+		var tile = entry[0]
+		var distance = entry[1]
+		#print("    tile: ", tile.name, " distance: ", distance)
+		AsyncLoader.wake_or_sleep_child_nodes(tile, distance)
+
 	AsyncLoader.change_tile(next_player_tile)
 #	#print("!! Player(%s) is on Tile (%s)" % [body.name, next_player_tile.name])
+
+class SortByDistance:
+	static func sort_distance(a, b):
+		return a[1] < b[1]
+
 
 func _position_to_tile_xz(org : Vector3) -> Vector3:
 	var half := Global.TILE_WIDTH / 2.0
@@ -149,18 +167,12 @@ func _position_to_tile_xz(org : Vector3) -> Vector3:
 
 	return Vector3(x, 0, z)
 
-func _get_cells_around(to_load : Array, center_tile : Vector3) -> Array:
-	var data := [
-		center_tile, # Center
-		center_tile + Vector3(-1.0, 0.0, 0.0), # Right
-		center_tile + Vector3(1.0, 0.0, 0.0), # Left
-		center_tile + Vector3(0.0, 0.0, 1.0), # Up
-		center_tile + Vector3(0.0, 0.0, -1.0), # Down
-		center_tile + Vector3(-1.0, 0.0, 1.0), # Up Right
-		center_tile + Vector3(1.0, 0.0, 1.0), # Up Left
-		center_tile + Vector3(-1.0, 0.0, -1.0), # Down Right
-		center_tile + Vector3(1.0, 0.0, -1.0), # Down Left
-	]
+func _get_cells_around(to_load : Array, center_tile : Vector3, distance : float) -> Array:
+	var data := []
+	for x in range(-distance, distance + 1.0):
+		for z in range(-distance, distance + 1.0):
+			data.append(center_tile + Vector3(x, 0.0, z))
+
 	for entry in data:
 		if not to_load.has(entry):
 			to_load.append(entry)

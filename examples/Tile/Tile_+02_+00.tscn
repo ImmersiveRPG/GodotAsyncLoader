@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://examples/GroundWhite/GroundWhite.tscn" type="PackedScene" id=1]
 [ext_resource path="res://examples/GroundBlack/GroundBlack.tscn" type="PackedScene" id=2]
 [ext_resource path="res://examples/Structures/House/House.tscn" type="PackedScene" id=3]
 [ext_resource path="res://examples/Items/Orange/Orange.tscn" type="PackedScene" id=4]
+[ext_resource path="res://examples/Plants/Cactus/Cactus.tscn" type="PackedScene" id=5]
+[ext_resource path="res://examples/Furniture/Table/Table.tscn" type="PackedScene" id=6]
 
 [node name="Tile_+02_+00" type="Spatial" groups=["tile"]]
 
@@ -30,3 +32,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 72.1002, 0, 35.7318 )
 
 [node name="Orange3" parent="." instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 41.771, 0, -75.301 )
+
+[node name="Cactus" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -69.4032, 0, 90.2556 )
+
+[node name="Table" parent="." instance=ExtResource( 6 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 58.5202, 0, -105.959 )

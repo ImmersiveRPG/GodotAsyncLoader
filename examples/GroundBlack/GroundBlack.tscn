@@ -9,7 +9,7 @@ extents = Vector3( 50, 50, 50 )
 material = ExtResource( 1 )
 size = Vector3( 100, 100, 100 )
 
-[node name="GroundBlack" type="StaticBody" groups=["structure"]]
+[node name="GroundBlack" type="StaticBody" groups=["terrain"]]
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -50, 0 )

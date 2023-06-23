@@ -56,3 +56,7 @@ func _on_add_orange_sync_pressed() -> void:
 	target.add_child(orange)
 	orange.transform.origin = pos
 
+
+
+func _on_ButtonTogglePlayer_pressed() -> void:
+	Global.is_player_moving = not Global.is_player_moving

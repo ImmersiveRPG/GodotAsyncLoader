@@ -21,11 +21,11 @@ const GROUPS := [
 ]
 
 var GROUP_SLEEP_DISTANCES := [
-	#{ "terrain" : 99 },
-	#{ "structure" : 99 },
-	{ "name" : "furniture", "distance" : 2 },
-	{ "name" : "plant", "distance" : 2 },
-	{ "name" : "item", "distance" : 1 },
+	#{ "name" : "terrain", "distance" : 6 },
+	{ "name" : "structure", "distance" : 5 },
+	{ "name" : "furniture", "distance" : 4 },
+	{ "name" : "plant", "distance" : 3 },
+	{ "name" : "item", "distance" : 2 },
 	{ "name" : "npc", "distance" : 1 },
 	{ "name" : "etc", "distance" : 1 },
 ]

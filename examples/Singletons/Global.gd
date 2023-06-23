@@ -6,13 +6,14 @@ extends Node
 
 
 const GRAVITY := -40.0
-const WORLD_TILES_WIDE := 4
+const WORLD_TILES_WIDE := 5
 const TILE_WIDTH := 200
 
 var _is_ready_for_movement := false
 var _world_offset := Vector3(0, 0, 0)
 var _player = null
 var _player_tile = null
+var is_player_moving := true
 
 var _fps_timer : Timer
 

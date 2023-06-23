@@ -168,11 +168,14 @@ func _assert_is_setup() -> bool:
 		push_error("Call AsyncLoader.start to initialize the library first")
 	return config._is_setup
 
-func sleep_child_nodes(current_tile : Node) -> void:
-	_scene_sleeper.sleep_child_nodes(current_tile)
+func sleep_child_nodes(current_tile : Node, distance : float) -> void:
+	_scene_sleeper.sleep_child_nodes(current_tile, distance)
 
-func wake_child_nodes(next_tile : Node) -> void:
-	_scene_sleeper.wake_child_nodes(next_tile)
+func wake_child_nodes(next_tile : Node, distance : float) -> void:
+	_scene_sleeper.wake_child_nodes(next_tile, distance)
+
+func wake_or_sleep_child_nodes(next_tile : Node, distance : float) -> void:
+	_scene_sleeper.wake_or_sleep_child_nodes(next_tile, distance)
 
 func change_tile(next_tile : Node) -> void:
 	_scene_sleeper.change_tile(next_tile)

@@ -10,7 +10,7 @@ script = ExtResource( 9 )
 [node name="WorldLoader" parent="." instance=ExtResource( 2 )]
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 473.044, 332 )
+transform = Transform( 1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 864.885, 332 )
 far = 2000.0
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
@@ -38,7 +38,16 @@ margin_bottom = 84.0
 text = "Add orange sync"
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -600, 0, 0 )
+
+[node name="ButtonTogglePlayer" type="Button" parent="."]
+margin_left = 42.0
+margin_top = 92.0
+margin_right = 166.0
+margin_bottom = 124.0
+text = "Toggle Movement"
 
 [connection signal="pressed" from="ButtonAddOrangeAsyncWithCB" to="." method="_on_add_orange_async_with_cb_pressed"]
 [connection signal="pressed" from="ButtonAddOrangeAsync" to="." method="_on_add_orange_async_pressed"]
 [connection signal="pressed" from="ButtonAddOrangeSync" to="." method="_on_add_orange_sync_pressed"]
+[connection signal="pressed" from="ButtonTogglePlayer" to="." method="_on_ButtonTogglePlayer_pressed"]

@@ -14,8 +14,10 @@ const MAX_VELOCITY := 60.0
 var _velocity := Vector3.ZERO
 var _snap_vector := Vector3.ZERO
 var _destination := Vector3.INF
+var _start_position := Vector3.INF
 
 func _ready() -> void:
+	_start_position = self.global_transform.origin
 	_on_TimerChangeDestination_timeout()
 
 func _physics_process(delta : float) -> void:
@@ -50,7 +52,7 @@ func _physics_process(delta : float) -> void:
 
 func _on_TimerChangeDestination_timeout() -> void:
 	var r := 300.0
-	_destination = Vector3(
+	_destination = _start_position + Vector3(
 		rand_range(-r, r),
 		rand_range(0.0, 0.0),
 		rand_range(-r, r)

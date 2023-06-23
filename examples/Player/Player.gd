@@ -13,8 +13,8 @@ const MAX_VELOCITY := 100.0
 var _velocity := Vector3.ZERO
 var _snap_vector := Vector3.ZERO
 var _destination := Vector3.INF
-const _destination_a := Vector3(-600, 0, 0)
-const _destination_b := Vector3(600, 0, 0)
+const _destination_a := Vector3(-Global.WORLD_TILES_WIDE * Global.TILE_WIDTH, 0, 0)
+const _destination_b := Vector3(Global.WORLD_TILES_WIDE * Global.TILE_WIDTH, 0, 0)
 
 func _init() -> void:
 	Global._player = self
@@ -25,7 +25,7 @@ func _ready() -> void:
 func _physics_process(delta : float) -> void:
 	if not Global._is_ready_for_movement: return
 
-	# It at destination, switch to next destination
+	# If at destination, switch to next destination
 	if self.global_transform.origin.distance_to(_destination) < 3.0:
 		if _destination_a == _destination:
 			_destination = _destination_b
@@ -37,7 +37,7 @@ func _physics_process(delta : float) -> void:
 	if _destination != Vector3.INF:
 		input_vector = (_destination - self.global_transform.origin).normalized()
 
-	var is_moving := input_vector != Vector3.ZERO
+	var is_moving := Global.is_player_moving and input_vector != Vector3.ZERO
 
 	self.rotation.y = lerp_angle(self.rotation.y, atan2(-input_vector.x, -input_vector.z), ROTATION_SPEED * delta)
 

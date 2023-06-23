@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://examples/GroundBlack/GroundBlack.tscn" type="PackedScene" id=1]
+[ext_resource path="res://examples/GroundWhite/GroundWhite.tscn" type="PackedScene" id=2]
+[ext_resource path="res://examples/Plants/Cactus/Cactus.tscn" type="PackedScene" id=4]
+
+[node name="Tile_-04_+00" type="Spatial" groups=["tile"]]
+
+[node name="GroundBlack" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
+
+[node name="GroundBlack2" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50 )
+
+[node name="GroundWhite" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 50 )
+
+[node name="GroundWhite2" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
+
+[node name="Cactus" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -79.2954, 0, -89.3449 )

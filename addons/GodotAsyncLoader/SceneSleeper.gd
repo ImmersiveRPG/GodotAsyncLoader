@@ -51,14 +51,14 @@ func _run_sleeper_thread(_arg : int) -> void:
 		_to_wake_mutex.unlock()
 		if node_owner:
 			var cb := funcref(self, "_wake_owner")
-			AsyncLoader.call_throttled(cb, [node_owner])
+			AsyncLoader.call_throttled(cb, [node_owner, 1.0])
 
 		_to_sleep_mutex.lock()
 		node_owner = _to_sleep.pop_front()
 		_to_sleep_mutex.unlock()
 		if node_owner:
 			var cb := funcref(self, "_sleep_owner")
-			AsyncLoader.call_throttled(cb, [node_owner, false])
+			AsyncLoader.call_throttled(cb, [node_owner, 1.0, false])
 
 		_to_sleep_child_mutex.lock()
 		var entry = _to_sleep_child.pop_front()
@@ -71,7 +71,7 @@ func _run_sleeper_thread(_arg : int) -> void:
 			AsyncLoader.call_throttled(_sleep_cb, [node, node_parent, node_owner, false])
 		OS.delay_msec(config._thread_sleep_msec)
 
-func _sleep_owner(node_owner : Node, is_can_sleep := true) -> void:
+func _sleep_owner(node_owner : Node, distance : float, is_can_sleep := true) -> void:
 	#print("! sleep %s" % [node_owner])
 	if node_owner == null:
 		return
@@ -83,32 +83,56 @@ func _sleep_owner(node_owner : Node, is_can_sleep := true) -> void:
 		group_sleep_distances = AsyncLoader._scene_adder.GROUPS.duplicate()
 	group_sleep_distances.invert()
 
-	for entry in group_sleep_distances:
-		var group = entry["name"]
-		var distance = entry["distance"]
-		var group_nodes = AsyncLoaderHelpers.recursively_get_all_children_in_group(node_owner, group)
-		group_nodes.invert()
-		for node in group_nodes:
-			var node_parent = node.get_parent()
-			AsyncLoader.call_throttled(_sleep_cb, [node, node_parent, node_owner, true])
+	for info in group_sleep_distances:
+		var group = info["name"]
+		var dis = info["distance"]
+		if distance >= dis:
+			var group_nodes = AsyncLoaderHelpers.recursively_get_all_children_in_group(node_owner, group)
+			group_nodes.invert()
+			for node in group_nodes:
+				var node_parent = node.get_parent()
+				AsyncLoader.call_throttled(_sleep_cb, [node, node_parent, node_owner, true])
 
-func sleep_child_nodes(node_owner : Node, is_can_sleep := true) -> void:
-	_sleep_owner(node_owner, is_can_sleep)
 
-func _wake_owner(node_owner : Node) -> void:
+func sleep_child_nodes(node_owner : Node, distance : float, is_can_sleep := true) -> void:
+	var cb := funcref(self, "_sleep_owner")
+	AsyncLoader.call_throttled(cb, [node_owner, distance, is_can_sleep])
+
+func _wake_owner(node_owner : Node, distance : float) -> void:
 	#print("! wake %s" % [node_owner])
 	if node_owner == null:
 		return
 
 	var entries = _get_sleeping_children_cb.call_func(node_owner)
-	while not entries.empty():
-		var entry = entries.pop_back()
+	for entry in entries.duplicate():
 		var node_parent = entry["node_parent"]
 		var node = entry["node"]
-		AsyncLoader.call_throttled(_wake_cb, [node, node_parent, node_owner])
 
-func wake_child_nodes(node_owner : Node) -> void:
-	_wake_owner(node_owner)
+		var name = null
+		var distance_threshold := 0.0
+		for info in AsyncLoader._scene_adder.GROUP_SLEEP_DISTANCES:
+			if node.is_in_group(info["name"]):
+				name = info["name"]
+				distance_threshold = info["distance"]
+				break
+
+		#print("    threshold: ", distance_threshold)
+		if name != null and distance <= distance_threshold:
+			entries.erase(entry)
+
+			AsyncLoader.call_throttled(_wake_cb, [node, node_parent, node_owner])
+
+
+func wake_child_nodes(node_owner : Node, distance : float) -> void:
+	var cb := funcref(self, "_wake_owner")
+	AsyncLoader.call_throttled(cb, [node_owner, distance])
+
+func wake_or_sleep_child_nodes(node_owner : Node, distance : float, is_can_sleep := true) -> void:
+	# Wake children
+	self.wake_child_nodes(node_owner, distance)
+
+	# Sleep children
+	self.sleep_child_nodes(node_owner, distance)
 
 func change_tile(next_tile : Node) -> void:
 	# Done changing tile

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://examples/GroundBlack/GroundBlack.tscn" type="PackedScene" id=1]
 [ext_resource path="res://examples/GroundWhite/GroundWhite.tscn" type="PackedScene" id=2]
@@ -6,8 +6,9 @@
 [ext_resource path="res://examples/Items/Orange/Orange.tscn" type="PackedScene" id=4]
 [ext_resource path="res://examples/Furniture/Table/Table.tscn" type="PackedScene" id=5]
 [ext_resource path="res://examples/Plants/Cactus/Cactus.tscn" type="PackedScene" id=6]
+[ext_resource path="res://examples/NPC/NPC.tscn" type="PackedScene" id=7]
 
-[node name="Tile_+03_+00" type="Spatial" groups=["tile"]]
+[node name="Tile_+04_+00" type="Spatial" groups=["tile"]]
 
 [node name="GroundBlack" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -50 )
@@ -24,17 +25,17 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -50 )
 [node name="Barn" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 33, 50, -91 )
 
-[node name="Orange5" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -74.4509, 31.1562, -90.412 )
+[node name="Orange" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.52389, 72.44 )
 
-[node name="Orange6" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -74.4509, 31.1562, -77.1997 )
+[node name="Orange2" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -47.3139, 4.52389, 45.6374 )
 
-[node name="Orange7" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -60.5809, 31.1562, -77.1997 )
+[node name="Orange3" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 55.9497, 4.52389, 14.2652 )
 
-[node name="Orange8" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -60.5809, 31.1562, -88.1574 )
+[node name="Orange4" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -77.9386, 4.52389, -24.6681 )
 
 [node name="Table" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -65.0051, 0, -86.3019 )
@@ -42,14 +43,4 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -65.0051, 0, -86.3019 )
 [node name="Cactus" parent="." instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -66.4233, 0, 89.0091 )
 
-[node name="Cactus2" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -33.4233, 0, 89.0091 )
-
-[node name="Cactus3" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4233, 0, 89.0091 )
-
-[node name="Cactus4" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 28.5767, 0, 89.0091 )
-
-[node name="Cactus5" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 59.5767, 0, 89.0091 )
+[node name="NPC" parent="." instance=ExtResource( 7 )]
