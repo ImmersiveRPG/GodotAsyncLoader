@@ -10,25 +10,6 @@ extends Control
 # . Make it save sleeping nodes in tscn files in FS
 # . Get rid of _world_offset to simplify code
 
-const GROUPS := [
-	"terrain",
-	"structure",
-	"furniture",
-	"plant",
-	"item",
-	"npc",
-	"etc",
-]
-
-var GROUP_SLEEP_DISTANCES := [
-	#{ "name" : "terrain", "distance" : 6 },
-	{ "name" : "structure", "distance" : 5 },
-	{ "name" : "furniture", "distance" : 4 },
-	{ "name" : "plant", "distance" : 3 },
-	{ "name" : "item", "distance" : 2 },
-	{ "name" : "npc", "distance" : 1 },
-	{ "name" : "etc", "distance" : 1 },
-]
 
 func _ready() -> void:
 	var err = AsyncLoader.connect("loading_started", Global, "_on_loading_started")
@@ -43,7 +24,7 @@ func _ready() -> void:
 	err = AsyncLoader.connect("scene_changed", Global, "_on_scene_changed")
 	assert(err == OK)
 
-	AsyncLoader.start(GROUPS, GROUP_SLEEP_DISTANCES)
+	AsyncLoader.start(Global.GROUPS, Global.GROUP_SLEEP_DISTANCES)
 
 func _on_StartAsyncButton_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")
