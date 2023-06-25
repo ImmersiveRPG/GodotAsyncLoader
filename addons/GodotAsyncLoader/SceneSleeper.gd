@@ -76,14 +76,14 @@ func _sleep_owner(node_owner : Node, distance : float, is_can_sleep := true) -> 
 	if node_owner == null:
 		return
 
-	var group_sleep_distances : Array
+	var load_groups : Array
 	if is_can_sleep:
-		group_sleep_distances = AsyncLoader._scene_adder.GROUP_SLEEP_DISTANCES.duplicate()
+		load_groups = AsyncLoader._scene_adder.LOAD_GROUPS.duplicate()
 	else:
-		group_sleep_distances = AsyncLoader._scene_adder.GROUPS.duplicate()
-	group_sleep_distances.invert()
+		load_groups = AsyncLoader._scene_adder.GROUPS.duplicate()
+	load_groups.invert()
 
-	for info in group_sleep_distances:
+	for info in load_groups:
 		var group = info["name"]
 		var dis = info["distance"]
 		if distance >= dis:
@@ -110,7 +110,7 @@ func _wake_owner(node_owner : Node, distance : float) -> void:
 
 		var name = null
 		var distance_threshold := 0.0
-		for info in AsyncLoader._scene_adder.GROUP_SLEEP_DISTANCES:
+		for info in AsyncLoader._scene_adder.LOAD_GROUPS:
 			if node.is_in_group(info["name"]):
 				name = info["name"]
 				distance_threshold = info["distance"]

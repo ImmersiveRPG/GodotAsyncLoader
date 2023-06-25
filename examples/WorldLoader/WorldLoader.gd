@@ -60,7 +60,7 @@ func _on_load_checker_timer_timeout() -> void:
 		var center_tile := self._position_to_tile_xz(org) - Global._world_offset
 		if center_tile != _prev_player_center_tile:
 			_prev_player_center_tile = center_tile
-			self._load_tiles_around(center_tile, Global.PLAYER_TILE_RANGE)
+			self._load_tiles_around(center_tile, Global.LOAD_DISTANCE)
 			self._sleep_and_wake_nodes(center_tile)
 
 	# Let the player move if the tiles under the player are loaded

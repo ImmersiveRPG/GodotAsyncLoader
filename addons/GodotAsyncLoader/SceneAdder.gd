@@ -10,16 +10,16 @@ var _to_add := []
 var _to_add_mutex := Mutex.new()
 var _to_adds := {}
 
-var GROUP_SLEEP_DISTANCES := []
+var LOAD_GROUPS := []
 
 func get_group_names() -> Array:
 	var group_names := []
-	for item in GROUP_SLEEP_DISTANCES:
+	for item in LOAD_GROUPS:
 		group_names.append(item["name"])
 	return group_names
 
-func set_groups(group_sleep_distances : Array) -> void:
-	GROUP_SLEEP_DISTANCES = group_sleep_distances
+func set_groups(load_groups : Array) -> void:
+	LOAD_GROUPS = load_groups
 
 	var GROUPS : Array = self.get_group_names()
 	for group in GROUPS:
@@ -206,7 +206,7 @@ func _check_for_new_scenes() -> bool:
 			var is_sleeping := false
 			if is_sleeping_children:
 				var groups = child.get_groups()
-				for sleep_dis in GROUP_SLEEP_DISTANCES:
+				for sleep_dis in LOAD_GROUPS:
 					var name = sleep_dis["name"]
 					if groups.has(name):
 						is_sleeping = true

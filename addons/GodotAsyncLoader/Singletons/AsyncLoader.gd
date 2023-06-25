@@ -20,10 +20,10 @@ signal scene_changed
 var _was_queue_empty := true
 var _total_queue_count := 0
 
-func start(group_sleep_distances : Array) -> void:
+func start(load_groups : Array) -> void:
 	yield(get_tree(), "idle_frame")
 	var config = self.get_node_or_null("/root/AsyncLoaderConfig")
-	_scene_adder.set_groups(group_sleep_distances)
+	_scene_adder.set_groups(load_groups)
 
 	# Start the adder thread
 	_scene_adder._thread = Thread.new()

@@ -9,8 +9,8 @@ const GRAVITY := -40.0
 const WORLD_TILES_WIDE := 5
 const TILE_WIDTH := 200
 
-const PLAYER_TILE_RANGE := 6.0
-const GROUP_SLEEP_DISTANCES := [
+const LOAD_DISTANCE := 6.0
+const LOAD_GROUPS := [
 	{ "name" : "terrain", "distance" : 99 },
 	{ "name" : "structure", "distance" : 5 },
 	{ "name" : "furniture", "distance" : 4 },
