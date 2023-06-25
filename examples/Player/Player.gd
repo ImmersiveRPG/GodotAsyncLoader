@@ -52,7 +52,7 @@ func _physics_process(delta : float) -> void:
 		_velocity.z = 0.0
 
 	# Gravity
-	_velocity.y = clamp(_velocity.y + Global.GRAVITY * delta, Global.GRAVITY, JUMP_IMPULSE)
+	#_velocity.y = clamp(_velocity.y + Global.GRAVITY * delta, Global.GRAVITY, JUMP_IMPULSE)
 
 	# Snap to floor plane if close enough
 	_snap_vector = -get_floor_normal() if is_on_floor() else Vector3.DOWN
