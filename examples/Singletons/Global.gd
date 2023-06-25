@@ -8,19 +8,10 @@ extends Node
 const GRAVITY := -40.0
 const WORLD_TILES_WIDE := 5
 const TILE_WIDTH := 200
-const PLAYER_TILE_RANGE := 6.0
-const GROUPS := [
-	"terrain",
-	"structure",
-	"furniture",
-	"plant",
-	"item",
-	"npc",
-	"etc",
-]
 
+const PLAYER_TILE_RANGE := 6.0
 const GROUP_SLEEP_DISTANCES := [
-	#{ "name" : "terrain", "distance" : 6 },
+	{ "name" : "terrain", "distance" : 99 },
 	{ "name" : "structure", "distance" : 5 },
 	{ "name" : "furniture", "distance" : 4 },
 	{ "name" : "plant", "distance" : 3 },

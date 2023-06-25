@@ -24,7 +24,7 @@ func _ready() -> void:
 	err = AsyncLoader.connect("scene_changed", Global, "_on_scene_changed")
 	assert(err == OK)
 
-	AsyncLoader.start(Global.GROUPS, Global.GROUP_SLEEP_DISTANCES)
+	AsyncLoader.start(Global.GROUP_SLEEP_DISTANCES)
 
 func _on_StartAsyncButton_pressed() -> void:
 	AsyncLoader.change_scene("res://examples/World/World.tscn", "res://examples/Loading/Loading.tscn")

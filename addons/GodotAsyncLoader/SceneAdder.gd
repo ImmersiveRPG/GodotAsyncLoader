@@ -10,13 +10,18 @@ var _to_add := []
 var _to_add_mutex := Mutex.new()
 var _to_adds := {}
 
-var GROUPS := []
 var GROUP_SLEEP_DISTANCES := []
 
-func set_groups(groups : Array, group_sleep_distances : Array) -> void:
-	GROUPS = groups
+func get_group_names() -> Array:
+	var group_names := []
+	for item in GROUP_SLEEP_DISTANCES:
+		group_names.append(item["name"])
+	return group_names
+
+func set_groups(group_sleep_distances : Array) -> void:
 	GROUP_SLEEP_DISTANCES = group_sleep_distances
 
+	var GROUPS : Array = self.get_group_names()
 	for group in GROUPS:
 		_to_adds[group] = []
 
@@ -37,6 +42,7 @@ func add_scene(instance : Node, added_cb : FuncRef, data : Dictionary, has_prior
 	_to_add_mutex.unlock()
 
 func _can_add(group : String) -> bool:
+	var GROUPS : Array = self.get_group_names()
 	var i := GROUPS.find(group)
 
 	match i:
@@ -55,6 +61,7 @@ func _can_add(group : String) -> bool:
 	return false
 
 func _get_queue_count() -> int:
+	var GROUPS : Array = self.get_group_names()
 	var count := 0
 	for group in GROUPS:
 		count += _to_adds[group].size()
@@ -65,6 +72,7 @@ func _run_adder_thread(_arg : int) -> void:
 	_is_running = true
 	var is_reset := false
 
+	var GROUPS : Array = self.get_group_names()
 	while _is_running:
 		is_reset = false
 		self._check_for_new_scenes()
@@ -147,6 +155,7 @@ func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group 
 	#yield(instance, "ready")
 
 func _get_destination_queue_for_instance(instance : Node, has_priority : bool, default_queue = null):
+	var GROUPS : Array = self.get_group_names()
 	if has_priority:
 		return _to_adds[GROUPS[0]]
 
@@ -158,6 +167,8 @@ func _get_destination_queue_for_instance(instance : Node, has_priority : bool, d
 	return default_queue
 
 func _check_for_new_scenes() -> bool:
+	var GROUPS : Array = self.get_group_names()
+
 	_to_add_mutex.lock()
 	var to_add := _to_add.duplicate()
 	_to_add.clear()
