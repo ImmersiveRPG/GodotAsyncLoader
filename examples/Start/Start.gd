@@ -5,8 +5,7 @@
 extends Control
 
 # TODO:
-# . Make throttler configurable
-# . Add distance zones for waking/sleeping
+# . Fix bug with first tile not loading
 # . Make it save sleeping nodes in tscn files in FS
 # . Get rid of _world_offset to simplify code
 
