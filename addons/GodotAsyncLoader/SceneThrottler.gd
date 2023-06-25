@@ -9,12 +9,12 @@ var _to_call_out := []
 var _mutex_out := Mutex.new()
 
 func _start_loop() -> void:
-	var msec_per_frame := int(1000 / 60) # FIXME: This assumes 60 FPS target
-	var budget_threshold := 5  # FIXME: This should be configurable
+	var frame_budget_msec := int(1000 / 60) # FIXME: This assumes 60 FPS target
+	var frame_budget_threshold_msec := 5  # FIXME: This should be configurable
 	var consecutive_no_work_count := 0
 
 	while _is_running:
-		var budget_remaining := msec_per_frame
+		var frame_budget_remaining_msec := frame_budget_msec
 		var is_sleeping := false
 		var call_count := 0
 		while not is_sleeping:
@@ -42,16 +42,16 @@ func _start_loop() -> void:
 
 			var after := Time.get_ticks_msec()
 			var used := after - before
-			budget_remaining -= used
-			#print("Used:%s, budget_remaining:%s" % [used, budget_remaining])
+			frame_budget_remaining_msec -= used
+			#print("Used:%s, frame_budget_remaining_msec:%s" % [used, frame_budget_remaining_msec])
 
 			# Sleep if there is no work to do, or the budget is below the threshold
-			if callable == null or budget_remaining < budget_threshold:
+			if callable == null or frame_budget_remaining_msec < frame_budget_threshold_msec:
 				is_sleeping = true
 				consecutive_no_work_count += 1
 
 #		if call_count > 0:
-#			print("budget_remaining:%s, call_count:%s" % [budget_remaining, call_count])
+#			print("frame_budget_remaining_msec:%s, call_count:%s" % [frame_budget_remaining_msec, call_count])
 
 		# Sleep, and do it longer if we had no work for X consecutive loops
 		var sleep_sec := 0.05 if consecutive_no_work_count > 10 else 0.001
