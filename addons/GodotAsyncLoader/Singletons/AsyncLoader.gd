@@ -204,7 +204,7 @@ func _ready() -> void:
 	self.add_child(_scene_sleeper)
 	self.add_child(_scene_throttler)
 
-	_scene_throttler.start()
+	_scene_throttler.start(config._target_fps, config._throttler_frame_budget_threshold_msec)
 
 func _exit_tree() -> void:
 	# Tell the threads to stop

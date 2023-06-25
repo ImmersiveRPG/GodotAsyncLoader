@@ -8,3 +8,5 @@ extends Node
 var _post_add_sleep_msec := 20
 var _thread_sleep_msec := 20
 var _is_setup := false
+var _target_fps := 60
+var _throttler_frame_budget_threshold_msec := 5

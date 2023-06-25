@@ -8,9 +8,9 @@ var _is_running := false
 var _to_call_out := []
 var _mutex_out := Mutex.new()
 
-func _start_loop() -> void:
-	var frame_budget_msec := int(1000 / 60) # FIXME: This assumes 60 FPS target
-	var frame_budget_threshold_msec := 5  # FIXME: This should be configurable
+func _start_loop(target_fps : int, frame_budget_threshold_msec : int) -> void:
+	var frame_budget_msec := int(1000 / target_fps)
+	#var frame_budget_threshold_msec := frame_budget_threshold_msec
 	var consecutive_no_work_count := 0
 
 	while _is_running:
@@ -58,10 +58,10 @@ func _start_loop() -> void:
 		yield(get_tree().create_timer(sleep_sec), "timeout")
 		#yield(get_tree().create_timer(0.1), "timeout")
 
-func start() -> void:
+func start(target_fps : int, frame_budget_threshold_msec := 5) -> void:
 	_is_running = true
 
-	self.call_deferred("_start_loop")
+	self.call_deferred("_start_loop", target_fps, frame_budget_threshold_msec)
 
 func stop() -> void:
 	_is_running = false
