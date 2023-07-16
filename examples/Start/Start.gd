@@ -28,7 +28,7 @@ func _ready() -> void:
 	AsyncLoader.start(Global.LOAD_GROUPS)
 
 	# Setup frame budget and threshold
-	var frame_budget_usec := int(1000000 / 60.0) # FIXME: int(floor(1000000 / float(Engine.get_physics_ticks_per_second())))
+	var frame_budget_usec := int(floor(1000000 / float(Engine.get_iterations_per_second())))
 	var frame_budget_threshold_usec := 5000
 	GodotCallThrottled.start(frame_budget_usec, frame_budget_threshold_usec)
 
