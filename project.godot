@@ -28,10 +28,11 @@ config/icon="res://icon.png"
 
 AsyncLoader="*res://addons/GodotAsyncLoader/Singletons/AsyncLoader.gd"
 Global="*res://examples/Singletons/Global.gd"
+GodotCallThrottled="*res://addons/GodotCallThrottled/Singletons/GodotCallThrottled.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/GodotAsyncLoader/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/GodotAsyncLoader/plugin.cfg", "res://addons/GodotCallThrottled/plugin.cfg" )
 
 [physics]
 

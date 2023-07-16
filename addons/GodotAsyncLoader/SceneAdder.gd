@@ -89,13 +89,13 @@ func _run_adder_thread(_arg : int) -> void:
 				var count := _get_queue_count()
 				is_reset = _add_entry(_to_adds[group], group)
 				if is_started:
-					AsyncLoader.call_throttled(cb, ["loading_started", AsyncLoader._total_queue_count])
+					GodotCallThrottled.call_throttled(cb, ["loading_started", AsyncLoader._total_queue_count])
 					is_started = false
-				AsyncLoader.call_throttled(cb, ["loading_progress", count, AsyncLoader._total_queue_count])
+				GodotCallThrottled.call_throttled(cb, ["loading_progress", count, AsyncLoader._total_queue_count])
 
 				# Check for loading done event
 				if _get_queue_count() == 0:
-					AsyncLoader.call_throttled(cb, ["loading_done", AsyncLoader._total_queue_count])
+					GodotCallThrottled.call_throttled(cb, ["loading_done", AsyncLoader._total_queue_count])
 					AsyncLoader._total_queue_count = 0
 					AsyncLoader._was_queue_empty = true
 
@@ -125,7 +125,7 @@ func _add_entry_parent(entry, group : String) -> void:
 	var instance = entry["instance"]
 	var data = entry["data"]
 	#print(["!!! _add_entry_parent", instance, data])
-	AsyncLoader.call_throttled(added_cb, [instance, data])
+	GodotCallThrottled.call_throttled(added_cb, [instance, data])
 
 func _add_entry_child(entry, group : String) -> void:
 	var parent = entry["parent"]
@@ -135,7 +135,7 @@ func _add_entry_child(entry, group : String) -> void:
 	instance.transform = transform
 
 	var cb := funcref(self, "_on_add_entry_child_cb")
-	AsyncLoader.call_throttled(cb, [parent, owner, instance, group])
+	GodotCallThrottled.call_throttled(cb, [parent, owner, instance, group])
 
 func _on_add_entry_child_cb(parent : Node, owner : Node, instance : Node, group : String) -> void:
 	# Make sure there is a parent, and it is valid

@@ -10,7 +10,6 @@ var _scene_instancer = null
 var _scene_adder = null
 var _scene_switcher = null
 var _scene_sleeper = null
-var _scene_throttler = null
 
 signal loading_started(total)
 signal loading_progress(current, total)
@@ -150,9 +149,6 @@ func change_scene(scene_path : String, loading_path := "") -> void:
 func load_and_cache_scene(scene_path : String) -> PackedScene:
 	return _scene_cache.load_and_cache(scene_path)
 
-func call_throttled(callable : FuncRef, args := []) -> void:
-	_scene_throttler.call_throttled(callable, args)
-
 func sleep_scene(instance : Node) -> void:
 	_scene_sleeper.sleep_scene(instance)
 
@@ -194,7 +190,6 @@ func _ready() -> void:
 	_scene_adder = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneAdder.gd").new()
 	_scene_switcher = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneSwitcher.gd").new()
 	_scene_sleeper = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneSleeper.gd").new()
-	_scene_throttler = ResourceLoader.load("res://addons/GodotAsyncLoader/SceneThrottler.gd").new()
 
 	self.add_child(_scene_cache)
 	self.add_child(_scene_loader)
@@ -202,9 +197,6 @@ func _ready() -> void:
 	self.add_child(_scene_adder)
 	self.add_child(_scene_switcher)
 	self.add_child(_scene_sleeper)
-	self.add_child(_scene_throttler)
-
-	_scene_throttler.start(config._target_fps, config._throttler_frame_budget_threshold_msec)
 
 func _exit_tree() -> void:
 	# Tell the threads to stop
@@ -236,6 +228,3 @@ func _exit_tree() -> void:
 	if _scene_sleeper and _scene_sleeper._thread:
 		_scene_sleeper._thread.wait_to_finish()
 		_scene_sleeper._thread = null
-
-	if _scene_throttler and _scene_throttler._is_running:
-		_scene_throttler._is_running = false
