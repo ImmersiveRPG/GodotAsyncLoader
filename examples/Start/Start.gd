@@ -5,7 +5,9 @@
 extends Control
 
 # TODO:
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # . Fix bug with first tile not loading
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # . Make it save sleeping nodes in tscn files in FS
 # . Get rid of _world_offset to simplify code
 
